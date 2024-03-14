@@ -35,8 +35,11 @@
 -   metric which allows multiple moves in same direction
 -   recode in Rust?
 -   graphical visualization
+-   solve with all heuristics in parallel
 
 ## resources
 
+-   heuristics: https://chat.openai.com/share/25b4e83e-8ac2-4a32-a1a0-ab5e855e20f8
+-   heuristics: https://chat.openai.com/share/d4642c60-8f6a-4ad3-81c8-8f7db19663e2
 -   https://en.wikipedia.org/wiki/A*_search_algorithm
 -   https://en.wikipedia.org/wiki/Admissible_heuristic

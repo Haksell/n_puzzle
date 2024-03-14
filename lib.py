@@ -60,8 +60,7 @@ def is_solvable(puzzle):
         return transpositions
 
     def parity_compared_to_goal(puzzle, size):
-        goal = make_goal(size)
-        return parity_permutation(puzzle) ^ parity_permutation(goal)
+        return parity_permutation(puzzle) ^ parity_permutation(make_goal(size))
 
     size = math.isqrt(len(puzzle))
     return parity_empty(puzzle, size) == parity_compared_to_goal(puzzle, size)
