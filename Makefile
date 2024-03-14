@@ -14,4 +14,4 @@ run:
 	@python npuzzle_solve.py puzzles/valid/subject3.txt
 
 clean:
-	rm -rf __pycache__ .pytest_cache .coverage
+	rm -rf __pycache__ .pytest_cache .coverage test_gen.txt

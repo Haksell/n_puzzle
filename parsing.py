@@ -1,8 +1,6 @@
-import math
+from lib import is_solvable
 import os
 import sys
-
-from lib import make_goal, print_puzzle
 
 
 def __panic(message):
@@ -24,33 +22,6 @@ def __parse_args(argv):
     except Exception as e:
         __panic(f"Failed to read puzzle '{filename}': {e}")
     return content
-
-
-def __is_solvable(puzzle):
-    def parity_empty(puzzle, size):
-        py, px = divmod(puzzle.index(0), size)
-        return (size ^ py ^ px ^ 1) & 1
-
-    def parity_permutation(puzzle):
-        seen = set()
-        transpositions = 0
-        for i in range(len(puzzle)):
-            if i in seen:
-                continue
-            seen.add(i)
-            j = puzzle[i]
-            while j != i:
-                seen.add(j)
-                j = puzzle[j]
-                transpositions ^= 1
-        return transpositions
-
-    def parity_compared_to_goal(puzzle, size):
-        goal = make_goal(size)
-        return parity_permutation(puzzle) ^ parity_permutation(goal)
-
-    size = math.isqrt(len(puzzle))
-    return parity_empty(puzzle, size) == parity_compared_to_goal(puzzle, size)
 
 
 def __parse_puzzle(content):
@@ -89,7 +60,7 @@ def __parse_puzzle(content):
     height = len(puzzle) // size
     if height != size:
         __panic(f"Invalid height (got {height}, expected {size})")
-    if not __is_solvable(puzzle):
+    if not is_solvable(puzzle):
         __panic("Unsolvable puzzle")
     return puzzle
 

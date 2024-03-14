@@ -38,3 +38,30 @@ def print_puzzle(puzzle):
     w = len(str(size**2))
     for y in range(0, size * size, size):
         print(*[f"{puzzle[x + y]:{w}}" for x in range(size)])
+
+
+def is_solvable(puzzle):
+    def parity_empty(puzzle, size):
+        py, px = divmod(puzzle.index(0), size)
+        return (size ^ py ^ px ^ 1) & 1
+
+    def parity_permutation(puzzle):
+        seen = set()
+        transpositions = 0
+        for i in range(len(puzzle)):
+            if i in seen:
+                continue
+            seen.add(i)
+            j = puzzle[i]
+            while j != i:
+                seen.add(j)
+                j = puzzle[j]
+                transpositions ^= 1
+        return transpositions
+
+    def parity_compared_to_goal(puzzle, size):
+        goal = make_goal(size)
+        return parity_permutation(puzzle) ^ parity_permutation(goal)
+
+    size = math.isqrt(len(puzzle))
+    return parity_empty(puzzle, size) == parity_compared_to_goal(puzzle, size)
