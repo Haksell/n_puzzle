@@ -7,7 +7,7 @@ all:
 	-@$(MAKE) --no-print-directory clean > /dev/null
 
 test:
-	pytest -rA -vv
+	pytest -vv
 
 run:
 	@# TODO: accept argument
