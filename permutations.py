@@ -6,6 +6,9 @@ def __factorial(n):
     return 1 if n <= 1 else n * __factorial(n - 1)
 
 
+# TODO efficiently: https://stackoverflow.com/questions/9860588/maximum-value-for-long-integer
+
+
 def perm_to_int(perm):
     assert sorted(perm) == list(range(len(perm)))
     return (
