@@ -26,6 +26,7 @@
 -   A\* solver
 -   row by row solver
 -   better solvers
+-   metric which allows multiple moves in same direction
 -   recode in Rust?
 -   graphical visualization
 
