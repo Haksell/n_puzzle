@@ -91,7 +91,12 @@ def test_parse_valid():
 
 
 def test_parse_invalid():
-    for filename in sorted(os.listdir(DIR_INVALID)):
+    filenames = sorted(os.listdir(DIR_INVALID))
+    filenames.append("/osquery.flags")
+    filenames.append("/dev/random")
+    filenames.append("/")
+    filenames.append("/abcdefgh")
+    for filename in filenames:
         filename = os.path.join(DIR_INVALID, filename)
         print(filename)
         with pytest.raises(SystemExit) as exc_info:
