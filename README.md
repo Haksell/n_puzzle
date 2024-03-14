@@ -3,6 +3,7 @@
 ## todo
 
 -   [ ] `is_solvable` + test
+-   [ ] generate puzzles zith an odd number of iterations
 -   [ ] O(n^2) `npuzzle_gen`
 
 ## mandatory

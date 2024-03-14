@@ -1,5 +1,8 @@
+import math
 import os
 import sys
+
+from lib import make_goal, print_puzzle
 
 
 def __panic(message):
@@ -24,7 +27,30 @@ def __parse_args(argv):
 
 
 def __is_solvable(puzzle):
-    return True  # TODO
+    def parity_empty(puzzle, size):
+        py, px = divmod(puzzle.index(0), size)
+        return (size ^ py ^ px ^ 1) & 1
+
+    def parity_permutation(puzzle):
+        seen = set()
+        transpositions = 0
+        for i in range(len(puzzle)):
+            if i in seen:
+                continue
+            seen.add(i)
+            j = puzzle[i]
+            while j != i:
+                seen.add(j)
+                j = puzzle[j]
+                transpositions ^= 1
+        return transpositions
+
+    def parity_compared_to_goal(puzzle, size):
+        goal = make_goal(size)
+        return parity_permutation(puzzle) ^ parity_permutation(goal)
+
+    size = math.isqrt(len(puzzle))
+    return parity_empty(puzzle, size) == parity_compared_to_goal(puzzle, size)
 
 
 def __parse_puzzle(content):
@@ -47,8 +73,7 @@ def __parse_puzzle(content):
                 assert (
                     len(row) == size
                 ), f"Invalid width (got {len(row)}, expected {size})"
-                puzzle.append([])
-                for x in line.split():
+                for x in row:
                     assert all(c.isdigit() for c in x), f"Invalid natural number: {x}"
                     x = int(x)
                     assert (
@@ -56,13 +81,14 @@ def __parse_puzzle(content):
                     ), f"Number too big for given puzzle size: (got {x}, max {size*size-1})"
                     assert x not in seen, f"Duplicate number: {x}"
                     seen.add(x)
-                    puzzle[-1].append(x)
+                    puzzle.append(x)
             except AssertionError as e:
                 __panic(e)
     if size is None:
         __panic("Empty file")
-    if len(puzzle) != size:
-        __panic(f"Invalid height (got {len(puzzle)}, expected {size})")
+    height = len(puzzle) // size
+    if height != size:
+        __panic(f"Invalid height (got {height}, expected {size})")
     if not __is_solvable(puzzle):
         __panic("Unsolvable puzzle")
     return puzzle
@@ -70,3 +96,13 @@ def __parse_puzzle(content):
 
 def parse(argv):
     return __parse_puzzle(__parse_args(argv))
+
+
+"""
+solvable
+1 2 3
+8   4
+7 6 5
+
+1 2 3 8 4 7 6 5
+"""
