@@ -2,6 +2,11 @@ import os
 import sys
 
 
+def __panic(message):
+    print(message, file=sys.stderr)
+    sys.exit(1)
+
+
 def __parse_args(argv):
     MAX_FILE_SIZE = 1 << 15
     try:
@@ -9,14 +14,12 @@ def __parse_args(argv):
         filename = argv[1]
     except AssertionError:
         program_name = argv[0] if len(argv) >= 1 else os.path.basename(__file__)
-        print(f"Usage: python {program_name} <filename>", file=sys.stderr)
-        sys.exit(1)
+        __panic(f"Usage: python {program_name} <filename>")
     try:
         content = open(filename).read(MAX_FILE_SIZE)
         assert len(content) != MAX_FILE_SIZE, f"file too big (max={MAX_FILE_SIZE})"
     except Exception as e:
-        print(f"Failed to read puzzle '{filename}': {e}", file=sys.stderr)
-        sys.exit(1)
+        __panic(f"Failed to read puzzle '{filename}': {e}")
     return content
 
 
@@ -33,16 +36,24 @@ def __parse_puzzle(content):
         if not line:
             continue
         if size is None:
-            size = int(line)  # TODO: try
-
+            try:
+                size = int(line)
+            except ValueError:
+                __panic(f"Invalid size: {line}")
         else:
             row = list(map(int, line.split()))  # TODO: try
+            assert (
+                len(row) == size
+            ), f"invalid row size (for {len(row)}, expected {size})"
+            for x in row:
+                assert 0 <= x, f"negative number found: {x}"
+                assert x < size, f"number too big for given puzzle size: (got {x})"
             assert all(0 <= x < size * size for x in row)
             assert all(x not in seen for x in row)
             seen |= set(row)
             puzzle.append(row)
     assert len(puzzle) == size
-    # TODO: check puzzle makes sense
+    assert __check_solvable(puzzle)
     return puzzle
 
 
