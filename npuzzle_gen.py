@@ -62,7 +62,7 @@ def __parse_args():
     parser.add_argument(
         "-i", "--iterations", type=int, default=10000, help="Number of passes"
     )
-    args = parser.__parse_args()
+    args = parser.parse_args()
     if args.solvable and args.unsolvable:
         print("Can't be both solvable AND unsolvable, dummy !")
         sys.exit(1)
@@ -75,11 +75,6 @@ def __parse_args():
 
 
 def main():
-    for size in range(3, 7):
-        goal = make_goal(size)
-        print_puzzle(goal)
-        print()
-    return
     args = __parse_args()
     solvable = (
         True

@@ -1,5 +1,10 @@
 # n_puzzle
 
+## todo
+
+-   [ ] `is_solvable` + test
+-   [ ] O(n^2) `npuzzle_gen`
+
 ## mandatory
 
 -   [ ] You must provide a Makefile with the usual rules.
