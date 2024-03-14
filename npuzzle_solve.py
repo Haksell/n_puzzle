@@ -5,6 +5,7 @@ import sys
 
 def main(argv):
     puzzle = parse(argv)
+    print_puzzle(puzzle)
 
 
 if __name__ == "__main__":
