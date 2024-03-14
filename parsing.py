@@ -2,7 +2,7 @@ import os
 import sys
 
 
-def parse_args(argv):
+def __parse_args(argv):
     MAX_FILE_SIZE = 1 << 15
     try:
         assert len(argv) == 2
@@ -20,11 +20,11 @@ def parse_args(argv):
     return content
 
 
-def check_solvable(puzzle):
+def __check_solvable(puzzle):
     return True  # TODO
 
 
-def parse_puzzle(content):
+def __parse_puzzle(content):
     size = None
     seen = set()
     puzzle = []
@@ -44,3 +44,7 @@ def parse_puzzle(content):
     assert len(puzzle) == size
     # TODO: check puzzle makes sense
     return puzzle
+
+
+def parse(argv):
+    return __parse_puzzle(__parse_args(argv))

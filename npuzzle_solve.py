@@ -1,11 +1,10 @@
-from parsing import parse_args, parse_puzzle
+from parsing import parse
 from pprint import pprint
 import sys
 
 
 def main(argv):
-    content = parse_args(argv)
-    puzzle = parse_puzzle(content)
+    puzzle = parse(argv)
     pprint(puzzle)
 
 
