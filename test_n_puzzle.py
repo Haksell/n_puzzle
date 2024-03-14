@@ -8,10 +8,86 @@ DIR_INVALID = "puzzles/invalid"
 
 
 def test_parse_valid():
+    KNOWN_PUZZLES = {
+        os.path.join(DIR_VALID, "subject3.txt"): [3, 2, 6, 1, 4, 0, 8, 7, 5],
+        os.path.join(DIR_VALID, "swap3.txt"): [1, 2, 3, 0, 8, 4, 7, 6, 5],
+        os.path.join(DIR_VALID, "solvable8.txt"): [
+            1,
+            45,
+            11,
+            35,
+            17,
+            54,
+            46,
+            51,
+            3,
+            37,
+            29,
+            44,
+            5,
+            26,
+            22,
+            25,
+            27,
+            28,
+            55,
+            60,
+            15,
+            10,
+            12,
+            0,
+            24,
+            41,
+            39,
+            58,
+            47,
+            52,
+            2,
+            40,
+            18,
+            8,
+            49,
+            4,
+            20,
+            7,
+            36,
+            9,
+            43,
+            21,
+            30,
+            23,
+            48,
+            59,
+            63,
+            6,
+            62,
+            53,
+            33,
+            34,
+            56,
+            61,
+            14,
+            38,
+            57,
+            13,
+            42,
+            31,
+            19,
+            50,
+            32,
+            16,
+        ],
+        **{
+            os.path.join(DIR_VALID, f"solved{i}.txt"): make_goal(i)
+            for i in range(3, 10)
+        },
+    }
     for filename in sorted(os.listdir(DIR_VALID)):
         filename = os.path.join(DIR_VALID, filename)
         print(filename)
-        print(parse(["npuzzle_solve.py", filename]))
+        puzzle = parse(["npuzzle_solve.py", filename])
+        if filename in KNOWN_PUZZLES:
+            assert puzzle == KNOWN_PUZZLES[filename]
 
 
 def test_parse_invalid():
