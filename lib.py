@@ -1,5 +1,11 @@
 import itertools
 import math
+import sys
+
+
+def panic(message):
+    print(message, file=sys.stderr)
+    sys.exit(1)
 
 
 def make_goal(s):

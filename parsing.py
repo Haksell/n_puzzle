@@ -1,11 +1,5 @@
-from lib import is_solvable
+from lib import is_solvable, panic
 import os
-import sys
-
-
-def __panic(message):
-    print(message, file=sys.stderr)
-    sys.exit(1)
 
 
 def __parse_args(argv):
@@ -15,12 +9,12 @@ def __parse_args(argv):
         filename = argv[1]
     except AssertionError:
         program_name = argv[0] if len(argv) >= 1 else os.path.basename(__file__)
-        __panic(f"Usage: python {program_name} <filename>")
+        panic(f"Usage: python {program_name} <filename>")
     try:
         content = open(filename).read(MAX_FILE_SIZE)
         assert len(content) != MAX_FILE_SIZE, f"file too big (max={MAX_FILE_SIZE})"
     except Exception as e:
-        __panic(f"Failed to read puzzle '{filename}': {e}")
+        panic(f"Failed to read puzzle '{filename}': {e}")
     return content
 
 
@@ -37,7 +31,7 @@ def __parse_puzzle(content):
                 size = int(line)
                 assert size >= 3
             except (AssertionError, ValueError):
-                __panic(f"Invalid size: {line}")
+                panic(f"Invalid size: {line}")
         else:
             try:
                 row = line.split()
@@ -54,14 +48,14 @@ def __parse_puzzle(content):
                     seen.add(x)
                     puzzle.append(x)
             except AssertionError as e:
-                __panic(e)
+                panic(e)
     if size is None:
-        __panic("Empty file")
+        panic("Empty file")
     height = len(puzzle) // size
     if height != size:
-        __panic(f"Invalid height (got {height}, expected {size})")
+        panic(f"Invalid height (got {height}, expected {size})")
     if not is_solvable(puzzle):
-        __panic("Unsolvable puzzle")
+        panic("Unsolvable puzzle")
     return puzzle
 
 

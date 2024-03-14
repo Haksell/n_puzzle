@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
 import argparse
-from lib import is_solvable, print_puzzle
+from lib import is_solvable, panic, print_puzzle
 import random
-import sys
 
 
 def __parse_args():
@@ -27,13 +26,9 @@ def __parse_args():
     )
     args = parser.parse_args()
     if args.solvable and args.unsolvable:
-        print("Can't be both solvable AND unsolvable, dummy !")
-        sys.exit(1)
+        panic("Can't be both solvable and unsolvable.")
     if args.size < 3:
-        print(
-            "Can't generate a puzzle with size lower than 2. It says so in the help. Dummy."
-        )
-        sys.exit(1)
+        panic("Can't generate a puzzle with size lower than 3.")
     return args
 
 
