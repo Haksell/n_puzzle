@@ -23,7 +23,7 @@ def __parse_args(argv):
     return content
 
 
-def __check_solvable(puzzle):
+def __is_solvable(puzzle):
     return True  # TODO
 
 
@@ -38,22 +38,33 @@ def __parse_puzzle(content):
         if size is None:
             try:
                 size = int(line)
-            except ValueError:
+                assert size >= 3
+            except (AssertionError, ValueError):
                 __panic(f"Invalid size: {line}")
         else:
-            row = list(map(int, line.split()))  # TODO: try
-            assert (
-                len(row) == size
-            ), f"invalid row size (for {len(row)}, expected {size})"
-            for x in row:
-                assert 0 <= x, f"negative number found: {x}"
-                assert x < size, f"number too big for given puzzle size: (got {x})"
-            assert all(0 <= x < size * size for x in row)
-            assert all(x not in seen for x in row)
-            seen |= set(row)
-            puzzle.append(row)
-    assert len(puzzle) == size
-    assert __check_solvable(puzzle)
+            try:
+                row = line.split()
+                assert (
+                    len(row) == size
+                ), f"Invalid width (got {len(row)}, expected {size})"
+                puzzle.append([])
+                for x in line.split():
+                    assert all(c.isdigit() for c in x), f"Invalid natural number: {x}"
+                    x = int(x)
+                    assert (
+                        x < size * size
+                    ), f"Number too big for given puzzle size: (got {x}, max {size*size-1})"
+                    assert x not in seen, f"Duplicate number: {x}"
+                    seen.add(x)
+                    puzzle[-1].append(x)
+            except AssertionError as e:
+                __panic(e)
+    if size is None:
+        __panic("Empty file")
+    if len(puzzle) != size:
+        __panic(f"Invalid height (got {len(puzzle)}, expected {size})")
+    if not __is_solvable(puzzle):
+        __panic("Unsolvable puzzle")
     return puzzle
 
 
