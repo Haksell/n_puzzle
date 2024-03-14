@@ -7,14 +7,14 @@ DIR_VALID = "puzzles/valid"
 DIR_INVALID = "puzzles/invalid"
 
 
-def test_valid():
+def test_parse_valid():
     for filename in sorted(os.listdir(DIR_VALID)):
         filename = os.path.join(DIR_VALID, filename)
         print(filename)
         print(parse(["npuzzle_solve.py", filename]))
 
 
-def test_invalid():
+def test_parse_invalid():
     for filename in sorted(os.listdir(DIR_INVALID)):
         filename = os.path.join(DIR_INVALID, filename)
         print(filename)
