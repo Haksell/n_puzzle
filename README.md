@@ -2,7 +2,7 @@
 
 ## todo
 
--   [ ] O(n^2) `npuzzle_gen`
+-   [ ] A\*
 
 ## mandatory
 
