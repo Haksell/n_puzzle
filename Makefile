@@ -9,9 +9,8 @@ all:
 test:
 	pytest -vv
 
-run:
-	@# TODO: accept argument
-	@python npuzzle_solve.py puzzles/valid/subject3.txt
+help:
+	@python npuzzle_solve.py || true
 
 clean:
 	rm -rf __pycache__ .pytest_cache .coverage test_gen.txt
