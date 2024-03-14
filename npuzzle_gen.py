@@ -1,43 +1,9 @@
 #!/usr/bin/env python
 
 import argparse
-from lib import make_goal, print_puzzle
+from lib import is_solvable, print_puzzle
 import random
 import sys
-
-# TODO: generate using shuffle + solvable check
-
-
-def __swap_empty(puzzle, size):
-    idx = puzzle.index(0)
-    moves = []
-    if idx % size > 0:
-        moves.append(idx - 1)
-    if idx % size < size - 1:
-        moves.append(idx + 1)
-    if idx >= size:
-        moves.append(idx - size)
-    if idx < size * (size - 1):
-        moves.append(idx + size)
-    move = random.choice(moves)
-    puzzle[idx] = puzzle[move]
-    puzzle[move] = 0
-
-
-def __make_unsolvable(puzzle):
-    if puzzle[0] == 0 or puzzle[1] == 0:
-        puzzle[-1], puzzle[-2] = puzzle[-2], puzzle[-1]
-    else:
-        puzzle[0], puzzle[1] = puzzle[1], puzzle[0]
-
-
-def __make_puzzle(size, solvable, iterations):
-    puzzle = make_goal(size)
-    for _ in range(iterations):
-        __swap_empty(puzzle, size)
-    if not solvable:
-        __make_unsolvable(puzzle)
-    return puzzle
 
 
 def __parse_args():
@@ -58,9 +24,6 @@ def __parse_args():
         action="store_true",
         default=False,
         help="Forces generation of an unsolvable puzzle.",
-    )
-    parser.add_argument(
-        "-i", "--iterations", type=int, default=10000, help="Number of passes"
     )
     args = parser.parse_args()
     if args.solvable and args.unsolvable:
@@ -83,7 +46,13 @@ def main():
         if args.unsolvable
         else random.choice([True, False])
     )
-    puzzle = __make_puzzle(args.size, solvable=solvable, iterations=args.iterations)
+    puzzle = list(range(args.size**2))
+    random.shuffle(puzzle)
+    if is_solvable(puzzle) != solvable:
+        if puzzle[0] == 0 or puzzle[1] == 0:
+            puzzle[-1], puzzle[-2] = puzzle[-2], puzzle[-1]
+        else:
+            puzzle[0], puzzle[1] = puzzle[1], puzzle[0]
     print(f"# This puzzle is {'solvable' if solvable else 'unsolvable'}")
     print(args.size)
     print_puzzle(puzzle)
