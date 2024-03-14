@@ -4,12 +4,17 @@ from lib import make_goal, print_puzzle
 from parsing import parse
 import sys
 
+# TODO: perm_to_int
+# TODO: int_to_perm
+
 
 def __a_star(puzzle, heuristic):
-    size = isqrt(len(puzzle))
-    goal = make_goal(size)
-    h = heuristic(puzzle, goal)
-    print(h)
+    # size = isqrt(len(puzzle))
+    # goal = make_goal(size)
+    # heap = [puzzle.copy()]
+    # while heap:
+    #     g, p, moves = heappop(heap)
+    #     pass
     print_puzzle(puzzle)
 
 
