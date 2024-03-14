@@ -1,38 +1,14 @@
 #!/usr/bin/env python
 
-import sys
 import argparse
+from lib import make_goal, print_puzzle
 import random
+import sys
+
+# TODO: generate using shuffle + solvable check
 
 
-def make_goal(s):
-    ts = s * s
-    puzzle = [-1] * ts
-    cur = 1
-    x = 0
-    ix = 1
-    y = 0
-    iy = 0
-    while True:
-        puzzle[x + y * s] = cur
-        if cur == 0:
-            break
-        cur += 1
-        if x + ix == s or x + ix < 0 or (ix != 0 and puzzle[x + ix + y * s] != -1):
-            iy = ix
-            ix = 0
-        elif y + iy == s or y + iy < 0 or (iy != 0 and puzzle[x + (y + iy) * s] != -1):
-            ix = -iy
-            iy = 0
-        x += ix
-        y += iy
-        if cur == s * s:
-            cur = 0
-
-    return puzzle
-
-
-def swap_empty(p, s):
+def __swap_empty(p, s):
     idx = p.index(0)
     moves = []
     if idx % s > 0:
@@ -48,23 +24,23 @@ def swap_empty(p, s):
     p[move] = 0
 
 
-def make_unsolvable(p):
+def __make_unsolvable(p):
     if p[0] == 0 or p[1] == 0:
         p[-1], p[-2] = p[-2], p[-1]
     else:
         p[0], p[1] = p[1], p[0]
 
 
-def make_puzzle(s, solvable, iterations):
+def __make_puzzle(s, solvable, iterations):
     p = make_goal(s)
     for _ in range(iterations):
-        swap_empty(p, s)
+        __swap_empty(p, s)
     if not solvable:
-        make_unsolvable(p)
+        __make_unsolvable(p)
     return p
 
 
-def parse_args():
+def __parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "size", type=int, help="Size of the puzzle's side. Must be ≥ 3."
@@ -86,7 +62,7 @@ def parse_args():
     parser.add_argument(
         "-i", "--iterations", type=int, default=10000, help="Number of passes"
     )
-    args = parser.parse_args()
+    args = parser.__parse_args()
     if args.solvable and args.unsolvable:
         print("Can't be both solvable AND unsolvable, dummy !")
         sys.exit(1)
@@ -99,7 +75,12 @@ def parse_args():
 
 
 def main():
-    args = parse_args()
+    for size in range(3, 7):
+        goal = make_goal(size)
+        print_puzzle(goal)
+        print()
+    return
+    args = __parse_args()
     solvable = (
         True
         if args.solvable
@@ -107,14 +88,10 @@ def main():
         if args.unsolvable
         else random.choice([True, False])
     )
-    puzzle = make_puzzle(args.size, solvable=solvable, iterations=args.iterations)
-    w = len(str(args.size**2))
+    puzzle = __make_puzzle(args.size, solvable=solvable, iterations=args.iterations)
     print(f"# This puzzle is {'solvable' if solvable else 'unsolvable'}")
     print(args.size)
-    for y in range(args.size):
-        print(
-            " ".join(str(puzzle[x + y * args.size]).rjust(w) for x in range(args.size))
-        )
+    print_puzzle(puzzle)
 
 
 if __name__ == "__main__":
