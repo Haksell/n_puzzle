@@ -2,8 +2,6 @@
 
 ## todo
 
--   [ ] `is_solvable` + test
--   [ ] generate puzzles zith an odd number of iterations
 -   [ ] O(n^2) `npuzzle_gen`
 
 ## mandatory
@@ -43,7 +41,7 @@
 -   euclidean
 -   chebyshev
 -   linear conflict
--   ... [chatgpt 1](https://chat.openai.com/share/25b4e83e-8ac2-4a32-a1a0-ab5e855e20f8) [chatgpt 2](https://chat.openai.com/share/d4642c60-8f6a-4ad3-81c8-8f7db19663e2)
+-   more... [chatgpt 1](https://chat.openai.com/share/25b4e83e-8ac2-4a32-a1a0-ab5e855e20f8) [chatgpt 2](https://chat.openai.com/share/d4642c60-8f6a-4ad3-81c8-8f7db19663e2)
 
 ## resources
 
