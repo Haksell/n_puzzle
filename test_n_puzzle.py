@@ -20,3 +20,7 @@ def test_invalid():
         with pytest.raises(SystemExit) as exc_info:
             parse(["npuzzle_solve.py", filename])
         assert exc_info.value.code == 1
+
+
+def test_is_solvable():
+    assert False

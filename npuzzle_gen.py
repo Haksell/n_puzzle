@@ -5,35 +5,6 @@ import argparse
 import random
 
 
-def make_puzzle(s, solvable, iterations):
-    def swap_empty(p):
-        idx = p.index(0)
-        poss = []
-        if idx % s > 0:
-            poss.append(idx - 1)
-        if idx % s < s - 1:
-            poss.append(idx + 1)
-        if idx / s > 0 and idx - s >= 0:
-            poss.append(idx - s)
-        if idx / s < s - 1:
-            poss.append(idx + s)
-        swi = random.choice(poss)
-        p[idx] = p[swi]
-        p[swi] = 0
-
-    p = make_goal(s)
-    for _ in range(iterations):
-        swap_empty(p)
-
-    if not solvable:
-        if p[0] == 0 or p[1] == 0:
-            p[-1], p[-2] = p[-2], p[-1]
-        else:
-            p[0], p[1] = p[1], p[0]
-
-    return p
-
-
 def make_goal(s):
     ts = s * s
     puzzle = [-1] * ts
@@ -59,6 +30,38 @@ def make_goal(s):
             cur = 0
 
     return puzzle
+
+
+def swap_empty(p, s):
+    idx = p.index(0)
+    moves = []
+    if idx % s > 0:
+        moves.append(idx - 1)
+    if idx % s < s - 1:
+        moves.append(idx + 1)
+    if idx >= s:
+        moves.append(idx - s)
+    if idx < s * (s - 1):
+        moves.append(idx + s)
+    move = random.choice(moves)
+    p[idx] = p[move]
+    p[move] = 0
+
+
+def make_unsolvable(p):
+    if p[0] == 0 or p[1] == 0:
+        p[-1], p[-2] = p[-2], p[-1]
+    else:
+        p[0], p[1] = p[1], p[0]
+
+
+def make_puzzle(s, solvable, iterations):
+    p = make_goal(s)
+    for _ in range(iterations):
+        swap_empty(p, s)
+    if not solvable:
+        make_unsolvable(p)
+    return p
 
 
 def parse_args():
