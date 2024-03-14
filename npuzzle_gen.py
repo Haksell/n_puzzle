@@ -8,36 +8,36 @@ import sys
 # TODO: generate using shuffle + solvable check
 
 
-def __swap_empty(p, s):
-    idx = p.index(0)
+def __swap_empty(puzzle, size):
+    idx = puzzle.index(0)
     moves = []
-    if idx % s > 0:
+    if idx % size > 0:
         moves.append(idx - 1)
-    if idx % s < s - 1:
+    if idx % size < size - 1:
         moves.append(idx + 1)
-    if idx >= s:
-        moves.append(idx - s)
-    if idx < s * (s - 1):
-        moves.append(idx + s)
+    if idx >= size:
+        moves.append(idx - size)
+    if idx < size * (size - 1):
+        moves.append(idx + size)
     move = random.choice(moves)
-    p[idx] = p[move]
-    p[move] = 0
+    puzzle[idx] = puzzle[move]
+    puzzle[move] = 0
 
 
-def __make_unsolvable(p):
-    if p[0] == 0 or p[1] == 0:
-        p[-1], p[-2] = p[-2], p[-1]
+def __make_unsolvable(puzzle):
+    if puzzle[0] == 0 or puzzle[1] == 0:
+        puzzle[-1], puzzle[-2] = puzzle[-2], puzzle[-1]
     else:
-        p[0], p[1] = p[1], p[0]
+        puzzle[0], puzzle[1] = puzzle[1], puzzle[0]
 
 
-def __make_puzzle(s, solvable, iterations):
-    p = make_goal(s)
+def __make_puzzle(size, solvable, iterations):
+    puzzle = make_goal(size)
     for _ in range(iterations):
-        __swap_empty(p, s)
+        __swap_empty(puzzle, size)
     if not solvable:
-        __make_unsolvable(p)
-    return p
+        __make_unsolvable(puzzle)
+    return puzzle
 
 
 def __parse_args():
