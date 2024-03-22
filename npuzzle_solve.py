@@ -23,16 +23,16 @@ OPPOSITE_MOVES = {
 }
 
 
-# Can we execute the moves directly on the hashed value?
+# TODO: execute the moves directly on the hashed value
 def __do_move(puzzle, move, size, zero_idx):
     swap_idx = (
         zero_idx
         + {
-            Move.UP: -size,
-            Move.RIGHT: 1,
-            Move.DOWN: size,
-            Move.LEFT: -1,
-        }[move]  # TODO: reverse the moves
+            Move.UP: size,
+            Move.RIGHT: -1,
+            Move.DOWN: -size,
+            Move.LEFT: 1,
+        }[move]
     )
     puzzle[zero_idx], puzzle[swap_idx] = puzzle[swap_idx], puzzle[zero_idx]
 
@@ -40,14 +40,14 @@ def __do_move(puzzle, move, size, zero_idx):
 def __available_moves(size, zero_idx, last):
     y, x = divmod(zero_idx, size)
     moves = []
-    if y != 0 and last != Move.DOWN:
-        moves.append(Move.UP)
-    if x != size - 1 and last != Move.LEFT:
-        moves.append(Move.RIGHT)
-    if y != size - 1 and last != Move.UP:
+    if y != 0 and last != Move.UP:
         moves.append(Move.DOWN)
-    if x != 0 and last != Move.RIGHT:
+    if x != size - 1 and last != Move.RIGHT:
         moves.append(Move.LEFT)
+    if y != size - 1 and last != Move.DOWN:
+        moves.append(Move.UP)
+    if x != 0 and last != Move.LEFT:
+        moves.append(Move.RIGHT)
     return moves
 
 
@@ -96,7 +96,7 @@ def main(argv):
     puzzle = parse(argv)
     print_puzzle(puzzle)
     solution = __a_star(puzzle, manhattan)
-    print("".join(OPPOSITE_MOVES[move].name[0] for move in solution), len(solution))
+    print("".join(move.name[0] for move in solution), len(solution))
 
 
 if __name__ == "__main__":
