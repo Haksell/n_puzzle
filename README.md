@@ -2,10 +2,8 @@
 
 ## todo
 
--   [ ] BFS
--   [ ] A\*
--   [ ] IDA\*
--   [ ] Puzzle class
+-   [ ] Puzzle class (avoid recomputing size everywhere, `rows` iterator, `cols` iterator)
+-   [ ] Paralellize all solvers
 
 ## mandatory
 
@@ -38,14 +36,19 @@
 -   graphical visualization
 -   solve with all heuristics in parallel
 
+## solvers
+
+-   [ ] BFS
+-   [ ] A\*
+-   [ ] IDA\*
+
 ## heuristics
 
--   manhattan
--   euclidean
--   chebyshev
--   linear conflict
--   hamming
--   more... [chatgpt 1](https://chat.openai.com/share/25b4e83e-8ac2-4a32-a1a0-ab5e855e20f8) [chatgpt 2](https://chat.openai.com/share/d4642c60-8f6a-4ad3-81c8-8f7db19663e2)
+-   [x] manhattan
+-   [x] euclidean
+-   [x] chebyshev
+-   [x] hamming
+-   [ ] manhattan + linear-conflict + corner-tile
 
 ## resources
 
@@ -53,3 +56,5 @@
 -   https://en.wikipedia.org/wiki/Heuristic_(computer_science)
 -   https://en.wikipedia.org/wiki/Admissible_heuristic
 -   https://en.wikipedia.org/wiki/Consistent_heuristic
+-   https://michael.kim/blog/puzzle
+-   https://medium.com/swlh/looking-into-k-puzzle-heuristics-6189318eaca2

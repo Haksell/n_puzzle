@@ -2,6 +2,7 @@ from lib import is_solvable, panic
 import os
 
 
+# TODO: use argparse
 def __parse_args(argv):
     MAX_FILE_SIZE = 1 << 15
     try:
@@ -61,13 +62,3 @@ def __parse_puzzle(content):
 
 def parse(argv):
     return __parse_puzzle(__parse_args(argv))
-
-
-"""
-solvable
-1 2 3
-8   4
-7 6 5
-
-1 2 3 8 4 7 6 5
-"""

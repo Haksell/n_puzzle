@@ -32,7 +32,7 @@ def __parse_args():
     return args
 
 
-def main():
+def __main():
     args = __parse_args()
     solvable = (
         True
@@ -54,4 +54,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    __main()
