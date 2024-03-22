@@ -1,4 +1,3 @@
-from itertools import permutations
 import math
 
 
@@ -87,10 +86,12 @@ def __longest_increasing_subsequence(a):
 
 def __line_conflicts(line_puzzle, line_goal):
     common = set(line_puzzle) & set(line_goal)
+    # common.discard(0)
     line_puzzle = [n for n in line_puzzle if n in common]
     line_goal = [n for n in line_goal if n in common]
     goal_pos = {n: i for i, n in enumerate(line_goal)}
     perm = [goal_pos[n] for n in line_puzzle]
+    # TODO: fix (clearly not 4)
     return 4 - __longest_increasing_subsequence(perm)
 
 

@@ -1,9 +1,9 @@
 from enum import IntEnum, auto
 from heapq import heappop, heappush
 import time
-from heuristics import HEURISTICS
+from heuristics import manhattan_with_conflicts
 from math import isqrt
-from lib import make_goal, print_puzzle
+from lib import make_goal
 from parsing import parse
 from permutations import int_to_perm, perm_to_int
 import sys
@@ -95,15 +95,15 @@ def __a_star(puzzle, heuristic):
 
 def __main(argv):
     puzzle = parse(argv)
-    print_puzzle(puzzle)
-    for heuristic in HEURISTICS:
+    for heuristic in [manhattan_with_conflicts]:
         t0 = time.time()
         solution = __a_star(puzzle, heuristic)
         print(
             "".join(move.name[0] for move in solution),
+            heuristic(puzzle, make_goal(isqrt(len(puzzle)))),
             len(solution),
             f"{time.time() - t0:.3f}s",
-            heuristic.__name__,
+            # heuristic.__name__,
         )
 
 
