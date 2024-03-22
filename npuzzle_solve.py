@@ -64,7 +64,7 @@ def __reconstruct_solution(puzzle, size, came_from, hash_puzzle):
 
 
 def __a_star(puzzle, heuristic):
-    # TODO: check this is A* and jsut not Dijkstra
+    # TODO: check this is A* and just not Dijkstra
     size = isqrt(len(puzzle))
     goal = make_goal(size)
     hash_goal = perm_to_int(goal)
