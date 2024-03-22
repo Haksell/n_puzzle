@@ -44,7 +44,7 @@
 -   [x] euclidean
 -   [x] chebyshev
 -   [x] hamming
--   [ ] manhattan + linear-conflict + corner-tile
+-   [x] manhattan with conflicts
 
 ## resources
 
