@@ -1,10 +1,5 @@
 # n_puzzle
 
-## todo
-
--   [ ] Puzzle class (avoid recomputing size everywhere, `rows` iterator, `cols` iterator)
--   [ ] Paralellize all solvers
-
 ## mandatory
 
 -   [ ] You must provide a Makefile with the usual rules.
@@ -24,23 +19,21 @@
 -   [ ] For the bonus part you can configure the appropriate g(x) and h(x) functions to run both the uniform-cost and greedy searches. Execute with the same output (Of course, the solution may be different. Read up on why, that’s the point.)
 -   [ ] Normal and Snail mode
 
-## misc
+## todo
 
--   bfs solver
--   iterated dfs solver
--   A\* solver
--   row by row solver
--   better solvers
--   metric which allows multiple moves in same direction
--   recode in Rust?
+-   Rust
+-   Puzzle struct (avoid recomputing size everywhere, `rows` iterator, `cols` iterator)
+-   multithreading
 -   graphical visualization
--   solve with all heuristics in parallel
 
 ## solvers
 
--   [ ] BFS
 -   [ ] A\*
 -   [ ] IDA\*
+-   [ ] SMA\*
+-   [ ] Pattern Databases (row/col solver?)
+-   [ ] ID-Dual\* or Bi-directional A\*
+-   ... https://chat.openai.com/c/10a31ea2-f76b-49db-86f3-f3adaeb3e31e
 
 ## heuristics
 
