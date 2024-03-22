@@ -1,3 +1,4 @@
+from itertools import permutations
 import math
 
 
@@ -52,22 +53,48 @@ def __corner_conflicts(puzzle, goal):
     )
 
 
+def __get_ceil_index(arr, tail_indices, l, r, key):
+    while r - l > 1:
+        m = l + r >> 1
+        if arr[tail_indices[m]] <= key:
+            r = m
+        else:
+            l = m
+    return r
+
+
+def __longest_increasing_subsequence(a):
+    a = list(reversed(a))
+    tail_indices = [0]
+    prev_indices = [-1] * (len(a) + 1)
+    for i in range(1, len(a)):
+        if a[i] > a[tail_indices[0]]:
+            tail_indices[0] = i
+        elif a[i] < a[tail_indices[-1]]:
+            prev_indices[i] = tail_indices[-1]
+            tail_indices.append(i)
+        else:
+            pos = __get_ceil_index(a, tail_indices, -1, len(tail_indices) - 1, a[i])
+            prev_indices[i] = tail_indices[pos - 1]
+            tail_indices[pos] = i
+    res = 0
+    i = tail_indices[-1]
+    while i >= 0:
+        i = prev_indices[i]
+        res += 1
+    return res
+
+
 def __line_conflicts(line_puzzle, line_goal):
-    # TODO: handle multiple conflicts
-    line_puzzle_pos = {n: i for i, n in enumerate(line_puzzle)}
-    for i in range(len(line_goal)):
-        if line_goal[i] not in line_puzzle_pos:
-            continue
-        for j in range(i + 1, len(line_goal)):
-            if line_goal[j] not in line_puzzle_pos:
-                continue
-            if line_puzzle_pos[line_goal[j]] < line_puzzle_pos[line_goal[i]]:
-                return 1
-    return 0
+    common = set(line_puzzle) & set(line_goal)
+    line_puzzle = [n for n in line_puzzle if n in common]
+    line_goal = [n for n in line_goal if n in common]
+    goal_pos = {n: i for i, n in enumerate(line_goal)}
+    perm = [goal_pos[n] for n in line_puzzle]
+    return 4 - __longest_increasing_subsequence(perm)
 
 
 def __linear_conflicts(puzzle, goal):
-    return 0
     size = math.isqrt(len(puzzle))
     conflicts = 0
     for i in range(size):
