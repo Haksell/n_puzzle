@@ -1,27 +1,25 @@
-from functools import cache
-
-
-@cache
-def __factorial(n):
-    return 1 if n <= 1 else n * __factorial(n - 1)
-
-
-# TODO efficiently: https://stackoverflow.com/questions/9860588/maximum-value-for-long-integer
-
-
-def perm_to_int(perm):
-    assert sorted(perm) == list(range(len(perm)))
-    return (
-        perm[0] * __factorial(len(perm) - 1)
-        + perm_to_int([x - (x > perm[0]) for x in perm[1:]])
-        if perm
-        else 0
-    )
+# https://stackoverflow.com/a/24689277/10793260
 
 
 def int_to_perm(n, size):
-    assert isinstance(n, int) and 0 <= n < __factorial(size)
-    if size == 0:
-        return []
-    first, n = divmod(n, __factorial(size - 1))
-    return [first] + [x + (x >= first) for x in int_to_perm(n, size - 1)]
+    permuted = [0] * size
+    elems = list(range(size))
+    for i in range(size):
+        n, ind = divmod(n, size - i)
+        permuted[i] = elems[ind]
+        elems[ind] = elems[size - i - 1]
+    return permuted
+
+
+def perm_to_int(perm):
+    k = 0
+    m = 1
+    n = len(perm)
+    pos = list(range(n))
+    elems = list(range(n))
+    for i in range(n - 1):
+        k += m * pos[perm[i]]
+        m *= n - i
+        pos[elems[n - i - 1]] = pos[perm[i]]
+        elems[pos[perm[i]]] = elems[n - i - 1]
+    return k

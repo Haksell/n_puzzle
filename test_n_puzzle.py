@@ -1,4 +1,5 @@
 import itertools
+from math import factorial
 import os
 from lib import is_solvable, make_goal
 from parsing import parse
@@ -470,13 +471,13 @@ def test_make_goal():
     ]
 
 
-def test_perm_to_int():
+def test_permutations():
     for size in range(6):
+        results = []
         for n, p in enumerate(itertools.permutations(range(size))):
-            assert perm_to_int(list(p)) == n
-
-
-def test_int_to_perm():
-    for size in range(6):
-        for n, p in enumerate(itertools.permutations(range(size))):
-            assert int_to_perm(n, size) == list(p)
+            p = list(p)
+            res = perm_to_int(p)
+            assert int_to_perm(perm_to_int(p), size) == p
+            assert perm_to_int(int_to_perm(n, size)) == n
+            results.append(res)
+        assert sorted(results) == list(range(factorial(size)))

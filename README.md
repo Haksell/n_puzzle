@@ -2,7 +2,10 @@
 
 ## todo
 
+-   [ ] BFS
 -   [ ] A\*
+-   [ ] IDA\*
+-   [ ] Puzzle class
 
 ## mandatory
 
