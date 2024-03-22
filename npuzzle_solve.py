@@ -32,7 +32,7 @@ def do_move(puzzle, move, size, zero_idx):
             Move.RIGHT: 1,
             Move.DOWN: size,
             Move.LEFT: -1,
-        }[move]
+        }[move]  # TODO: reverse the moves
     )
     try:
         puzzle[zero_idx], puzzle[swap_idx] = puzzle[swap_idx], puzzle[zero_idx]
@@ -56,28 +56,33 @@ def available_moves(size, zero_idx, last):
 
 
 def __a_star(puzzle, heuristic):
+    # TODO: came_from idea
+    # TODO: check this is A* and not Dijkstra
     size = isqrt(len(puzzle))
     goal = make_goal(size)
     hash_goal = perm_to_int(goal)
     hash_puzzle = perm_to_int(puzzle)
-    seen = {hash_puzzle}
+    closed_set = {hash_puzzle}
     print_puzzle(puzzle)
-    heap = [(heuristic(puzzle, goal), hash_puzzle, [])]
-    while heap:
-        _, hash_puzzle, moves = heappop(heap)
+    open_set = [(heuristic(puzzle, goal), hash_puzzle, [])]
+    while open_set:
+        _, hash_puzzle, moves = heappop(open_set)
         puzzle = int_to_perm(hash_puzzle, len(puzzle))
         zero_idx = puzzle.index(0)
         for move in available_moves(size, zero_idx, moves[-1] if moves else None):
             do_move(puzzle, move, size, zero_idx)
             hash_puzzle = perm_to_int(puzzle)
-            if hash_puzzle == hash_goal:
-                print(moves)
-                print_puzzle(puzzle)
-                return
-            if hash_puzzle not in seen:
-                seen.add(hash_puzzle)
+            if hash_puzzle not in closed_set:
                 moves.append(move)
-                heappush(heap, (heuristic(puzzle, goal), hash_puzzle, moves.copy()))
+                if hash_puzzle == hash_goal:
+                    print("".join(OPPOSITE_MOVES[m].name[0] for m in moves), len(moves))
+                    print_puzzle(puzzle)
+                    return
+                closed_set.add(hash_puzzle)
+                heappush(
+                    open_set,
+                    (len(moves) + heuristic(puzzle, goal), hash_puzzle, moves.copy()),
+                )
                 moves.pop()
             do_move(puzzle, move, size, zero_idx)
     print("No solution found. This shouldn't happen.")
