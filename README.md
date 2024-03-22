@@ -21,17 +21,20 @@
 
 ## todo
 
+-   Puzzle class (avoid recomputing size everywhere, not necessarily square, `rows` iterator, `cols` iterator)
 -   Rust
--   Puzzle struct (avoid recomputing size everywhere, `rows` iterator, `cols` iterator)
+-   way more testing
 -   multithreading
 -   graphical visualization
+-   just cycle when 2x2 to solve
 
 ## solvers
 
 -   [ ] A\*
 -   [ ] IDA\*
 -   [ ] SMA\*
--   [ ] Pattern Databases (row/col solver?)
+-   [ ] Pattern Databases
+-   [ ] Row/Col solver
 -   [ ] ID-Dual\* or Bi-directional A\*
 -   ... https://chat.openai.com/c/10a31ea2-f76b-49db-86f3-f3adaeb3e31e
 
@@ -51,3 +54,5 @@
 -   https://en.wikipedia.org/wiki/Consistent_heuristic
 -   https://michael.kim/blog/puzzle
 -   https://medium.com/swlh/looking-into-k-puzzle-heuristics-6189318eaca2
+-   https://algorithmsinsight.wordpress.com/graph-theory-2/a-star-in-general/implementing-a-star-to-solve-n-puzzle/
+-   https://algorithmsinsight.wordpress.com/graph-theory-2/implementing-bfs-for-pattern-database/
