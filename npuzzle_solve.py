@@ -1,5 +1,6 @@
 from enum import IntEnum, auto
 from heapq import heappop, heappush
+import math
 import time
 from heuristics import manhattan, manhattan_with_conflicts
 from math import isqrt
@@ -65,31 +66,31 @@ def __reconstruct_solution(puzzle, size, came_from, hash_puzzle):
 
 
 def __a_star(puzzle, heuristic):
-    # TODO: fix optimality
     size = isqrt(len(puzzle))
     goal = make_goal(size)
     hash_goal = perm_to_int(goal)
     hash_puzzle = perm_to_int(puzzle)
     came_from = {hash_puzzle: None}
-    len_solution = {hash_puzzle: 0}
+    solution_lengths = {hash_puzzle: 0}
     frontier = [(heuristic(puzzle, goal), hash_puzzle)]
     while frontier:
-        _, hash_puzzle = heappop(frontier)
-        puzzle = int_to_perm(hash_puzzle, len(puzzle))
-        zero_idx = puzzle.index(0)
-        for move in __available_moves(size, zero_idx, came_from[hash_puzzle]):
-            __do_move(puzzle, move, size, zero_idx)
-            hash_moved = perm_to_int(puzzle)
-            if hash_moved not in came_from:  # TODO: overwrite if better value
-                came_from[hash_moved] = move
-                len_solution[hash_moved] = len_solution[hash_puzzle] + 1
-                if hash_moved == hash_goal:
-                    return __reconstruct_solution(goal, size, came_from, hash_moved)
+        (_, hash_current) = heappop(frontier)
+        if hash_current == hash_goal:
+            return __reconstruct_solution(goal, size, came_from, hash_current)
+        current = int_to_perm(hash_current, len(puzzle))
+        zero_idx = current.index(0)
+        solution_length = solution_lengths[hash_current] + 1
+        for move in __available_moves(size, zero_idx, came_from[hash_current]):
+            __do_move(current, move, size, zero_idx)
+            hash_neighbor = perm_to_int(current)
+            if solution_length < solution_lengths.get(hash_neighbor, math.inf):
+                came_from[hash_neighbor] = move
+                solution_lengths[hash_neighbor] = solution_length
                 heappush(
                     frontier,
-                    (len_solution[hash_moved] + heuristic(puzzle, goal), hash_moved),
+                    (solution_length + heuristic(current, goal), hash_neighbor),
                 )
-            __do_move(puzzle, move, size, zero_idx)
+            __do_move(current, move, size, zero_idx)
     raise RuntimeError("No solution found. This is impossible.")
 
 

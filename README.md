@@ -22,7 +22,7 @@
 ## todo
 
 - fix manhattan_with_conflicts admissibility
-- Puzzle class (avoid recomputing size everywhere, not necessarily square, `rows` iterator, `cols` iterator)
+- Puzzle class (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator)
 - Rust
 - way more testing
 - multithreading
