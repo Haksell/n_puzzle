@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, IntEnum
 from heapq import heappop, heappush
 import math
 import time
@@ -10,7 +10,7 @@ from permutations import int_to_perm, perm_to_int
 import sys
 
 
-class Move(Enum):
+class Move(IntEnum):
     UP = 0
     RIGHT = 1
     DOWN = 2
@@ -22,15 +22,7 @@ class Move(Enum):
 
 def __do_move(puzzle, move, size, zero_idx):
     # TODO: execute the moves directly on the hashed value
-    swap_idx = (
-        zero_idx
-        + {
-            Move.UP: size,
-            Move.RIGHT: -1,
-            Move.DOWN: -size,
-            Move.LEFT: 1,
-        }[move]
-    )
+    swap_idx = zero_idx + [size, -1, -size, 1][move]
     puzzle[zero_idx], puzzle[swap_idx] = puzzle[swap_idx], puzzle[zero_idx]
 
 
