@@ -33,7 +33,7 @@
 
 - [ ] Best-first search
 - [ ] A\*
-- [ ] IDA\*
+- [ ] IDA\* (no need for hashing)
 - [ ] SMA\*
 - [ ] Pattern Databases
 - [ ] Row/Col solver
