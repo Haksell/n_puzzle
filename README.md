@@ -31,6 +31,7 @@
 
 ## solvers
 
+- [ ] Best-first search
 - [ ] A\*
 - [ ] IDA\*
 - [ ] SMA\*
