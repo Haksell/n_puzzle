@@ -15,12 +15,12 @@ def __lebesgue(puzzle, goal, dist_func):
     return total_distance
 
 
-def euclidean(puzzle, goal):
-    return __lebesgue(puzzle, goal, math.hypot)
-
-
 def manhattan(puzzle, goal):
     return __lebesgue(puzzle, goal, lambda dx, dy: abs(dx) + abs(dy))
+
+
+def euclidean(puzzle, goal):
+    return __lebesgue(puzzle, goal, math.hypot)
 
 
 def chebyshev(puzzle, goal):
