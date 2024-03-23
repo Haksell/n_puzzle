@@ -1,7 +1,5 @@
 import math
 
-from lib import print_puzzle
-
 
 def __lebesgue(puzzle, goal, dist_func):
     assert len(puzzle) == len(goal)
