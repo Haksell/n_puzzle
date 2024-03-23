@@ -115,6 +115,3 @@ def manhattan_with_conflicts(puzzle, goal):
         + 2 * __corner_conflicts(puzzle, goal)
         + 2 * __linear_conflicts(puzzle, goal)
     )
-
-
-HEURISTICS = [manhattan_with_conflicts, manhattan, euclidean, chebyshev, hamming]
