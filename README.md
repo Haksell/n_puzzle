@@ -47,6 +47,8 @@
 - [x] chebyshev
 - [x] hamming
 - [x] manhattan with conflicts
+- [ ] inversion distance
+- [ ] walking distance
 
 ## resources
 
