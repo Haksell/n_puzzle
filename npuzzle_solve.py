@@ -1,7 +1,7 @@
 from enum import IntEnum, auto
 from heapq import heappop, heappush
 import time
-from heuristics import manhattan_with_conflicts
+from heuristics import manhattan, manhattan_with_conflicts
 from math import isqrt
 from lib import make_goal
 from parsing import parse
@@ -95,7 +95,7 @@ def __a_star(puzzle, heuristic):
 
 def __main(argv):
     puzzle = parse(argv)
-    for heuristic in [manhattan_with_conflicts]:
+    for heuristic in [manhattan_with_conflicts, manhattan]:
         t0 = time.time()
         solution = __a_star(puzzle, heuristic)
         print(
