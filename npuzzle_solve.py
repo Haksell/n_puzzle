@@ -40,6 +40,7 @@ def __do_move(puzzle, move, size, zero_idx):
 
 
 def __available_moves(size, zero_idx, last):
+    # yield would be cooler but it's somehow slower with pypy
     y, x = divmod(zero_idx, size)
     moves = []
     if y != 0 and last != Move.UP:
@@ -53,16 +54,15 @@ def __available_moves(size, zero_idx, last):
     return moves
 
 
-def __reconstruct_solution(puzzle, size, came_from, hash_puzzle):
+def __reconstruct_solution(size, came_from, hash_puzzle):
+    size_sq = size * size
     solution = []
-    while True:
-        move = came_from[hash_puzzle]
-        if move is None:
-            return solution[::-1]
+    while (move := came_from[hash_puzzle]) is not None:
         solution.append(move)
-        puzzle = int_to_perm(hash_puzzle, size * size)
+        puzzle = int_to_perm(hash_puzzle, size_sq)
         __do_move(puzzle, OPPOSITE_MOVES[move], size, puzzle.index(0))
         hash_puzzle = perm_to_int(puzzle)
+    return solution[::-1]
 
 
 def __a_star(puzzle, heuristic):
@@ -76,7 +76,7 @@ def __a_star(puzzle, heuristic):
     while frontier:
         (_, hash_current) = heappop(frontier)
         if hash_current == hash_goal:
-            return __reconstruct_solution(goal, size, came_from, hash_current)
+            return __reconstruct_solution(size, came_from, hash_current)
         current = int_to_perm(hash_current, len(puzzle))
         zero_idx = current.index(0)
         solution_length = solution_lengths[hash_current] + 1
