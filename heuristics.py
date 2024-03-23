@@ -63,8 +63,8 @@ def __get_ceil_index(arr, tail_indices, l, r, key):
 
 
 def __longest_increasing_subsequence(a):
-    if len(a) == 0:
-        return 0
+    if len(a) <= 1:
+        return len(a)
     a = list(reversed(a))
     tail_indices = [0]
     prev_indices = [-1] * (len(a) + 1)
