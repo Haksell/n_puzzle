@@ -72,9 +72,9 @@ def __a_star(puzzle, heuristic):
     hash_puzzle = perm_to_int(puzzle)
     came_from = {hash_puzzle: None}
     len_solution = {hash_puzzle: 0}
-    open_set = [(heuristic(puzzle, goal), hash_puzzle)]
-    while open_set:
-        _, hash_puzzle = heappop(open_set)
+    frontier = [(heuristic(puzzle, goal), hash_puzzle)]
+    while frontier:
+        _, hash_puzzle = heappop(frontier)
         puzzle = int_to_perm(hash_puzzle, len(puzzle))
         zero_idx = puzzle.index(0)
         for move in __available_moves(size, zero_idx, came_from[hash_puzzle]):
@@ -86,7 +86,7 @@ def __a_star(puzzle, heuristic):
                 if hash_moved == hash_goal:
                     return __reconstruct_solution(goal, size, came_from, hash_moved)
                 heappush(
-                    open_set,
+                    frontier,
                     (len_solution[hash_moved] + heuristic(puzzle, goal), hash_moved),
                 )
             __do_move(puzzle, move, size, zero_idx)
