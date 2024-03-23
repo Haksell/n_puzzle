@@ -103,7 +103,7 @@ def __main(argv):
             heuristic(puzzle, make_goal(isqrt(len(puzzle)))),
             len(solution),
             f"{time.time() - t0:.3f}s",
-            # heuristic.__name__,
+            heuristic.__name__,
         )
 
 

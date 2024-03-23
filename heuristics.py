@@ -1,5 +1,7 @@
 import math
 
+from lib import print_puzzle
+
 
 def __lebesgue(puzzle, goal, dist_func):
     assert len(puzzle) == len(goal)
@@ -63,6 +65,8 @@ def __get_ceil_index(arr, tail_indices, l, r, key):
 
 
 def __longest_increasing_subsequence(a):
+    if len(a) == 0:
+        return 0
     a = list(reversed(a))
     tail_indices = [0]
     prev_indices = [-1] * (len(a) + 1)
@@ -86,13 +90,12 @@ def __longest_increasing_subsequence(a):
 
 def __line_conflicts(line_puzzle, line_goal):
     common = set(line_puzzle) & set(line_goal)
-    # common.discard(0)
+    common.discard(0)
     line_puzzle = [n for n in line_puzzle if n in common]
     line_goal = [n for n in line_goal if n in common]
     goal_pos = {n: i for i, n in enumerate(line_goal)}
     perm = [goal_pos[n] for n in line_puzzle]
-    # TODO: fix (clearly not 4)
-    return 4 - __longest_increasing_subsequence(perm)
+    return len(perm) - __longest_increasing_subsequence(perm)
 
 
 def __linear_conflicts(puzzle, goal):
