@@ -1,4 +1,4 @@
-from enum import IntEnum, auto
+from enum import Enum
 from heapq import heappop, heappush
 import math
 import time
@@ -10,23 +10,18 @@ from permutations import int_to_perm, perm_to_int
 import sys
 
 
-class Move(IntEnum):
-    UP = auto()
-    RIGHT = auto()
-    DOWN = auto()
-    LEFT = auto()
+class Move(Enum):
+    UP = 0
+    RIGHT = 1
+    DOWN = 2
+    LEFT = 3
+
+    def opposite(self):
+        return Move(self.value ^ 2)
 
 
-OPPOSITE_MOVES = {
-    Move.UP: Move.DOWN,
-    Move.RIGHT: Move.LEFT,
-    Move.DOWN: Move.UP,
-    Move.LEFT: Move.RIGHT,
-}
-
-
-# TODO: execute the moves directly on the hashed value
 def __do_move(puzzle, move, size, zero_idx):
+    # TODO: execute the moves directly on the hashed value
     swap_idx = (
         zero_idx
         + {
@@ -40,7 +35,7 @@ def __do_move(puzzle, move, size, zero_idx):
 
 
 def __available_moves(size, zero_idx, last):
-    # yield would be cooler but it's somehow slower with pypy
+    # TODO: yield would be cooler but it's somehow slower with pypy
     y, x = divmod(zero_idx, size)
     moves = []
     if y != 0 and last != Move.UP:
@@ -61,7 +56,7 @@ def __reconstruct_solution(size, came_from, hash_puzzle):
     while (move := came_from[hash_puzzle]) is not None:
         solution.append(move)
         puzzle = int_to_perm(hash_puzzle, size_sq)
-        __do_move(puzzle, OPPOSITE_MOVES[move], size, puzzle.index(0))
+        __do_move(puzzle, move.opposite(), size, puzzle.index(0))
         hash_puzzle = perm_to_int(puzzle)
     return solution[::-1]
 
