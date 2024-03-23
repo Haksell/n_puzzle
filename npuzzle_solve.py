@@ -55,6 +55,7 @@ def __available_moves(size, zero_idx, last):
 
 
 def __reconstruct_solution(size, came_from, hash_puzzle):
+    # TODO: keep track of 0 pos
     size_sq = size * size
     solution = []
     while (move := came_from[hash_puzzle]) is not None:
