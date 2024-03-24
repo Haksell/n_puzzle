@@ -21,7 +21,7 @@
 
 ## todo
 
-- fix manhattan_with_conflicts admissibility
+- compare code with Tristan
 - Puzzle class (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator)
 - Rust
 - way more testing
@@ -35,7 +35,6 @@
 - [ ] A\*
 - [ ] IDA\* (no need for hashing)
 - [ ] SMA\*
-- [ ] Pattern Databases
 - [ ] Row/Col solver
 - [ ] ID-Dual\* or Bi-directional A\*
 - ... https://chat.openai.com/c/10a31ea2-f76b-49db-86f3-f3adaeb3e31e
@@ -49,6 +48,7 @@
 - [x] manhattan with conflicts
 - [ ] inversion distance
 - [ ] walking distance
+- [ ] pattern databases
 
 ## resources
 
