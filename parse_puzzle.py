@@ -1,16 +1,8 @@
 from lib import is_solvable, panic
-import os
 
 
-# TODO: use argparse
-def __parse_args(argv):
+def __read_file(filename):
     MAX_FILE_SIZE = 1 << 15
-    try:
-        assert len(argv) == 2
-        filename = argv[1]
-    except AssertionError:
-        program_name = argv[0] if len(argv) >= 1 else os.path.basename(__file__)
-        panic(f"Usage: python {program_name} <filename>")
     try:
         content = open(filename).read(MAX_FILE_SIZE)
         assert len(content) != MAX_FILE_SIZE, f"file too big (max={MAX_FILE_SIZE})"
@@ -19,7 +11,8 @@ def __parse_args(argv):
     return content
 
 
-def __parse_puzzle(content):
+def parse_puzzle(filename):
+    content = __read_file(filename)
     size = None
     seen = set()
     puzzle = []
@@ -58,7 +51,3 @@ def __parse_puzzle(content):
     if not is_solvable(puzzle):
         panic("Unsolvable puzzle")
     return puzzle
-
-
-def parse(argv):
-    return __parse_puzzle(__parse_args(argv))

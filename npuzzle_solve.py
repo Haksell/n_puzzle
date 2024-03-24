@@ -1,3 +1,4 @@
+import argparse
 from enum import IntEnum
 from heapq import heappop, heappush
 import math
@@ -5,9 +6,8 @@ import time
 from heuristics import manhattan, manhattan_with_conflicts
 from math import isqrt
 from lib import make_goal
-from parsing import parse
+from parse_puzzle import parse_puzzle
 from permutations import int_to_perm, perm_to_int
-import sys
 
 
 class Move(IntEnum):
@@ -82,8 +82,15 @@ def __a_star(puzzle, heuristic):
     raise RuntimeError("No solution found. This is impossible.")
 
 
-def __main(argv):
-    puzzle = parse(argv)
+def __parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("filename", type=str, help="Filename of the puzzle.")
+    return parser.parse_args()
+
+
+def __main():
+    args = __parse_args()
+    puzzle = parse_puzzle(args.filename)
     for heuristic in [manhattan_with_conflicts, manhattan]:
         t0 = time.time()
         solution = __a_star(puzzle, heuristic)
@@ -97,4 +104,4 @@ def __main(argv):
 
 
 if __name__ == "__main__":
-    __main(sys.argv)
+    __main()

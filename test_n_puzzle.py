@@ -2,7 +2,7 @@ import itertools
 from math import factorial
 import os
 from lib import is_solvable, make_goal
-from parsing import parse
+from parse_puzzle import parse_puzzle
 from permutations import int_to_perm, perm_to_int
 import pytest
 
@@ -88,7 +88,7 @@ def test_parse_valid():
     for filename in sorted(os.listdir(DIR_VALID)):
         filename = os.path.join(DIR_VALID, filename)
         print(filename)
-        puzzle = parse(["npuzzle_solve.py", filename])
+        puzzle = parse_puzzle(filename)
         if filename in KNOWN_PUZZLES:
             assert puzzle == KNOWN_PUZZLES[filename]
 
@@ -103,7 +103,7 @@ def test_parse_invalid():
         filename = os.path.join(DIR_INVALID, filename)
         print(filename)
         with pytest.raises(SystemExit) as exc_info:
-            parse(["npuzzle_solve.py", filename])
+            parse_puzzle(filename)
         assert exc_info.value.code == 1
 
 
