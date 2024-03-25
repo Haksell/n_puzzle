@@ -37,6 +37,7 @@
 - [ ] SMA\*
 - [ ] Row/Col solver
 - [ ] ID-Dual\* or Bi-directional A\*
+- [ ] JPS+
 - ... https://chat.openai.com/c/10a31ea2-f76b-49db-86f3-f3adaeb3e31e
 
 ## heuristics
