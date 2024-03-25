@@ -3,7 +3,7 @@ from enum import IntEnum
 from heapq import heappop, heappush
 import math
 import time
-from heuristics import manhattan, manhattan_with_conflicts
+from heuristics import constant_zero, manhattan, manhattan_with_conflicts
 from math import isqrt
 from lib import make_goal
 from parse_puzzle import parse_puzzle
@@ -91,7 +91,7 @@ def __parse_args():
 def __main():
     args = __parse_args()
     puzzle = parse_puzzle(args.filename)
-    for heuristic in [manhattan_with_conflicts, manhattan]:
+    for heuristic in [manhattan_with_conflicts, manhattan, constant_zero]:
         t0 = time.time()
         solution = __a_star(puzzle, heuristic)
         print(

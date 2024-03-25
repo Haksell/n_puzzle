@@ -46,6 +46,7 @@
 - [x] chebyshev
 - [x] hamming
 - [x] manhattan with conflicts
+- [ ] constant zero (equivalent to BFS)
 - [ ] inversion distance
 - [ ] walking distance
 - [ ] pattern databases

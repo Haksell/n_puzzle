@@ -113,3 +113,7 @@ def manhattan_with_conflicts(puzzle, goal):
         + 2 * __corner_conflicts(puzzle, goal)
         + 2 * __linear_conflicts(puzzle, goal)
     )
+
+
+def constant_zero(puzzle, goal):
+    return 0
