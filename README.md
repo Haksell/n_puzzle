@@ -21,6 +21,7 @@
 
 ## todo
 
+- heuristics folder
 - compare code with Tristan
 - Puzzle class (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator)
 - Rust
@@ -48,7 +49,7 @@
 - [x] hamming
 - [x] manhattan with conflicts
 - [x] constant zero (equivalent to BFS)
-- [ ] inversion distance
+- [ ] inversion distance (kind of done but not optimized)
 - [ ] walking distance
 - [ ] pattern databases
 
