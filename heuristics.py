@@ -52,14 +52,14 @@ def __corner_conflicts(puzzle, goal):
     )
 
 
-def __get_ceil_index(arr, tail_indices, l, r, key):
-    while r - l > 1:
-        m = l + r >> 1
-        if arr[tail_indices[m]] <= key:
-            r = m
+def __get_ceil_index(arr, tail_indices, lo, hi, key):
+    while hi - lo > 1:
+        mi = lo + hi >> 1
+        if arr[tail_indices[mi]] <= key:
+            hi = mi
         else:
-            l = m
-    return r
+            lo = mi
+    return hi
 
 
 def __longest_increasing_subsequence(a):
