@@ -1,5 +1,9 @@
+MAIN := src/npuzzle_solve.py
 END := \033[0m
 GREEN := \033[1m\033[32m
+
+help:
+	@python $(MAIN) --help
 
 all:
 	-@$(MAKE) --no-print-directory clean > /dev/null
@@ -8,9 +12,6 @@ all:
 
 test:
 	pytest -vv
-
-help:
-	@python npuzzle_solve.py || true
 
 clean:
 	@rm -rf __pycache__ */__pycache__ */*/__pycache__

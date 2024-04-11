@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
-from lib import is_solvable, panic, print_puzzle
+from src.lib import is_solvable, panic, print_puzzle
 import random
 
 
