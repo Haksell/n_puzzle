@@ -22,12 +22,11 @@
 ## todo
 
 -   `Puzzle` class (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator, zero_idx & goal properties)
--   way more testing
--   multithreading
 -   graphical visualization
 -   remaining solvers
 -   remaining heuristics
 -   just cycle when 2x2 to solve
+-   way more testing
 -   compare code with Tristan
 
 ## solvers
