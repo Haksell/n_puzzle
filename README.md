@@ -45,10 +45,10 @@
 -   [x] manhattan
 -   [x] euclidean
 -   [x] chebyshev
--   [x] hamming
 -   [x] manhattan with conflicts
+-   [x] hamming
 -   [x] constant zero (equivalent to BFS)
--   [ ] inversion distance (kind of done but not optimized)
+-   [x] inversion distance
 -   [ ] walking distance
 -   [ ] pattern databases
 

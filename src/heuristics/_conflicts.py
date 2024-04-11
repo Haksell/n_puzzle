@@ -1,5 +1,5 @@
 import math
-from .lebesgue import manhattan
+from ._lebesgue import manhattan
 
 
 def __corner_conflicts(puzzle, goal):

@@ -3,7 +3,7 @@ from math import factorial
 import os
 from src.lib import is_solvable, make_goal
 from src.parse_puzzle import parse_puzzle
-from src.hash_puzzle import int_to_perm, perm_to_int
+from src.hash_puzzle import compressed
 import pytest
 
 DIR_VALID = "puzzles/valid"
@@ -471,13 +471,13 @@ def test_make_goal():
     ]
 
 
-def test_permutations():
+def test_compression():
     for size in range(6):
         results = []
         for n, p in enumerate(itertools.permutations(range(size))):
             p = list(p)
-            res = perm_to_int(p)
-            assert int_to_perm(perm_to_int(p), size) == p
-            assert perm_to_int(int_to_perm(n, size)) == n
+            res = compressed.do_hash(p)
+            assert compressed.undo_hash(compressed.do_hash(p), size) == p
+            assert compressed.do_hash(compressed.undo_hash(n, size)) == n
             results.append(res)
         assert sorted(results) == list(range(factorial(size)))
