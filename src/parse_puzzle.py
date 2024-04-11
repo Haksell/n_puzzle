@@ -23,7 +23,7 @@ def parse_puzzle(filename):
         if size is None:
             try:
                 size = int(line)
-                assert size >= 3
+                assert size >= 2
             except (AssertionError, ValueError):
                 panic(f"Invalid size: {line}")
         else:

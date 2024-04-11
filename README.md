@@ -22,6 +22,7 @@
 ## todo
 
 -   `Puzzle` class (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator, zero_idx & goal properties)
+-   accept randomly generated puzzles
 -   graphical visualization
 -   remaining solvers
 -   remaining heuristics
