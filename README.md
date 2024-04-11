@@ -36,6 +36,7 @@
 -   [x] A\*
 -   [x] Best-First Search
 -   [x] IDA\*
+-   [ ] LPA\*
 -   [ ] SMA\*
 -   [ ] ID-Dual\* or Bi-directional A\*
 -   [ ] JPS+
@@ -57,6 +58,9 @@
 ## resources
 
 -   https://en.wikipedia.org/wiki/A*_search_algorithm
+-   https://en.wikipedia.org/wiki/Iterative_deepening_A*
+-   https://en.wikipedia.org/wiki/SMA*
+-   https://en.wikipedia.org/wiki/Lifelong_Planning_A*
 -   https://en.wikipedia.org/wiki/Heuristic_(computer_science)
 -   https://en.wikipedia.org/wiki/Admissible_heuristic
 -   https://en.wikipedia.org/wiki/Consistent_heuristic
@@ -64,3 +68,7 @@
 -   https://medium.com/swlh/looking-into-k-puzzle-heuristics-6189318eaca2
 -   https://algorithmsinsight.wordpress.com/graph-theory-2/a-star-in-general/implementing-a-star-to-solve-n-puzzle/
 -   https://algorithmsinsight.wordpress.com/graph-theory-2/implementing-bfs-for-pattern-database/
+-   https://laconicml.com/simplified-memory-bounded-a-star/
+-   https://mice.cs.columbia.edu/getTechreport.php?techreportID=1026&format=pdf&
+-   https://www.lamsade.dauphine.fr/~cazenave/papers/SOAPH.pdf
+-   https://cdn.aaai.org/AAAI/1996/AAAI96-178.pdf
