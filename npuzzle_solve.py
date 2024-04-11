@@ -18,12 +18,15 @@ def __main():
     args = __parse_args()
     puzzle = parse_puzzle(args.filename)
     for solver in [
-        solvers.best_first_search,
-        solvers.ida_star,
+        # solvers.best_first_search,
+        # solvers.ida_star,
         solvers.a_star,
     ]:
         for heuristic in [heuristics.manhattan_with_conflicts]:
-            for hash_pair in [compressed, uncompressed]:
+            for hash_pair in [
+                # compressed,
+                uncompressed,
+            ]:
                 t0 = time.time()
                 solution = solver(puzzle, heuristic, hash_pair)
                 print(
