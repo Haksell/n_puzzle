@@ -21,14 +21,13 @@
 
 ## todo
 
--   srcs folder
--   compare code with Tristan
 -   Puzzle class (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator)
 -   Rust
 -   way more testing
 -   multithreading
 -   graphical visualization
 -   just cycle when 2x2 to solve
+-   compare code with Tristan
 
 ## solvers
 
