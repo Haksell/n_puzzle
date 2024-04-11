@@ -21,21 +21,24 @@
 
 ## todo
 
--   Puzzle class (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator)
--   Rust
+-   Iterated Birst-First Search
+-   Fix A*, IDA*, conflicts
+-   Puzzle class (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator, zero_idx & goal properties)
 -   way more testing
 -   multithreading
 -   graphical visualization
+-   remaining solvers
+-   remaining heuristics
 -   just cycle when 2x2 to solve
 -   compare code with Tristan
 
 ## solvers
 
--   [x] Best-First Search
 -   [x] A\*
--   [ ] IDA\* (no need for hashing)
+-   [x] Best-First Search
+-   [ ] IDA\*
 -   [ ] SMA\*
--   [ ] Row/Col solver
+-   [ ] Row/Col solver (don't allow with pattern databases)
 -   [ ] ID-Dual\* or Bi-directional A\*
 -   [ ] JPS+
 -   ... https://chat.openai.com/c/10a31ea2-f76b-49db-86f3-f3adaeb3e31e

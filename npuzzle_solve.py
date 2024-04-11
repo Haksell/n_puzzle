@@ -1,9 +1,8 @@
 import argparse
 import time
+from src import heuristics, solvers
 from src.hash_puzzle import compressed, uncompressed
-from src.heuristics import inversion_distance, manhattan, manhattan_with_conflicts
 from src.parse_puzzle import parse_puzzle
-from src.solvers import a_star, best_first_search
 
 
 def __parse_args():
@@ -19,8 +18,11 @@ def __main():
     args = __parse_args()
     hash_pair = compressed if args.compress else uncompressed
     puzzle = parse_puzzle(args.filename)
-    for solver in [a_star]:
-        for heuristic in [manhattan_with_conflicts, manhattan, inversion_distance]:
+    for solver in [
+        solvers.ida_star,
+        solvers.a_star,
+    ]:
+        for heuristic in [heuristics.manhattan_with_conflicts]:
             t0 = time.time()
             solution = solver(puzzle, heuristic, hash_pair)
             print(
