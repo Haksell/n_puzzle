@@ -32,7 +32,7 @@
 ## solvers
 
 -   [ ] Best-first search
--   [ ] A\*
+-   [x] A\*
 -   [ ] IDA\* (no need for hashing)
 -   [ ] SMA\*
 -   [ ] Row/Col solver
