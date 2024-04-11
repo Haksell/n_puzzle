@@ -3,11 +3,10 @@ from enum import IntEnum
 from heapq import heappop, heappush
 import math
 import time
-from heuristics import inversion_distance, manhattan, manhattan_with_conflicts
-from math import isqrt
-from lib import make_goal
-from parse_puzzle import parse_puzzle
-from permutations import int_to_perm, perm_to_int
+from src.parse_puzzle import parse_puzzle
+from src.permutations import int_to_perm, perm_to_int
+from src.heuristics import inversion_distance, manhattan, manhattan_with_conflicts
+from src.lib import make_goal
 
 
 class Move(IntEnum):
@@ -54,7 +53,7 @@ def __reconstruct_solution(size, came_from, hash_puzzle):
 
 
 def __a_star(puzzle, heuristic):
-    size = isqrt(len(puzzle))
+    size = math.isqrt(len(puzzle))
     goal = make_goal(size)
     hash_goal = perm_to_int(goal)
     hash_puzzle = perm_to_int(puzzle)
@@ -96,7 +95,7 @@ def __main():
         solution = __a_star(puzzle, heuristic)
         print(
             "".join(move.name[0] for move in solution),
-            heuristic(puzzle, make_goal(isqrt(len(puzzle)))),
+            heuristic(puzzle, make_goal(math.isqrt(len(puzzle)))),
             len(solution),
             f"{time.time() - t0:.3f}s",
             heuristic.__name__,

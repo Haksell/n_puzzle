@@ -2,8 +2,8 @@ import itertools
 from math import factorial
 import os
 from src.lib import is_solvable, make_goal
-from parse_puzzle import parse_puzzle
-from permutations import int_to_perm, perm_to_int
+from src.parse_puzzle import parse_puzzle
+from src.permutations import int_to_perm, perm_to_int
 import pytest
 
 DIR_VALID = "puzzles/valid"

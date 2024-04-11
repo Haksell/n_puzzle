@@ -1,4 +1,4 @@
-from lib import is_solvable, panic
+from .lib import is_solvable, panic
 
 
 def __read_file(filename):

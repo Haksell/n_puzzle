@@ -1,6 +1,4 @@
-MAIN := src/npuzzle_solve.py
-END := \033[0m
-GREEN := \033[1m\033[32m
+MAIN := npuzzle_solve.py
 
 help:
 	@python $(MAIN) --help
