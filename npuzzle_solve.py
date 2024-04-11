@@ -16,7 +16,6 @@ def __parse_args():
 
 def __main():
     args = __parse_args()
-    hash_pair = compressed if args.compress else uncompressed
     puzzle = parse_puzzle(args.filename)
     for solver in [
         solvers.best_first_search,
@@ -24,16 +23,18 @@ def __main():
         solvers.a_star,
     ]:
         for heuristic in [heuristics.manhattan_with_conflicts]:
-            t0 = time.time()
-            solution = solver(puzzle, heuristic, hash_pair)
-            print(
-                # "".join(move.name[0] for move in solution),
-                # heuristic(puzzle, make_goal(math.isqrt(len(puzzle)))),
-                len(solution),
-                f"{time.time() - t0:.3f}s",
-                solver.__name__,
-                heuristic.__name__,
-            )
+            for hash_pair in [compressed, uncompressed]:
+                t0 = time.time()
+                solution = solver(puzzle, heuristic, hash_pair)
+                print(
+                    # "".join(move.name[0] for move in solution),
+                    # heuristic(puzzle, make_goal(math.isqrt(len(puzzle)))),
+                    len(solution),
+                    f"{time.time() - t0:.3f}s",
+                    solver.__name__,
+                    heuristic.__name__,
+                    "compressed" if hash_pair == compressed else "uncompressed",
+                )
 
 
 if __name__ == "__main__":

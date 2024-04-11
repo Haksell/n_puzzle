@@ -15,7 +15,7 @@ def __corner_conflicts(puzzle, goal):
             or puzzle[vertical_neighbor] == goal[vertical_neighbor]
         )
         for corner, horizontal_neighbor, vertical_neighbor in [
-            (top_left + 0, top_left + 1, top_left + size),
+            (top_left, top_left + 1, top_left + size),
             (top_right, top_right - 1, top_right + size),
             (bottom_left, bottom_left + 1, bottom_left - size),
             (bottom_right, bottom_right - 1, bottom_right - size),
