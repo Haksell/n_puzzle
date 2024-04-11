@@ -4,8 +4,8 @@ from heapq import heappop, heappush
 import math
 import time
 from src.parse_puzzle import parse_puzzle
-from src.permutations import int_to_perm, perm_to_int
-from src.heuristics import inversion_distance, manhattan, manhattan_with_conflicts
+from src.hash_puzzle import compressed, uncompressed
+from src.heuristics import manhattan_with_conflicts
 from src.lib import make_goal
 
 
@@ -40,36 +40,36 @@ def __available_moves(size, zero_idx, last):
     return moves
 
 
-def __reconstruct_solution(size, came_from, hash_puzzle):
+def __reconstruct_solution(size, came_from, hash_puzzle, hash_pair):
     # TODO: keep track of 0 pos
     size_sq = size * size
     solution = []
     while (move := came_from[hash_puzzle]) is not None:
         solution.append(move)
-        puzzle = int_to_perm(hash_puzzle, size_sq)
+        puzzle = hash_pair.undo_hash(hash_puzzle, size_sq)
         __do_move(puzzle, move.opposite(), size, puzzle.index(0))
-        hash_puzzle = perm_to_int(puzzle)
+        hash_puzzle = hash_pair.do_hash(puzzle)
     return solution[::-1]
 
 
-def __a_star(puzzle, heuristic):
+def __a_star(puzzle, heuristic, hash_pair):
     size = math.isqrt(len(puzzle))
     goal = make_goal(size)
-    hash_goal = perm_to_int(goal)
-    hash_puzzle = perm_to_int(puzzle)
+    hash_goal = hash_pair.do_hash(goal)
+    hash_puzzle = hash_pair.do_hash(puzzle)
     came_from = {hash_puzzle: None}
     solution_lengths = {hash_puzzle: 0}
     frontier = [(heuristic(puzzle, goal), hash_puzzle)]
     while frontier:
         (_, hash_current) = heappop(frontier)
         if hash_current == hash_goal:
-            return __reconstruct_solution(size, came_from, hash_current)
-        current = int_to_perm(hash_current, len(puzzle))
+            return __reconstruct_solution(size, came_from, hash_current, hash_pair)
+        current = hash_pair.undo_hash(hash_current, len(puzzle))
         zero_idx = current.index(0)
         solution_length = solution_lengths[hash_current] + 1
         for move in __available_moves(size, zero_idx, came_from[hash_current]):
             __do_move(current, move, size, zero_idx)
-            hash_neighbor = perm_to_int(current)
+            hash_neighbor = hash_pair.do_hash(current)
             if solution_length < solution_lengths.get(hash_neighbor, math.inf):
                 came_from[hash_neighbor] = move
                 solution_lengths[hash_neighbor] = solution_length
@@ -84,15 +84,19 @@ def __a_star(puzzle, heuristic):
 def __parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", type=str, help="Filename of the puzzle.")
+    parser.add_argument(
+        "--compress", action="store_true", help="Compress the puzzle representation."
+    )
     return parser.parse_args()
 
 
 def __main():
     args = __parse_args()
+    hash_pair = compressed if args.compress else uncompressed
     puzzle = parse_puzzle(args.filename)
-    for heuristic in [manhattan_with_conflicts, manhattan, inversion_distance]:
+    for heuristic in [manhattan_with_conflicts]:
         t0 = time.time()
-        solution = __a_star(puzzle, heuristic)
+        solution = __a_star(puzzle, heuristic, hash_pair)
         print(
             "".join(move.name[0] for move in solution),
             heuristic(puzzle, make_goal(math.isqrt(len(puzzle)))),
