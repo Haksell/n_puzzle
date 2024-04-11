@@ -21,9 +21,8 @@
 
 ## todo
 
--   Iterated Birst-First Search
--   Fix A*, IDA*, conflicts
--   Puzzle class (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator, zero_idx & goal properties)
+-   fix manhattan_with_conflicts admissibility
+-   `Puzzle` class (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator, zero_idx & goal properties)
 -   way more testing
 -   multithreading
 -   graphical visualization
@@ -36,7 +35,7 @@
 
 -   [x] A\*
 -   [x] Best-First Search
--   [ ] IDA\*
+-   [x] IDA\*
 -   [ ] SMA\*
 -   [ ] Row/Col solver (don't allow with pattern databases)
 -   [ ] ID-Dual\* or Bi-directional A\*

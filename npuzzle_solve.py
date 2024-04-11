@@ -19,6 +19,7 @@ def __main():
     hash_pair = compressed if args.compress else uncompressed
     puzzle = parse_puzzle(args.filename)
     for solver in [
+        solvers.best_first_search,
         solvers.ida_star,
         solvers.a_star,
     ]:
