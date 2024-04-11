@@ -31,7 +31,7 @@
 
 ## solvers
 
--   [ ] Best-first search
+-   [x] Best-First Search
 -   [x] A\*
 -   [ ] IDA\* (no need for hashing)
 -   [ ] SMA\*
