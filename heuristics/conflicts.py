@@ -1,34 +1,6 @@
 import math
 
-
-def __lebesgue(puzzle, goal, dist_func):
-    assert len(puzzle) == len(goal)
-    size = math.isqrt(len(puzzle))
-    goal_pos = {v: i for i, v in enumerate(goal) if v != 0}
-    total_distance = 0
-    for i, v in enumerate(puzzle):
-        if v == 0:
-            continue
-        gy, gx = divmod(goal_pos[v], size)
-        py, px = divmod(i, size)
-        total_distance += dist_func(gx - px, gy - py)
-    return total_distance
-
-
-def manhattan(puzzle, goal):
-    return __lebesgue(puzzle, goal, lambda dx, dy: abs(dx) + abs(dy))
-
-
-def euclidean(puzzle, goal):
-    return __lebesgue(puzzle, goal, math.hypot)
-
-
-def chebyshev(puzzle, goal):
-    return __lebesgue(puzzle, goal, lambda dx, dy: max(abs(dx), abs(dy)))
-
-
-def hamming(puzzle, goal):
-    return sum(pi != gi for pi, gi in zip(puzzle, goal) if pi != 0)
+from heuristics.lebesgue import manhattan
 
 
 def __corner_conflicts(puzzle, goal):
@@ -113,66 +85,3 @@ def manhattan_with_conflicts(puzzle, goal):
         + 2 * __corner_conflicts(puzzle, goal)
         + 2 * __linear_conflicts(puzzle, goal)
     )
-
-
-def constant_zero(puzzle, goal):
-    return 0
-
-
-def __merge(arr, temp_arr, left, mid, right):
-    i = left
-    j = mid + 1
-    k = left
-    inv_count = 0
-
-    while i <= mid and j <= right:
-        if arr[i] <= arr[j]:
-            temp_arr[k] = arr[i]
-            k += 1
-            i += 1
-        else:
-            temp_arr[k] = arr[j]
-            inv_count += mid - i + 1
-            k += 1
-            j += 1
-
-    while i <= mid:
-        temp_arr[k] = arr[i]
-        k += 1
-        i += 1
-
-    while j <= right:
-        temp_arr[k] = arr[j]
-        k += 1
-        j += 1
-
-    for loop_var in range(left, right + 1):
-        arr[loop_var] = temp_arr[loop_var]
-
-    return inv_count
-
-
-def __merge_sort(arr, temp_arr, left, right):
-    inv_count = 0
-    if left < right:
-        mid = (left + right) // 2
-        inv_count += __merge_sort(arr, temp_arr, left, mid)
-        inv_count += __merge_sort(arr, temp_arr, mid + 1, right)
-        inv_count += __merge(arr, temp_arr, left, mid, right)
-    return inv_count
-
-
-def __count_inversions(arr1, arr2):
-    index_map = {value: idx for idx, value in enumerate(arr2)}
-    arr1_mapped = [index_map[value] for value in arr1]
-    temp_arr = [0] * len(arr1)
-    return __merge_sort(arr1_mapped, temp_arr, 0, len(arr1_mapped) - 1)
-
-
-def inversion_distance(puzzle, goal):
-    size = math.isqrt(len(puzzle))
-    vertical_puzzle = [puzzle[i + j * size] for i in range(size) for j in range(size)]
-    vertical_goal = [goal[i + j * size] for i in range(size) for j in range(size)]
-    horizontal_inversions = __count_inversions(puzzle, goal)
-    vertical_inversions = __count_inversions(vertical_puzzle, vertical_goal)
-    return sum(divmod(horizontal_inversions, 3)) + sum(divmod(vertical_inversions, 3))

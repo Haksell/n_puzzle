@@ -13,4 +13,6 @@ help:
 	@python npuzzle_solve.py || true
 
 clean:
-	rm -rf __pycache__ .pytest_cache .coverage test_gen.txt
+	@rm -rf __pycache__ */__pycache__ */*/__pycache__
+	@rm -rf .pytest_cache */.pytest_cache */*.pytest_cache
+	@rm -rf .coverage test_gen.txt
