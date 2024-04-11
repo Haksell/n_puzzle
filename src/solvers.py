@@ -71,7 +71,7 @@ def __solver(puzzle, heuristic, hash_pair, optimal, max_depth, push, pop):
             if solution_length < solution_lengths.get(hash_neighbor, math.inf):
                 came_from[hash_neighbor] = move
                 solution_lengths[hash_neighbor] = solution_length
-                depth = heuristic(current, goal) + (solution_length if optimal else 0)
+                depth = heuristic(current, goal) + solution_length * optimal
                 push(frontier, (depth, hash_neighbor))
             __do_move(current, move, size, zero_idx)
 
@@ -84,15 +84,10 @@ def best_first_search(puzzle, heuristic, hash_pair):
     return __solver(puzzle, heuristic, hash_pair, False, math.inf, heappush, heappop)
 
 
-def __ida_star(puzzle, heuristic, hash_pair, max_depth):
-    return __solver(
-        puzzle, heuristic, hash_pair, True, max_depth, list.append, list.pop
-    )
-
-
 def ida_star(puzzle, heuristic, hash_pair, step=1):
-    return next(
-        solution
-        for max_depth in count(0, step=step)
-        if (solution := __ida_star(puzzle, heuristic, hash_pair, max_depth)) is not None
-    )
+    for max_depth in count(0, step=step):
+        solution = __solver(
+            puzzle, heuristic, hash_pair, True, max_depth, list.append, list.pop
+        )
+        if solution is not None:
+            return solution
