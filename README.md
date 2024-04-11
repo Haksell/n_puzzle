@@ -37,9 +37,9 @@
 -   [x] Best-First Search
 -   [x] IDA\*
 -   [ ] SMA\*
--   [ ] Row/Col solver (don't allow with pattern databases)
 -   [ ] ID-Dual\* or Bi-directional A\*
 -   [ ] JPS+
+-   [ ] Row/Col solver (don't allow with pattern databases)
 -   ... https://chat.openai.com/c/10a31ea2-f76b-49db-86f3-f3adaeb3e31e
 
 ## heuristics
