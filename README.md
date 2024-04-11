@@ -7,7 +7,7 @@
 -   [ ] You have to manage various puzzle sizes (3, 4, 5, 17, etc ...). The higher your program can go without dying a horrible, horrible death, the better.
 -   [ ] You have to manage both randomly determined states (of your own generation of course), and input files that specify a starting board, the format of which is described in the appendix.
 -   [ ] The cost associated with each transition is always 1.
--   [ ] The user must be able to choose between at LEAST 3 (relevant) heuristic functions. The Manhattan-distance heuristic is mandatory, the other two are up to you. By "relevant" we mean they must be admissible (Read up on what this means) and they must be something other than " just return a random value because #YOLO".
+-   [ ] The user must be able to choose between at LEAST 3 (relevant) heuristic functions. The Manhattan-distance heuristic is mandatory, the other two are up to you.
 -   [ ] Show total number of states ever selected in the "opened" set (complexity in time)
 -   [ ] Show maximum number of states ever represented in memory at the same time during the search (complexity in size)
 -   [ ] Show number of moves required to transition from the initial state to the final state, according to the search
@@ -36,6 +36,7 @@
 -   [x] A\*
 -   [x] Best-First Search
 -   [x] IDA\*
+-   [ ] Uniform Cost Search
 -   [ ] LPA\*
 -   [ ] SMA\*
 -   [ ] ID-Dual\* or Bi-directional A\*
@@ -72,3 +73,7 @@
 -   https://mice.cs.columbia.edu/getTechreport.php?techreportID=1026&format=pdf&
 -   https://www.lamsade.dauphine.fr/~cazenave/papers/SOAPH.pdf
 -   https://cdn.aaai.org/AAAI/1996/AAAI96-178.pdf
+-   https://www.educative.io/answers/what-is-uniform-cost-search
+-   https://www.scaler.com/topics/uniform-cost-search/
+-   https://www.javatpoint.com/ai-uninformed-search-algorithms
+-   https://www.geeksforgeeks.org/uniform-cost-search-dijkstra-for-large-graphs/
