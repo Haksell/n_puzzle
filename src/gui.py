@@ -1,9 +1,14 @@
 import tkinter as tk
 from .lib import make_goal
-from .solvers import do_move
 
 # TODO: make the tiles non-clickable
 # TODO: animations
+# TODO: p5
+
+
+def __do_move(puzzle, move, size, zero_idx):
+    swap_idx = zero_idx + [size, -1, -size, 1][move]
+    puzzle[zero_idx], puzzle[swap_idx] = puzzle[swap_idx], puzzle[zero_idx]
 
 
 def __draw_puzzle(board_frame, tiles, goal, width, height):
@@ -32,6 +37,30 @@ def __draw_puzzle(board_frame, tiles, goal, width, height):
             )
 
 
+# def __draw_puzzle(board_frame, buttons, tiles, goal, width, height):
+#     buttons = []
+#     for y in range(height):
+#         for x in range(width):
+#             tile = tiles[height * y + x]
+#             goal_tile = goal[height * y + x]
+#             txt, bg_color = (
+#                 ("", "White")
+#                 if tile == 0
+#                 else (str(tile), "#E88A45" if tile == goal_tile else "#6AC6B8")
+#             )
+#             buttons.append(
+#                 tk.Button(
+#                     board_frame,
+#                     text=txt,
+#                     relief="solid",
+#                     bd=1,
+#                     bg=bg_color,
+#                     font="times 12 bold",
+#                 )
+#             )
+#     return buttons
+
+
 def launch_gui(puzzle, solution):
     pos = 0
     tiles = list(puzzle)
@@ -48,7 +77,7 @@ def launch_gui(puzzle, solution):
         nonlocal pos
         if pos > 0:
             pos -= 1
-            do_move(tiles, solution[pos].opposite(), size, tiles.index(0))
+            __do_move(tiles, solution[pos].opposite(), size, tiles.index(0))
             __draw_puzzle(board_frame, tiles, goal, size, size)
 
     def play():
@@ -57,7 +86,7 @@ def launch_gui(puzzle, solution):
     def go_next():
         nonlocal pos
         if pos < len(solution):
-            do_move(tiles, solution[pos], size, tiles.index(0))
+            __do_move(tiles, solution[pos], size, tiles.index(0))
             pos += 1
             __draw_puzzle(board_frame, tiles, goal, size, size)
 
