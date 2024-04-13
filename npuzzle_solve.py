@@ -43,7 +43,7 @@ def __launch_gui(puzzle, solution):
     tiles = list(puzzle)
     root = tk.Tk()
     root.title("n_puzzle")
-    root.geometry("600x600+100+50")
+    root.geometry("600x600")
     root.resizable(False, False)
 
     top_fr = tk.Frame(root, width=600, height=100, bg="light green")
@@ -62,11 +62,7 @@ def __launch_gui(puzzle, solution):
     )
     bd_fr.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-    objh = 100
-    objw = 100
-    objx = 0
-    objy = 0
-
+    square_size = 100
     for r in range(4):
         for c in range(4):
             tile = tiles[4 * r + c]
@@ -79,14 +75,12 @@ def __launch_gui(puzzle, solution):
                 bg=bg_color,
                 font="times 12 bold",
             )
-            game_btn.place(x=objx, y=objy, height=objh, width=objw)
-
-            # sq = bd.get_square(r, c)
-            # sq.set_btn(game_btn)
-
-            objx = objx + objw
-        objx = 0
-        objy = objy + objh
+            game_btn.place(
+                x=square_size * c,
+                y=square_size * r,
+                height=square_size,
+                width=square_size,
+            )
 
     root.mainloop()
 
