@@ -1,8 +1,8 @@
 import argparse
 import time
 from src import heuristics, solvers
+from src.Puzzle import Puzzle
 from src.hash_puzzle import compressed, uncompressed
-from src.parse_puzzle import parse_puzzle
 
 
 def __parse_args():
@@ -16,7 +16,7 @@ def __parse_args():
 
 def __main():
     args = __parse_args()
-    puzzle = parse_puzzle(args.filename)
+    puzzle = Puzzle.from_file(args.filename)
     for solver in [
         # solvers.best_first_search,
         # solvers.ida_star,

@@ -4,6 +4,8 @@ import argparse
 from src.lib import is_solvable, panic, print_puzzle
 import random
 
+MIN_SIZE = 3
+
 
 def __parse_args():
     parser = argparse.ArgumentParser()
@@ -26,9 +28,9 @@ def __parse_args():
     )
     args = parser.parse_args()
     if args.solvable and args.unsolvable:
-        panic("Can't be both solvable and unsolvable.")
-    if args.size < 3:
-        panic("Can't generate a puzzle with size lower than 3.")
+        panic("Puzzle can't be both solvable and unsolvable.")
+    if args.size < MIN_SIZE:
+        panic(f"Can't generate a puzzle with size lower than {MIN_SIZE}.")
     return args
 
 
