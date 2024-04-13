@@ -6,12 +6,17 @@ from .solvers import do_move
 # TODO: animations
 
 
-def __draw_puzzle(board_frame, tiles, width, height):
+def __draw_puzzle(board_frame, tiles, goal, width, height):
     square_size = 100
     for y in range(height):
         for x in range(width):
             tile = tiles[height * y + x]
-            txt, bg_color = ("", "White") if tile == 0 else (str(tile), "RosyBrown1")
+            goal_tile = goal[height * y + x]
+            txt, bg_color = (
+                ("", "White")
+                if tile == 0
+                else (str(tile), "#E88A45" if tile == goal_tile else "#6AC6B8")
+            )
             tk.Button(
                 board_frame,
                 text=txt,
@@ -37,27 +42,30 @@ def launch_gui(puzzle, solution):
         nonlocal pos
         pos = 0
         tiles = list(puzzle)
-        __draw_puzzle(board_frame, tiles, size, size)
+        __draw_puzzle(board_frame, tiles, goal, size, size)
 
     def go_previous():
         nonlocal pos
         if pos > 0:
             pos -= 1
-            do_move(tiles, solution[pos].opposite(), size, puzzle.index(0))
-            __draw_puzzle(board_frame, tiles, size, size)
+            do_move(tiles, solution[pos].opposite(), size, tiles.index(0))
+            __draw_puzzle(board_frame, tiles, goal, size, size)
+
+    def play():
+        pass
 
     def go_next():
         nonlocal pos
-        if pos > 0:
-            pos -= 1
-            do_move(tiles, solution[pos].opposite(), size, puzzle.index(0))
-            __draw_puzzle(board_frame, tiles, size, size)
+        if pos < len(solution):
+            do_move(tiles, solution[pos], size, tiles.index(0))
+            pos += 1
+            __draw_puzzle(board_frame, tiles, goal, size, size)
 
     def go_end():
         nonlocal pos
         pos = len(solution)
         tiles = goal.copy()
-        __draw_puzzle(board_frame, tiles, size, size)
+        __draw_puzzle(board_frame, tiles, goal, size, size)
 
     root = tk.Tk()
     root.title("n_puzzle")
@@ -77,35 +85,35 @@ def launch_gui(puzzle, solution):
         text="⏮️",
         width=button_width,
         height=button_height,
-        command=lambda: go_start,
+        command=go_start,
     ).pack(side=tk.LEFT, padx=padx)
     tk.Button(
         top_frame,
         text="⏪",
         width=button_width,
         height=button_height,
-        command=lambda: print("⏪"),
+        command=go_previous,
     ).pack(side=tk.LEFT, padx=padx)
     tk.Button(
         top_frame,
         text="▶️",
         width=button_width,
         height=button_height,
-        command=lambda: print("▶️"),
+        command=play,
     ).pack(side=tk.LEFT, padx=padx)
     tk.Button(
         top_frame,
         text="⏩",
         width=button_width,
         height=button_height,
-        command=lambda: print("⏩"),
+        command=go_next,
     ).pack(side=tk.LEFT, padx=padx)
     tk.Button(
         top_frame,
         text="⏭️",
         width=button_width,
         height=button_height,
-        command=lambda: print("⏭️"),
+        command=go_end,
     ).pack(side=tk.LEFT, padx=padx)
 
     bottom_frame = tk.Frame(root, width=600, height=500, bg="light steel blue")
@@ -120,5 +128,5 @@ def launch_gui(puzzle, solution):
         bg="lemon chiffon",
     )
     board_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-    __draw_puzzle(board_frame, puzzle)
+    __draw_puzzle(board_frame, puzzle, goal, size, size)
     root.mainloop()
