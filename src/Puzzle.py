@@ -74,3 +74,7 @@ class Puzzle:
         if not is_solvable(tiles):  # TODO: in class
             panic("Unsolvable puzzle")
         return cls(size, tiles)
+
+    @classmethod
+    def random(cls, width, height):
+        pass  # TODO
