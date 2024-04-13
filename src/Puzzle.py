@@ -13,6 +13,14 @@ class Puzzle:
     def __len__(self):
         return len(self.__tiles)
 
+    @property
+    def height(self):
+        return self.__size
+
+    @property
+    def width(self):
+        return self.__size
+
     # TODO: remove __iter__ (maybe) and __getitem__(definitely)
 
     def __iter__(self):

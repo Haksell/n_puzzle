@@ -9,6 +9,8 @@ class HashPair:
     undo_hash: Callable[[Any, int], List[int]]
 
 
+# TODO: more basic __perm_to_int with 4/5 bits for each number
+
 # https://stackoverflow.com/a/24689277/10793260
 
 
