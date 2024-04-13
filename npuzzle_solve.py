@@ -45,31 +45,9 @@ def __launch_gui(puzzle, solution):
     root.title("n_puzzle")
     root.geometry("600x600+100+50")
     root.resizable(False, False)
-    bd = None
-    playable = False
 
     top_fr = tk.Frame(root, width=600, height=100, bg="light green")
     top_fr.pack(fill=tk.X)
-
-    hdg = tk.Label(
-        top_fr,
-        text="  15 PUZZLE GAME  ",
-        font="arial 22 bold",
-        fg="Navy Blue",
-        bg="white",
-    )
-    hdg.place(relx=0.5, rely=0.4, anchor=tk.CENTER)
-
-    play_btn = tk.Button(
-        top_fr,
-        text="New \nGame",
-        bd=5,
-        bg="PaleGreen4",
-        fg="White",
-        font="times 12 bold",
-        # command=new_game,
-    )
-    play_btn.place(relx=0.92, rely=0.5, anchor=tk.E)
 
     btm_fr = tk.Frame(root, width=600, height=500, bg="light steel blue")
     btm_fr.pack(fill=tk.X)
@@ -84,11 +62,6 @@ def __launch_gui(puzzle, solution):
     )
     bd_fr.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-    if playable:
-        btn_state = "normal"
-    else:
-        btn_state = "disable"
-
     objh = 100
     objw = 100
     objx = 0
@@ -97,12 +70,7 @@ def __launch_gui(puzzle, solution):
     for r in range(4):
         for c in range(4):
             tile = tiles[4 * r + c]
-            if tile == 0:
-                txt = ""
-                bg_color = "White"
-            else:
-                txt = str(tile)
-                bg_color = "RosyBrown1"
+            txt, bg_color = ("", "White") if tile == 0 else (str(tile), "RosyBrown1")
             game_btn = tk.Button(
                 bd_fr,
                 text=txt,
@@ -110,8 +78,6 @@ def __launch_gui(puzzle, solution):
                 bd=1,
                 bg=bg_color,
                 font="times 12 bold",
-                state=btn_state,
-                # command=lambda x=nm: clicked(x),
             )
             game_btn.place(x=objx, y=objy, height=objh, width=objw)
 
