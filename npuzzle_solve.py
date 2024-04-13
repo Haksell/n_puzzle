@@ -7,37 +7,47 @@ from src.hash_puzzle import compressed, uncompressed
 
 def __parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("filename", type=str, help="Filename of the puzzle.")
+    parser.add_argument("filename", type=str, help="Filename of the puzzle")
     parser.add_argument(
-        "--compress", action="store_true", help="Compress the puzzle representation."
+        "--compress", action="store_true", help="Compress the puzzle representation"
     )
-    return parser.parse_args()
+    # TODO: refactor heurstic and solver code
+    heuristic_names = [h.__name__ for h in heuristics.HEURISTICS]
+    parser.add_argument(
+        "--heuristic",
+        type=str,
+        choices=heuristic_names,
+        default=heuristic_names[0],
+        help=f"Type of heuristic to use. Defaults to {heuristic_names[0]}.",
+    )
+    solver_names = [h.__name__ for h in solvers.SOLVERS]
+    parser.add_argument(
+        "--solver",
+        type=str,
+        choices=solver_names,
+        default=solver_names[0],
+        help=f"Type of solver to use. Defaults to {solver_names[0]}.",
+    )
+    args = parser.parse_args()
+    puzzle = Puzzle.from_file(args.filename)
+    hash_pair = compressed if args.compress else uncompressed
+    heuristic = next(h for h in heuristics.HEURISTICS if h.__name__ == args.heuristic)
+    solver = next(s for s in solvers.SOLVERS if s.__name__ == args.solver)
+    return puzzle, hash_pair, heuristic, solver
 
 
 def __main():
-    args = __parse_args()
-    puzzle = Puzzle.from_file(args.filename)
-    for solver in [
-        # solvers.best_first_search,
-        # solvers.ida_star,
-        solvers.a_star,
-    ]:
-        for heuristic in [heuristics.manhattan_with_conflicts]:
-            for hash_pair in [
-                # compressed,
-                uncompressed,
-            ]:
-                t0 = time.time()
-                solution = solver(puzzle, heuristic, hash_pair)
-                print(
-                    # "".join(move.name[0] for move in solution),
-                    # heuristic(puzzle, make_goal(math.isqrt(len(puzzle)))),
-                    len(solution),
-                    f"{time.time() - t0:.3f}s",
-                    solver.__name__,
-                    heuristic.__name__,
-                    "compressed" if hash_pair == compressed else "uncompressed",
-                )
+    puzzle, hash_pair, heuristic, solver = __parse_args()
+    t0 = time.time()
+    solution = solver(puzzle, heuristic, hash_pair)
+    print(
+        "".join(move.name[0] for move in solution),
+        len(solution),
+        f"{time.time() - t0:.3f}s",
+        solver.__name__,
+        heuristic.__name__,
+        hash_pair.name,
+    )
 
 
 if __name__ == "__main__":

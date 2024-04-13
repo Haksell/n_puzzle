@@ -4,6 +4,7 @@ from typing import Any, Callable, List
 
 @dataclass
 class HashPair:
+    name: str
     do_hash: Callable[[List[int]], Any]
     undo_hash: Callable[[Any, int], List[int]]
 
@@ -35,5 +36,5 @@ def __int_to_perm(n, size):
     return permuted
 
 
-compressed = HashPair(__perm_to_int, __int_to_perm)
-uncompressed = HashPair(tuple, lambda a, _: list(a))
+compressed = HashPair("compressed", __perm_to_int, __int_to_perm)
+uncompressed = HashPair("uncompressed", tuple, lambda a, _: list(a))

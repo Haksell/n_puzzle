@@ -80,10 +80,6 @@ def a_star(puzzle, heuristic, hash_pair):
     return __solver(puzzle, heuristic, hash_pair, True, math.inf, heappush, heappop)
 
 
-def best_first_search(puzzle, heuristic, hash_pair):
-    return __solver(puzzle, heuristic, hash_pair, False, math.inf, heappush, heappop)
-
-
 def ida_star(puzzle, heuristic, hash_pair, step=1):
     for max_depth in count(0, step=step):
         solution = __solver(
@@ -91,3 +87,10 @@ def ida_star(puzzle, heuristic, hash_pair, step=1):
         )
         if solution is not None:
             return solution
+
+
+def best_first_search(puzzle, heuristic, hash_pair):
+    return __solver(puzzle, heuristic, hash_pair, False, math.inf, heappush, heappop)
+
+
+SOLVERS = [a_star, ida_star, best_first_search]

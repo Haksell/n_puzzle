@@ -2,7 +2,8 @@ import itertools
 from math import factorial
 import os
 from src.lib import is_solvable, make_goal
-from src.parse_puzzle import parse_puzzle
+
+# TODO: fix parsing testing from src.parse_puzzle import parse_puzzle
 from src.hash_puzzle import compressed
 import pytest
 
