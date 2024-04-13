@@ -2,7 +2,7 @@ import argparse
 from src import heuristics, solvers
 from src.Puzzle import Puzzle
 from src.hash_puzzle import compressed, uncompressed
-from src.solvers import Move
+from src.solvers import do_move, Move
 import time
 import tkinter as tk
 
@@ -40,43 +40,63 @@ def __parse_args():
 
 
 def __launch_gui(puzzle, solution):
-    tiles = list(puzzle)
     root = tk.Tk()
     root.title("n_puzzle")
     root.geometry("600x600")
     root.resizable(False, False)
 
-    top_fr = tk.Frame(root, width=600, height=100, bg="light green")
-    top_fr.pack(fill=tk.X)
+    top_frame = tk.Frame(root, width=600, height=100, bg="light green")
+    top_frame.pack_propagate(False)
+    top_frame.pack(fill=tk.X)
 
-    btm_fr = tk.Frame(root, width=600, height=500, bg="light steel blue")
-    btm_fr.pack(fill=tk.X)
+    button_width = 10
+    button_height = 2
+    padx = 10
 
-    bd_fr = tk.Frame(
-        btm_fr,
+    tk.Button(top_frame, text="⏮️", width=button_width, height=button_height).pack(
+        side=tk.LEFT, padx=padx
+    )
+    tk.Button(top_frame, text="⏪", width=button_width, height=button_height).pack(
+        side=tk.LEFT, padx=padx
+    )
+    tk.Button(top_frame, text="▶️", width=button_width, height=button_height).pack(
+        side=tk.LEFT, padx=padx
+    )
+    tk.Button(top_frame, text="⏩", width=button_width, height=button_height).pack(
+        side=tk.LEFT, padx=padx
+    )
+    tk.Button(top_frame, text="⏭️", width=button_width, height=button_height).pack(
+        side=tk.LEFT, padx=padx
+    )
+
+    bottom_frame = tk.Frame(root, width=600, height=500, bg="light steel blue")
+    bottom_frame.pack(fill=tk.X)
+
+    board_frame = tk.Frame(
+        bottom_frame,
         width=400 + 2,
         height=400 + 2,
         relief="solid",
         bd=1,
         bg="lemon chiffon",
     )
-    bd_fr.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+    board_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     square_size = 100
-    for r in range(4):
-        for c in range(4):
-            tile = tiles[4 * r + c]
+    for y in range(puzzle.height):
+        for x in range(puzzle.width):
+            tile = puzzle[puzzle.height * y + x]
             txt, bg_color = ("", "White") if tile == 0 else (str(tile), "RosyBrown1")
             tk.Button(
-                bd_fr,
+                board_frame,
                 text=txt,
                 relief="solid",
                 bd=1,
                 bg=bg_color,
                 font="times 12 bold",
             ).place(
-                x=square_size * c,
-                y=square_size * r,
+                x=square_size * x,
+                y=square_size * y,
                 height=square_size,
                 width=square_size,
             )
