@@ -28,7 +28,7 @@ def __parse_args():
     )
     args = parser.parse_args()
     if args.solvable and args.unsolvable:
-        panic("Can't be both solvable and unsolvable.")
+        panic("Puzzle can't be both solvable and unsolvable.")
     if args.size < MIN_SIZE:
         panic(f"Can't generate a puzzle with size lower than {MIN_SIZE}.")
     return args
