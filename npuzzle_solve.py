@@ -67,15 +67,14 @@ def __launch_gui(puzzle, solution):
         for c in range(4):
             tile = tiles[4 * r + c]
             txt, bg_color = ("", "White") if tile == 0 else (str(tile), "RosyBrown1")
-            game_btn = tk.Button(
+            tk.Button(
                 bd_fr,
                 text=txt,
                 relief="solid",
                 bd=1,
                 bg=bg_color,
                 font="times 12 bold",
-            )
-            game_btn.place(
+            ).place(
                 x=square_size * c,
                 y=square_size * r,
                 height=square_size,
