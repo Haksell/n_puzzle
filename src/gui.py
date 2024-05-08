@@ -1,7 +1,6 @@
 import pyglet
 from pyglet.graphics import Batch
 
-# TODO: more constants
 TILE_MARGIN = 0.05  # TODO: add it on the border
 CORRECT_COLOR = (232, 138, 69)
 INCORRECT_COLOR = (106, 198, 184)
@@ -15,9 +14,8 @@ class GUI(pyglet.window.Window):
             height=self.tile_size * puzzle.height,
             caption=f"{len(puzzle)-1}-puzzle",
         )
-        self.batch = Batch()
         self.font_size = self.__compute_font_size(puzzle)
-        self.__make_tiles(puzzle)
+        self.batch = self.__make_batch(puzzle)
 
     def __compute_tile_size(self, puzzle):
         display = pyglet.canvas.get_display()
@@ -32,7 +30,8 @@ class GUI(pyglet.window.Window):
         factor = max(0.2, 0.4 - max_digits * 0.04)
         return round(self.tile_size * factor)
 
-    def __make_tiles(self, puzzle):
+    def __make_batch(self, puzzle):
+        batch = Batch()
         background_margin = TILE_MARGIN * self.tile_size
         background_size = (1 - 2 * TILE_MARGIN) * self.tile_size
         half_tile = self.tile_size // 2
@@ -48,7 +47,7 @@ class GUI(pyglet.window.Window):
                 anchor_x="center",
                 anchor_y="center",
                 color=(255, 255, 255, 255),  # TODO: better color and font
-                batch=self.batch,
+                batch=batch,
             )
             pyglet.shapes.Rectangle(
                 x * self.tile_size + background_margin,
@@ -56,19 +55,13 @@ class GUI(pyglet.window.Window):
                 background_size,
                 background_size,
                 color=CORRECT_COLOR if puzzle.is_correct(i) else INCORRECT_COLOR,
-                batch=self.batch,
+                batch=batch,
             )
+        return batch
 
     def on_draw(self):
         self.clear()
         self.batch.draw()
-
-    @staticmethod
-    def hex_to_rgb(hex_color):
-        # Convert hex color to an RGB tuple
-        hex_color = hex_color.lstrip("#")
-        lv = len(hex_color)
-        return tuple(int(hex_color[i : i + lv // 3], 16) for i in range(0, lv, lv // 3))
 
     def run(self):
         pyglet.app.run()
