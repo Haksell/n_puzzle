@@ -54,8 +54,8 @@ def __ida_star(puzzle, heuristic, max_depth, moves, solution_lengths):
             if puzzle.is_solved():
                 return moves
             solution_lengths[hash_neighbor] = solution_length
-            depth = heuristic(puzzle, puzzle.goal) + solution_length
-            if depth <= max_depth and __ida_star(
+            estimate = heuristic(puzzle, puzzle.goal) + solution_length
+            if estimate <= max_depth and __ida_star(
                 puzzle, heuristic, max_depth, moves, solution_lengths
             ):
                 return moves

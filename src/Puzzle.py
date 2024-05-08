@@ -61,6 +61,9 @@ def is_solvable(tiles):
     return parity_empty(tiles, size) == parity_compared_to_goal(tiles, size)
 
 
+# TODO: keep running manhattan
+
+
 class Puzzle:
     # TODO: accept rectangles
     def __init__(self, size, tiles):
@@ -72,6 +75,10 @@ class Puzzle:
         self.__zero_idx = tiles.index(0)
         # TODO:be lazy about calling make_goal
         self.__goal = make_goal(self.__size)
+        # TODO: only if manhattan or similar
+        self.__goal_pos = [0] * (size * size)
+        for i, n in enumerate(self.__goal):
+            self.__goal_pos[n] = i
 
     def __len__(self):
         return len(self.__tiles)
@@ -87,6 +94,10 @@ class Puzzle:
     @property
     def goal(self):
         return self.__goal
+
+    @property
+    def goal_pos(self):
+        return self.__goal_pos
 
     def __iter__(self):
         yield from self.__tiles

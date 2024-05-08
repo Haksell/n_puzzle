@@ -1,6 +1,3 @@
-import math
-
-
 def __merge(arr, temp_arr, lo, mi, hi):
     left_idx = lo
     right_idx = mi + 1
@@ -38,7 +35,7 @@ def __count_inversions(arr1, arr2):
 
 
 def inversion_distance(puzzle, goal):
-    size = math.isqrt(len(puzzle))
+    size = puzzle.height
     vertical_puzzle = [puzzle[i + j * size] for i in range(size) for j in range(size)]
     vertical_goal = [goal[i + j * size] for i in range(size) for j in range(size)]
     horizontal_inversions = __count_inversions(puzzle, goal)

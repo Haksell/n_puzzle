@@ -3,14 +3,14 @@ import math
 
 def __lebesgue(puzzle, goal, dist_func):
     assert len(puzzle) == len(goal)
-    size = math.isqrt(len(puzzle))
-    goal_pos = {v: i for i, v in enumerate(goal) if v != 0}
     total_distance = 0
+    goal_pos = puzzle.goal_pos
+    width = puzzle.width
     for i, v in enumerate(puzzle):
         if v == 0:
             continue
-        gy, gx = divmod(goal_pos[v], size)
-        py, px = divmod(i, size)
+        gy, gx = divmod(goal_pos[v], width)
+        py, px = divmod(i, width)
         total_distance += dist_func(gx - px, gy - py)
     return total_distance
 
