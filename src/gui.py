@@ -1,6 +1,8 @@
 import pyglet
 from pyglet.graphics import Batch
 
+MAX_TILE_SIZE = 125
+MAX_SCREEN_PROPORTION = 0.7
 TILE_MARGIN = 0.05  # TODO: add it on the border
 CORRECT_COLOR = (232, 138, 69)
 INCORRECT_COLOR = (106, 198, 184)
@@ -18,11 +20,13 @@ class GUI(pyglet.window.Window):
         self.batch = self.__make_batch(puzzle)
 
     def __compute_tile_size(self, puzzle):
-        display = pyglet.canvas.get_display()
-        screen = display.get_default_screen()
+        screen = pyglet.canvas.get_display().get_default_screen()
         return min(
-            125,
-            int(min(screen.height / puzzle.height, screen.width / puzzle.width) * 0.7),
+            MAX_TILE_SIZE,
+            int(
+                min(screen.height / puzzle.height, screen.width / puzzle.width)
+                * MAX_SCREEN_PROPORTION
+            ),
         )
 
     def __compute_font_size(self, puzzle):
