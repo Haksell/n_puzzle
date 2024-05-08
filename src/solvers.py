@@ -42,7 +42,7 @@ def best_first_search(puzzle, heuristic):
     return __heap_solver(puzzle, heuristic, False)
 
 
-def __ida_star(puzzle, heuristic, optimal, max_depth):
+def __ida_star(puzzle, heuristic, max_depth):
     hash_puzzle = puzzle.hash()
     came_from = {hash_puzzle: None}
     solution_lengths = {hash_puzzle: 0}
@@ -61,14 +61,14 @@ def __ida_star(puzzle, heuristic, optimal, max_depth):
             if solution_length < solution_lengths.get(hash_neighbor, sys.maxsize):
                 came_from[hash_neighbor] = move
                 solution_lengths[hash_neighbor] = solution_length
-                depth = heuristic(current, puzzle.goal) + solution_length * optimal
+                depth = heuristic(current, puzzle.goal) + solution_length
                 frontier.append((depth, hash_neighbor))
             current.do_move(move.opposite())
 
 
 def ida_star(puzzle, heuristic):
     for max_depth in count(0):
-        solution = __ida_star(puzzle, heuristic, True, max_depth)
+        solution = __ida_star(puzzle, heuristic, max_depth)
         if solution is not None:
             return solution
 
