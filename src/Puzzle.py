@@ -56,13 +56,18 @@ class Puzzle:
     def width(self):
         return self.__size
 
-    # TODO: remove __iter__ (maybe) and __getitem__(definitely)
-
     def __iter__(self):
         yield from self.__tiles
 
     def __getitem__(self, idx):
         return self.__tiles[idx]
+
+    def __str__(self):
+        padding = len(str(len(self) - 1))
+        return "\n".join(
+            " ".join(f"{self[y*self.__size+x]:{padding}}" for x in range(self.__size))
+            for y in range(self.__size)
+        )
 
     def hash(self):  # TODO: __hash__
         return tuple(self)  # TODO: constently updated factorial base

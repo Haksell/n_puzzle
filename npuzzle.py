@@ -38,7 +38,7 @@ def __parse_args():
 
 def __main():
     puzzle, heuristic, solver, gui = __parse_args()
-    print(list(puzzle))
+    print(puzzle)
     t0 = time.time()
     solution = solver(puzzle, heuristic)
     print(
