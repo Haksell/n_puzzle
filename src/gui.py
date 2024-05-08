@@ -135,7 +135,7 @@ class GUI(pyglet.window.Window):
         else:
             for i in reversed(range(new_position, self.__position)):
                 self.__puzzle.do_move(self.__solution[i].opposite())
-        self.__batch = self.__make_batch()
+        self.__batch = self.__make_batch()  # TODO: only update tiles that moved
 
     def on_draw(self):
         new_position = self.__get_new_position()
