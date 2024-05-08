@@ -46,6 +46,8 @@ def __line_conflicts(line_puzzle, line_goal):
     return len(perm) - __longest_increasing_subsequence(perm)
 
 
+# TODO: alternative simpler linear conflicts that misses multiple conflicts
+# but is faster to compute without lis
 def __linear_conflicts(puzzle, goal):
     size = math.isqrt(len(puzzle))
     conflicts = 0
