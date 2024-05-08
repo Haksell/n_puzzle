@@ -1,6 +1,7 @@
 import itertools
 import math
-from src.lib import do_move, panic
+from src.Move import Move
+from src.lib import panic
 
 
 def is_solvable(tiles):
@@ -27,6 +28,9 @@ def is_solvable(tiles):
 
     size = math.isqrt(len(tiles))
     return parity_empty(tiles, size) == parity_compared_to_goal(tiles, size)
+
+
+# TODO: @cache make_goal
 
 
 class Puzzle:
@@ -60,11 +64,32 @@ class Puzzle:
     def __getitem__(self, idx):
         return self.__tiles[idx]
 
+    def hash(self):  # TODO: __hash__
+        return tuple(self)  # TODO: factorial base
+
     def is_correct(self, i):
         return self[i] == self.__goal[i]
 
     def do_move(self, move):
-        do_move(self.__tiles, move, self.__size, self.__tiles.index(0))
+        zero_idx = self.__tiles.index(0)
+        swap_idx = zero_idx + [self.__size, -1, -self.__size, 1][move]
+        self.__tiles[zero_idx], self.__tiles[swap_idx] = (
+            self.__tiles[swap_idx],
+            self.__tiles[zero_idx],
+        )
+
+    def available_moves(self, last):
+        y, x = divmod(self.__tiles.index(0), self.__size)
+        moves = []
+        if y != 0 and last != Move.UP:
+            moves.append(Move.DOWN)
+        if x != self.__size - 1 and last != Move.RIGHT:
+            moves.append(Move.LEFT)
+        if y != self.__size - 1 and last != Move.DOWN:
+            moves.append(Move.UP)
+        if x != 0 and last != Move.LEFT:
+            moves.append(Move.RIGHT)
+        return moves
 
     @staticmethod
     def __read_file(filename):

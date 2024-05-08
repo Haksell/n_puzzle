@@ -1,16 +1,5 @@
-from enum import IntEnum
 import math
 import sys
-
-
-class Move(IntEnum):
-    UP = 0
-    RIGHT = 1
-    DOWN = 2
-    LEFT = 3
-
-    def opposite(self):
-        return Move(self.value ^ 2)
 
 
 def panic(message):
@@ -36,9 +25,3 @@ def print_puzzle(puzzle):
     w = len(str(size**2))
     for y in range(0, size * size, size):
         print(*[f"{puzzle[x + y]:{w}}" for x in range(size)])
-
-
-def do_move(tiles, move, size, zero_idx):
-    # TODO: execute the moves directly on the hashed value
-    swap_idx = zero_idx + [size, -1, -size, 1][move]
-    tiles[zero_idx], tiles[swap_idx] = tiles[swap_idx], tiles[zero_idx]
