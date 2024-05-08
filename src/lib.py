@@ -76,3 +76,9 @@ def is_solvable(puzzle):
 
     size = math.isqrt(len(puzzle))
     return parity_empty(puzzle, size) == parity_compared_to_goal(puzzle, size)
+
+
+def do_move(tiles, move, size, zero_idx):
+    # TODO: execute the moves directly on the hashed value
+    swap_idx = zero_idx + [size, -1, -size, 1][move]
+    tiles[zero_idx], tiles[swap_idx] = tiles[swap_idx], tiles[zero_idx]

@@ -3,7 +3,6 @@ from src import heuristics, solvers
 from src.Puzzle import Puzzle
 from src.gui import GUI
 from src.hash_puzzle import compressed, uncompressed
-from src.solvers import Move
 import time
 
 
@@ -42,65 +41,8 @@ def __parse_args():
 def __main():
     puzzle, hash_pair, heuristic, solver, gui = __parse_args()
     t0 = time.time()
-    # solution = solver(puzzle, heuristic, hash_pair)
-    solution = [
-        Move.DOWN,
-        Move.LEFT,
-        Move.DOWN,
-        Move.RIGHT,
-        Move.RIGHT,
-        Move.UP,
-        Move.LEFT,
-        Move.DOWN,
-        Move.RIGHT,
-        Move.DOWN,
-        Move.RIGHT,
-        Move.UP,
-        Move.UP,
-        Move.LEFT,
-        Move.DOWN,
-        Move.DOWN,
-        Move.LEFT,
-        Move.LEFT,
-        Move.UP,
-        Move.RIGHT,
-        Move.RIGHT,
-        Move.DOWN,
-        Move.LEFT,
-        Move.LEFT,
-        Move.UP,
-        Move.RIGHT,
-        Move.UP,
-        Move.RIGHT,
-        Move.UP,
-        Move.LEFT,
-        Move.DOWN,
-        Move.LEFT,
-        Move.UP,
-        Move.RIGHT,
-        Move.RIGHT,
-        Move.RIGHT,
-        Move.DOWN,
-        Move.LEFT,
-        Move.LEFT,
-        Move.LEFT,
-        Move.DOWN,
-        Move.RIGHT,
-        Move.RIGHT,
-        Move.RIGHT,
-        Move.UP,
-        Move.LEFT,
-        Move.DOWN,
-        Move.DOWN,
-        Move.RIGHT,
-        Move.UP,
-        Move.LEFT,
-        Move.LEFT,
-        Move.UP,
-        Move.RIGHT,
-    ]
+    solution = solver(puzzle, heuristic, hash_pair)
     print(list(puzzle))
-    print(", ".join("Move." + move.name for move in solution))
     print(
         "".join(move.name[0] for move in solution),
         len(solution),
