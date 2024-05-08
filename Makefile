@@ -1,7 +1,5 @@
-MAIN := npuzzle_solve.py
-
 help:
-	@python $(MAIN) --help
+	@python npuzzle.py --help
 
 all:
 	-@$(MAKE) --no-print-directory clean > /dev/null
