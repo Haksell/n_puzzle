@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# TODO: remove this file, and generate random in Puzzle class
+
 import argparse
 from src.lib import is_solvable, panic, print_puzzle
 import random
