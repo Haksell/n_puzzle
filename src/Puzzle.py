@@ -9,7 +9,29 @@ def panic(message):
     sys.exit(1)
 
 
-def is_solvable(tiles):
+def make_goal(s):  # TODO: accept rectangles
+    ts = s * s
+    tiles = [-1] * ts
+    x = y = 0
+    dx = 1
+    dy = 0
+    for cur in itertools.chain(range(1, ts), [0]):
+        tiles[x + y * s] = cur
+        cur += 1
+        if (
+            x + dx >= s
+            or x + dx < 0
+            or y + dy >= s
+            or y + dy < 0
+            or tiles[x + dx + (y + dy) * s] != -1
+        ):
+            dx, dy = -dy, dx
+        x += dx
+        y += dy
+    return tiles
+
+
+def is_solvable(tiles):  # TODO: test with rectangles of various sizes
     def parity_empty(tiles, size):
         py, px = divmod(tiles.index(0), size)
         return (size ^ py ^ px ^ 1) & 1
@@ -29,26 +51,21 @@ def is_solvable(tiles):
         return transpositions
 
     def parity_compared_to_goal(tiles, size):
-        return parity_permutation(tiles) ^ parity_permutation(Puzzle.make_goal(size))
+        return parity_permutation(tiles) ^ parity_permutation(make_goal(size))
 
     size = math.isqrt(len(tiles))
     return parity_empty(tiles, size) == parity_compared_to_goal(tiles, size)
 
 
-# TODO: @cache make_goal
-
-
 class Puzzle:
     # TODO: accept rectangles
-    # TODO: remove retarded mkg argument
-    def __init__(self, size, tiles, *, mkg=True):
+    def __init__(self, size, tiles):
         assert sorted(tiles) == list(
             range(size * size)
         ), f"Invalid puzzle of size {size}: {tiles}"
         self.__size = size
         self.__tiles = tiles
-        if mkg:
-            self.__goal = Puzzle.make_goal(self.__size)
+        self.__goal = make_goal(self.__size)
 
     def __len__(self):
         return len(self.__tiles)
@@ -60,6 +77,10 @@ class Puzzle:
     @property
     def width(self):
         return self.__size
+
+    @property
+    def goal(self):
+        return self.__goal
 
     def __iter__(self):
         yield from self.__tiles
@@ -115,28 +136,6 @@ class Puzzle:
         return content
 
     @classmethod
-    def make_goal(cls, s):  # TODO: accept rectangles
-        ts = s * s
-        tiles = [-1] * ts
-        x = y = 0
-        dx = 1
-        dy = 0
-        for cur in itertools.chain(range(1, ts), [0]):
-            tiles[x + y * s] = cur
-            cur += 1
-            if (
-                x + dx >= s
-                or x + dx < 0
-                or y + dy >= s
-                or y + dy < 0
-                or tiles[x + dx + (y + dy) * s] != -1
-            ):
-                dx, dy = -dy, dx
-            x += dx
-            y += dy
-        return cls(s, tiles, mkg=False)
-
-    @classmethod
     def from_file(cls, filename):
         content = cls.__read_file(filename)
         size = None
@@ -176,7 +175,7 @@ class Puzzle:
         height = len(tiles) // size
         if height != size:
             panic(f"Invalid height (got {height}, expected {size})")
-        if not is_solvable(tiles):  # TODO: in class
+        if not is_solvable(tiles):
             panic("Unsolvable puzzle")
         return cls(size, tiles)
 

@@ -1,6 +1,5 @@
 from heapq import heappop, heappush
 from itertools import count
-import math
 import sys
 from src.Puzzle import Puzzle
 
@@ -14,17 +13,15 @@ def __reconstruct_solution(came_from, puzzle):
 
 
 def __solver(puzzle, heuristic, optimal, max_depth, push, pop):
-    size = math.isqrt(len(puzzle))
-    goal = Puzzle.make_goal(puzzle.height)
     hash_puzzle = puzzle.hash()
     came_from = {hash_puzzle: None}
     solution_lengths = {hash_puzzle: 0}
-    frontier = [(heuristic(puzzle, goal), hash_puzzle)]
+    frontier = [(heuristic(puzzle, puzzle.goal), hash_puzzle)]
     while frontier:
         (depth, hash_current) = pop(frontier)
         if depth > max_depth:
             continue
-        current = Puzzle(size, list(hash_current))
+        current = Puzzle(puzzle.height, list(hash_current))
         if current.is_solved():
             return __reconstruct_solution(came_from, current)
         solution_length = solution_lengths[hash_current] + 1
@@ -34,14 +31,14 @@ def __solver(puzzle, heuristic, optimal, max_depth, push, pop):
             if solution_length < solution_lengths.get(hash_neighbor, sys.maxsize):
                 came_from[hash_neighbor] = move
                 solution_lengths[hash_neighbor] = solution_length
-                depth = heuristic(current, goal) + solution_length * optimal
+                depth = heuristic(current, puzzle.goal) + solution_length * optimal
                 push(frontier, (depth, hash_neighbor))
             current.do_move(move.opposite())
     raise RuntimeError("No solution found. This shouldn't be possible.")
 
 
 def a_star(puzzle, heuristic):
-    return __solver(puzzle, heuristic, True, math.inf, heappush, heappop)
+    return __solver(puzzle, heuristic, True, sys.maxsize, heappush, heappop)
 
 
 def ida_star(puzzle, heuristic, step=1):
@@ -52,7 +49,7 @@ def ida_star(puzzle, heuristic, step=1):
 
 
 def best_first_search(puzzle, heuristic):
-    return __solver(puzzle, heuristic, False, math.inf, heappush, heappop)
+    return __solver(puzzle, heuristic, False, sys.maxsize, heappush, heappop)
 
 
 SOLVERS = [a_star, ida_star, best_first_search]
