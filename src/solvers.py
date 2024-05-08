@@ -19,23 +19,22 @@ def __available_moves(size, zero_idx, last):
     return moves
 
 
-def __reconstruct_solution(size, came_from, hash_puzzle, hash_pair):
+def __reconstruct_solution(size, came_from, hash_puzzle):
     # TODO: keep track of 0 pos
-    size_sq = size * size
     solution = []
     while (move := came_from[hash_puzzle]) is not None:
         solution.append(move)
-        puzzle = hash_pair.undo_hash(hash_puzzle, size_sq)
+        puzzle = list(hash_puzzle)
         do_move(puzzle, move.opposite(), size, puzzle.index(0))
-        hash_puzzle = hash_pair.do_hash(puzzle)
+        hash_puzzle = tuple(puzzle)
     return solution[::-1]
 
 
-def __solver(puzzle, heuristic, hash_pair, optimal, max_depth, push, pop):
+def __solver(puzzle, heuristic, optimal, max_depth, push, pop):
     size = math.isqrt(len(puzzle))
     goal = make_goal(size)
-    hash_goal = hash_pair.do_hash(goal)
-    hash_puzzle = hash_pair.do_hash(puzzle)
+    hash_goal = tuple(goal)
+    hash_puzzle = tuple(puzzle)
     came_from = {hash_puzzle: None}
     solution_lengths = {hash_puzzle: 0}
     frontier = [(heuristic(puzzle, goal), hash_puzzle)]
@@ -44,13 +43,13 @@ def __solver(puzzle, heuristic, hash_pair, optimal, max_depth, push, pop):
         if depth > max_depth:
             continue
         if hash_current == hash_goal:
-            return __reconstruct_solution(size, came_from, hash_current, hash_pair)
-        current = hash_pair.undo_hash(hash_current, len(puzzle))
+            return __reconstruct_solution(size, came_from, hash_current)
+        current = list(hash_current)
         zero_idx = current.index(0)  # TODO keep value somewhere
         solution_length = solution_lengths[hash_current] + 1
         for move in __available_moves(size, zero_idx, came_from[hash_current]):
             do_move(current, move, size, zero_idx)
-            hash_neighbor = hash_pair.do_hash(current)
+            hash_neighbor = tuple(current)
             if solution_length < solution_lengths.get(hash_neighbor, math.inf):
                 came_from[hash_neighbor] = move
                 solution_lengths[hash_neighbor] = solution_length
@@ -59,21 +58,19 @@ def __solver(puzzle, heuristic, hash_pair, optimal, max_depth, push, pop):
             do_move(current, move, size, zero_idx)
 
 
-def a_star(puzzle, heuristic, hash_pair):
-    return __solver(puzzle, heuristic, hash_pair, True, math.inf, heappush, heappop)
+def a_star(puzzle, heuristic):
+    return __solver(puzzle, heuristic, True, math.inf, heappush, heappop)
 
 
-def ida_star(puzzle, heuristic, hash_pair, step=1):
+def ida_star(puzzle, heuristic, step=1):
     for max_depth in count(0, step=step):
-        solution = __solver(
-            puzzle, heuristic, hash_pair, True, max_depth, list.append, list.pop
-        )
+        solution = __solver(puzzle, heuristic, True, max_depth, list.append, list.pop)
         if solution is not None:
             return solution
 
 
-def best_first_search(puzzle, heuristic, hash_pair):
-    return __solver(puzzle, heuristic, hash_pair, False, math.inf, heappush, heappop)
+def best_first_search(puzzle, heuristic):
+    return __solver(puzzle, heuristic, False, math.inf, heappush, heappop)
 
 
 SOLVERS = [a_star, ida_star, best_first_search]

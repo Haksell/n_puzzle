@@ -1,10 +1,7 @@
-import itertools
-from math import factorial
 import os
 from src.lib import is_solvable, make_goal
 
 # TODO: fix parsing testing from src.parse_puzzle import parse_puzzle
-from src.hash_puzzle import compressed
 import pytest
 
 DIR_VALID = "puzzles/valid"
@@ -470,15 +467,3 @@ def test_make_goal():
         12,
         11,
     ]
-
-
-def test_compression():
-    for size in range(6):
-        results = []
-        for n, p in enumerate(itertools.permutations(range(size))):
-            p = list(p)
-            res = compressed.do_hash(p)
-            assert compressed.undo_hash(compressed.do_hash(p), size) == p
-            assert compressed.do_hash(compressed.undo_hash(n, size)) == n
-            results.append(res)
-        assert sorted(results) == list(range(factorial(size)))
