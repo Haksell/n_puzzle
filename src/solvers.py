@@ -16,7 +16,6 @@ def __reconstruct_solution(came_from, puzzle):
 def __solver(puzzle, heuristic, optimal, max_depth, push, pop):
     size = math.isqrt(len(puzzle))
     goal = Puzzle.make_goal(puzzle.height)
-    hash_goal = goal.hash()
     hash_puzzle = puzzle.hash()
     came_from = {hash_puzzle: None}
     solution_lengths = {hash_puzzle: 0}
@@ -26,7 +25,7 @@ def __solver(puzzle, heuristic, optimal, max_depth, push, pop):
         if depth > max_depth:
             continue
         current = Puzzle(size, list(hash_current))
-        if hash_current == hash_goal:
+        if current.is_solved():
             return __reconstruct_solution(came_from, current)
         solution_length = solution_lengths[hash_current] + 1
         for move in current.available_moves(came_from[hash_current]):

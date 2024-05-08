@@ -65,10 +65,13 @@ class Puzzle:
         return self.__tiles[idx]
 
     def hash(self):  # TODO: __hash__
-        return tuple(self)  # TODO: factorial base
+        return tuple(self)  # TODO: constently updated factorial base
 
     def is_correct(self, i):
         return self[i] == self.__goal[i]
+
+    def is_solved(self):
+        return all(map(int.__eq__, self, self.__goal))
 
     def do_move(self, move):
         zero_idx = self.__tiles.index(0)
