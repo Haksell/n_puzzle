@@ -31,9 +31,8 @@ class Puzzle:
         return self.__tiles[idx]
 
     def is_correct(self, i):
-        # TODO
+        # TODO: return self[i] == self.__goal[i]
         return __import__("random").choice([False, True])
-        return self[i] == self.__goal[i]
 
     @staticmethod
     def __read_file(filename):
