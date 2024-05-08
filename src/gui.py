@@ -1,7 +1,7 @@
 import math
 import pyglet
+from src.lib import clamp
 import time
-from .lib import clamp
 
 
 FONT_NAME = "poetsenone"

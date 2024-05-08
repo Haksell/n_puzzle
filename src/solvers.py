@@ -1,7 +1,7 @@
 from heapq import heappop, heappush
 from itertools import count
 import math
-from .lib import Move, do_move, make_goal
+from src.lib import Move, do_move, make_goal
 
 
 def __available_moves(size, zero_idx, last):

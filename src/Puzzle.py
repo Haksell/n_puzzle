@@ -1,4 +1,4 @@
-from .lib import do_move, is_solvable, make_goal, panic
+from src.lib import do_move, is_solvable, make_goal, panic
 
 
 class Puzzle:
