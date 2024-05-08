@@ -1,3 +1,5 @@
+import math
+import time
 import pyglet
 
 
@@ -8,6 +10,8 @@ MAX_SCREEN_PROPORTION = 0.7
 TILE_PADDING = 0.05
 COLOR_CORRECT = (232, 138, 69)
 COLOR_INCORRECT = (106, 198, 184)
+KEY_TIMEOUT_INITIAL = 0.3
+KEY_TIMEOUT_REPEAT = 0.05
 
 pyglet.font.add_file(FONT_FILE)
 
@@ -51,6 +55,11 @@ class GUI(pyglet.window.Window):
         )
         self.__font_size = self.__compute_font_size()
         self.__batch = self.__make_batch()
+        self.__keys = pyglet.window.key.KeyStateHandler()
+        self.__left_key_start = self.__right_key_start = self.__left_key_prev = (
+            self.__right_key_prev
+        ) = 0.0
+        self.push_handlers(self.__keys)
 
     def __compute_tile_size(self):
         screen = pyglet.canvas.get_display().get_default_screen()
@@ -97,19 +106,38 @@ class GUI(pyglet.window.Window):
             )
         return batch
 
+    @staticmethod
+    def __count_repeats(start, end):
+        return max(
+            0,
+            1
+            + int(math.floor((end - start - KEY_TIMEOUT_INITIAL) / KEY_TIMEOUT_REPEAT)),
+        )
+
+    def f(self, current_time):
+        if self.__keys[pyglet.window.key.LEFT]:
+            if self.__left_key_start == 0.0:
+                self.__position += 1  # TODO: -1
+                self.__left_key_start = self.__left_key_prev = current_time
+            else:
+                prev_repeats = self.__class__.__count_repeats(
+                    self.__left_key_start, self.__left_key_prev
+                )
+                current_repeats = self.__class__.__count_repeats(
+                    self.__left_key_start, current_time
+                )
+                self.__position += current_repeats - prev_repeats
+                self.__left_key_prev = current_time
+        else:
+            self.__left_key_start = self.__left_key_prev = 0.0
+
     def on_draw(self):
+        current_time = time.time()
+        self.f(current_time)
         self.set_caption(self.__get_caption())
         pyglet.gl.glClearColor(0.1, 0.1, 0.1, 1.0)
         self.clear()
         self.__batch.draw()
-
-    def on_key_press(self, symbol, _):
-        if symbol == pyglet.window.key.LEFT:
-            self.__position += 2
-
-    def on_key_release(self, symbol, _):
-        if symbol == pyglet.window.key.LEFT:
-            self.__position -= 1
 
     def run(self):
         pyglet.app.run()
