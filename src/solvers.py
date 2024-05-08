@@ -7,14 +7,14 @@ from src.Puzzle import Puzzle
 
 def __reconstruct_solution(came_from, puzzle):
     solution = []
-    while (move := came_from[puzzle.hash()]) is not None:
+    while (move := came_from[tuple(puzzle)]) is not None:
         solution.append(move)
         puzzle.do_move(move.opposite())
     return solution[::-1]
 
 
 def __heap_solver(puzzle, heuristic, optimal):
-    hash_puzzle = puzzle.hash()
+    hash_puzzle = tuple(puzzle)
     came_from = {hash_puzzle: None}
     solution_lengths = {hash_puzzle: 0}
     frontier = [(heuristic(puzzle, puzzle.goal), hash_puzzle)]
@@ -26,7 +26,7 @@ def __heap_solver(puzzle, heuristic, optimal):
         solution_length = solution_lengths[hash_current] + 1
         for move in current.available_moves(came_from[hash_current]):
             current.do_move(move)
-            hash_neighbor = current.hash()
+            hash_neighbor = tuple(current)
             if solution_length < solution_lengths.get(hash_neighbor, sys.maxsize):
                 came_from[hash_neighbor] = move
                 solution_lengths[hash_neighbor] = solution_length
@@ -44,11 +44,11 @@ def best_first_search(puzzle, heuristic):
 
 
 def __ida_star(puzzle, heuristic, max_depth, moves, solution_lengths):
-    hash_current = puzzle.hash()
+    hash_current = tuple(puzzle)
     solution_length = solution_lengths[hash_current] + 1
     for move in puzzle.available_moves(moves[-1] if moves else None):
         puzzle.do_move(move)
-        hash_neighbor = puzzle.hash()
+        hash_neighbor = tuple(puzzle)
         if solution_length < solution_lengths.get(hash_neighbor, sys.maxsize):
             moves.append(move)
             if puzzle.is_solved():
@@ -67,7 +67,7 @@ def ida_star(puzzle, heuristic):
     for max_depth in count(0):
         print(max_depth)
         solution = __ida_star(
-            deepcopy(puzzle), heuristic, max_depth, [], {puzzle.hash(): 0}
+            deepcopy(puzzle), heuristic, max_depth, [], {tuple(puzzle): 0}
         )
         if solution is not None:
             return solution

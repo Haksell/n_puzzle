@@ -112,9 +112,6 @@ class Puzzle:
             for y in range(self.__size)
         )
 
-    def hash(self):  # TODO: __hash__
-        return tuple(self)  # TODO: constantly updated factorial base
-
     def is_correct(self, i):
         return self[i] == self.__goal[i]
 
@@ -130,7 +127,7 @@ class Puzzle:
         self.__zero_idx = swap_idx
 
     def available_moves(self, last):
-        y, x = divmod(self.__zero_idx, self.width)  # TODO: self.__width
+        y, x = divmod(self.__zero_idx, self.__size)
         moves = []
         if y != 0 and last != Move.UP:
             moves.append(Move.DOWN)
