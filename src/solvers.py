@@ -34,15 +34,14 @@ def __solver(puzzle, heuristic, optimal, max_depth, push, pop):
                 depth = heuristic(current, puzzle.goal) + solution_length * optimal
                 push(frontier, (depth, hash_neighbor))
             current.do_move(move.opposite())
-    raise RuntimeError("No solution found. This shouldn't be possible.")
 
 
 def a_star(puzzle, heuristic):
     return __solver(puzzle, heuristic, True, sys.maxsize, heappush, heappop)
 
 
-def ida_star(puzzle, heuristic, step=1):
-    for max_depth in count(0, step=step):
+def ida_star(puzzle, heuristic):
+    for max_depth in count(0):
         solution = __solver(puzzle, heuristic, True, max_depth, list.append, list.pop)
         if solution is not None:
             return solution
