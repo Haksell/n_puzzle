@@ -1,15 +1,45 @@
-from src.lib import do_move, is_solvable, make_goal, panic
+import itertools
+import math
+from src.lib import do_move, panic
+
+
+def is_solvable(tiles):
+    def parity_empty(tiles, size):
+        py, px = divmod(tiles.index(0), size)
+        return (size ^ py ^ px ^ 1) & 1
+
+    def parity_permutation(tiles):
+        seen = set()
+        transpositions = 0
+        for i in range(len(tiles)):
+            if i in seen:
+                continue
+            seen.add(i)
+            j = tiles[i]
+            while j != i:
+                seen.add(j)
+                j = tiles[j]
+                transpositions ^= 1
+        return transpositions
+
+    def parity_compared_to_goal(tiles, size):
+        return parity_permutation(tiles) ^ parity_permutation(Puzzle.make_goal(size))
+
+    size = math.isqrt(len(tiles))
+    return parity_empty(tiles, size) == parity_compared_to_goal(tiles, size)
 
 
 class Puzzle:
     # TODO: accept rectangles
-    def __init__(self, size, tiles):
+    # TODO: remove retarded make_goal argument
+    def __init__(self, size, tiles, *, make_goal=True):
         assert sorted(tiles) == list(
             range(size * size)
         ), f"Invalid puzzle of size {size}: {tiles}"
         self.__size = size
         self.__tiles = tiles
-        self.__goal = make_goal(self.__size)
+        if make_goal:
+            self.__goal = Puzzle.make_goal(self.__size)
 
     def __len__(self):
         return len(self.__tiles)
@@ -45,6 +75,28 @@ class Puzzle:
         except Exception as e:
             panic(f"Failed to read puzzle '{filename}': {e}")
         return content
+
+    @classmethod
+    def make_goal(cls, s):  # TODO: accept rectangles
+        ts = s * s
+        tiles = [-1] * ts
+        x = y = 0
+        dx = 1
+        dy = 0
+        for cur in itertools.chain(range(1, ts), [0]):
+            tiles[x + y * s] = cur
+            cur += 1
+            if (
+                x + dx >= s
+                or x + dx < 0
+                or y + dy >= s
+                or y + dy < 0
+                or tiles[x + dx + (y + dy) * s] != -1
+            ):
+                dx, dy = -dy, dx
+            x += dx
+            y += dy
+        return cls(s, tiles, make_goal=False)
 
     @classmethod
     def from_file(cls, filename):

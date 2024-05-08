@@ -1,7 +1,8 @@
+# TODO: fix
+# TODO: more tests
+
 import os
 from src.lib import is_solvable, make_goal
-
-# TODO: fix parsing testing from src.parse_puzzle import parse_puzzle
 import pytest
 
 DIR_VALID = "puzzles/valid"

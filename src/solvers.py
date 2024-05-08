@@ -1,7 +1,8 @@
 from heapq import heappop, heappush
 from itertools import count
 import math
-from src.lib import Move, do_move, make_goal
+from src.Puzzle import Puzzle
+from src.lib import Move, do_move
 
 
 def __available_moves(size, zero_idx, last):
@@ -32,7 +33,7 @@ def __reconstruct_solution(size, came_from, hash_puzzle):
 
 def __solver(puzzle, heuristic, optimal, max_depth, push, pop):
     size = math.isqrt(len(puzzle))
-    goal = make_goal(size)
+    goal = Puzzle.make_goal(puzzle.height)
     hash_goal = tuple(goal)
     hash_puzzle = tuple(puzzle)
     came_from = {hash_puzzle: None}
