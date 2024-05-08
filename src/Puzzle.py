@@ -9,7 +9,9 @@ def panic(message):
     sys.exit(1)
 
 
-def make_goal(s):  # TODO: accept rectangles
+# TODO: in Puzzle class
+# TODO: accept rectangles
+def make_goal(s):
     ts = s * s
     tiles = [-1] * ts
     x = y = 0
@@ -31,7 +33,9 @@ def make_goal(s):  # TODO: accept rectangles
     return tiles
 
 
-def is_solvable(tiles):  # TODO: test with rectangles of various sizes
+# TODO: in Puzzle class
+# TODO: test with rectangles of various sizes
+def is_solvable(tiles):
     def parity_empty(tiles, size):
         py, px = divmod(tiles.index(0), size)
         return (size ^ py ^ px ^ 1) & 1
@@ -65,6 +69,7 @@ class Puzzle:
         ), f"Invalid puzzle of size {size}: {tiles}"
         self.__size = size
         self.__tiles = tiles
+        self.__zero_idx = tiles.index(0)
         self.__goal = make_goal(self.__size)
 
     def __len__(self):
@@ -105,15 +110,15 @@ class Puzzle:
         return all(map(int.__eq__, self, self.__goal))
 
     def do_move(self, move):
-        zero_idx = self.__tiles.index(0)
-        swap_idx = zero_idx + [self.__size, -1, -self.__size, 1][move]
-        self.__tiles[zero_idx], self.__tiles[swap_idx] = (
+        swap_idx = self.__zero_idx + [self.__size, -1, -self.__size, 1][move]
+        self.__tiles[self.__zero_idx], self.__tiles[swap_idx] = (
             self.__tiles[swap_idx],
-            self.__tiles[zero_idx],
+            self.__tiles[self.__zero_idx],
         )
+        self.__zero_idx = swap_idx
 
     def available_moves(self, last):
-        y, x = divmod(self.__tiles.index(0), self.__size)
+        y, x = divmod(self.__zero_idx, self.__size)
         moves = []
         if y != 0 and last != Move.UP:
             moves.append(Move.DOWN)
