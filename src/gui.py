@@ -1,17 +1,46 @@
 import pyglet
 from pyglet.graphics import Batch
 
-pyglet.font.add_file("PoetsenOne-Regular.ttf")
 
+FONT_NAME = "PoetsenOne"
+FONT_FILE = f"{FONT_NAME}-Regular.ttf"
 MAX_TILE_SIZE = 125
 MAX_SCREEN_PROPORTION = 0.7
 TILE_PADDING = 0.05
 COLOR_CORRECT = (232, 138, 69)
 COLOR_INCORRECT = (106, 198, 184)
 
+pyglet.font.add_file(FONT_FILE)
+
+
+# TODO: remove
+class DummyPuzzle:
+    def __init__(self):
+        self.__width = 4
+        self.__height = 4
+        self.__tiles = list(range(self.__width * self.__height))
+
+    @property
+    def height(self):
+        return self.__height
+
+    @property
+    def width(self):
+        return self.__width
+
+    def __iter__(self):
+        yield from self.__tiles
+
+    def __len__(self):
+        return len(self.__tiles)
+
+    def is_correct(self, i):
+        return __import__("random").choice([False, True])
+
 
 class GUI(pyglet.window.Window):
     def __init__(self, puzzle):
+        # puzzle = DummyPuzzle()
         self.__tile_size = self.__compute_tile_size(puzzle)
         self.__padding = round(TILE_PADDING * self.__tile_size)
         super().__init__(
@@ -34,7 +63,7 @@ class GUI(pyglet.window.Window):
 
     def __compute_font_size(self, puzzle):
         max_digits = len(str(puzzle.width * puzzle.height - 1))
-        factor = max(0.2, 0.4 - max_digits * 0.04)
+        factor = max(0.2, 0.48 - max_digits * 0.04)
         return round(self.__tile_size * factor)
 
     def __make_batch(self, puzzle):
@@ -48,7 +77,7 @@ class GUI(pyglet.window.Window):
             pyglet.text.Label(
                 str(number),
                 font_size=self.__font_size,
-                font_name="PoetsenOne",
+                font_name=FONT_NAME,
                 x=x * self.__tile_size + half_tile + self.__padding,
                 y=self.height - (y * self.__tile_size + half_tile + self.__padding),
                 anchor_x="center",
