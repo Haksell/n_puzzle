@@ -8,6 +8,8 @@ def panic(message):
     sys.exit(1)
 
 
+# TODO: accept rectangles
+# TODO: directly in Puzzle class?
 def make_goal(s):
     ts = s * s
     puzzle = [-1] * ts

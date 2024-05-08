@@ -1,4 +1,4 @@
-from .lib import is_solvable, panic
+from .lib import is_solvable, make_goal, panic
 
 
 class Puzzle:
@@ -9,6 +9,7 @@ class Puzzle:
         ), f"Invalid puzzle of size {size}: {tiles}"
         self.__size = size
         self.__tiles = tiles
+        self.__goal = make_goal(self.__size)
 
     def __len__(self):
         return len(self.__tiles)
@@ -28,6 +29,11 @@ class Puzzle:
 
     def __getitem__(self, idx):
         return self.__tiles[idx]
+
+    def is_correct(self, i):
+        # TODO
+        return __import__("random").choice([False, True])
+        return self[i] == self.__goal[i]
 
     @staticmethod
     def __read_file(filename):
