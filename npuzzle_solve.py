@@ -109,10 +109,8 @@ def __main():
         heuristic.__name__,
         hash_pair.name,
     )
-    # TODO: launch it at the start and parallelize
     if gui:
-        # TODO: GUI(puzzle, solution).run()
-        GUI(puzzle).run()
+        GUI(puzzle, solution).run()
 
 
 if __name__ == "__main__":

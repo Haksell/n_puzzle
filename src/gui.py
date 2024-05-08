@@ -1,5 +1,4 @@
 import pyglet
-from pyglet.graphics import Batch
 
 
 FONT_NAME = "PoetsenOne"
@@ -39,40 +38,44 @@ class DummyPuzzle:
 
 
 class GUI(pyglet.window.Window):
-    def __init__(self, puzzle):
-        self.__tile_size = self.__compute_tile_size(puzzle)
+    def __init__(self, puzzle, solution):
+        self.__puzzle = puzzle
+        self.__solution = solution
+        self.__tile_size = self.__compute_tile_size()
         self.__padding = round(TILE_PADDING * self.__tile_size)
+        self.__position = 0
         super().__init__(
             width=self.__tile_size * puzzle.width + 2 * self.__padding,
             height=self.__tile_size * puzzle.height + 2 * self.__padding,
-            caption=f"{len(puzzle)-1}-puzzle",
+            caption=self.__get_caption(),
         )
-        self.__font_size = self.__compute_font_size(puzzle)
-        self.__batch = self.__make_batch(puzzle)
+        self.__font_size = self.__compute_font_size()
+        self.__batch = self.__make_batch()
 
-    def __compute_tile_size(self, puzzle):
+    def __compute_tile_size(self):
         screen = pyglet.canvas.get_display().get_default_screen()
-        return min(
-            MAX_TILE_SIZE,
-            int(
-                min(screen.height / puzzle.height, screen.width / puzzle.width)
-                * MAX_SCREEN_PROPORTION
-            ),
+        h = screen.height / self.__puzzle.height
+        w = screen.width / self.__puzzle.width
+        return min(MAX_TILE_SIZE, int(min(h, w) * MAX_SCREEN_PROPORTION))
+
+    def __get_caption(self):
+        return (
+            f"{len(self.__puzzle)-1}-puzzle ({self.__position}/{len(self.__solution)})"
         )
 
-    def __compute_font_size(self, puzzle):
-        max_digits = len(str(puzzle.width * puzzle.height - 1))
+    def __compute_font_size(self):
+        max_digits = len(str(self.__puzzle.width * self.__puzzle.height - 1))
         factor = max(0.2, 0.48 - max_digits * 0.04)
         return round(self.__tile_size * factor)
 
-    def __make_batch(self, puzzle):
-        batch = Batch()
+    def __make_batch(self):
+        batch = pyglet.graphics.Batch()
         visible_tile_size = (1 - 2 * TILE_PADDING) * self.__tile_size
         label_offset = self.__tile_size // 2 + self.__padding
-        for i, number in enumerate(puzzle):
+        for i, number in enumerate(self.__puzzle):
             if number == 0:
                 continue
-            y, x = divmod(i, puzzle.width)
+            y, x = divmod(i, self.__puzzle.width)
             pyglet.text.Label(
                 str(number),
                 font_size=self.__font_size,
@@ -89,15 +92,24 @@ class GUI(pyglet.window.Window):
                 self.height - (y * self.__tile_size + self.__tile_size),
                 visible_tile_size,
                 visible_tile_size,
-                color=COLOR_CORRECT if puzzle.is_correct(i) else COLOR_INCORRECT,
+                color=COLOR_CORRECT if self.__puzzle.is_correct(i) else COLOR_INCORRECT,
                 batch=batch,
             )
         return batch
 
     def on_draw(self):
+        self.set_caption(self.__get_caption())
         pyglet.gl.glClearColor(0.1, 0.1, 0.1, 1.0)
         self.clear()
         self.__batch.draw()
+
+    def on_key_press(self, symbol, _):
+        if symbol == pyglet.window.key.LEFT:
+            self.__position += 2
+
+    def on_key_release(self, symbol, _):
+        if symbol == pyglet.window.key.LEFT:
+            self.__position -= 1
 
     def run(self):
         pyglet.app.run()
