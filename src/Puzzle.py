@@ -1,7 +1,12 @@
 import itertools
 import math
+import sys
 from src.Move import Move
-from src.lib import panic
+
+
+def panic(message):
+    print(message, file=sys.stderr)
+    sys.exit(1)
 
 
 def is_solvable(tiles):

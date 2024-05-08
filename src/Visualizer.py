@@ -1,6 +1,5 @@
 import math
 import pyglet
-from src.lib import clamp
 import time
 
 
@@ -17,7 +16,11 @@ KEY_TIMEOUT_REPEAT = 0.05
 pyglet.font.add_file(FONT_FILE)
 
 
-class GUI(pyglet.window.Window):
+def clamp(x, mini, maxi):
+    return mini if x < mini else maxi if x > maxi else x
+
+
+class Visualizer(pyglet.window.Window):
     def __init__(self, puzzle, solution):
         self.__puzzle = puzzle
         self.__solution = solution

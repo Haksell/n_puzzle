@@ -1,7 +1,7 @@
 import argparse
 from src import heuristics, solvers
 from src.Puzzle import Puzzle
-from src.gui import GUI
+from src.Visualizer import Visualizer
 import time
 
 
@@ -9,10 +9,9 @@ def __parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", type=str, help="Filename of the puzzle")
     parser.add_argument(
-        "--compress", action="store_true", help="Compress the puzzle representation"
+        "--visualizer", action="store_true", help="Visualize the solution"
     )
-    parser.add_argument("--gui", action="store_true", help="Open a window")
-    # TODO: refactor heurstic and solver code
+    # TODO: refactor heuristic and solver code
     heuristic_names = [h.__name__ for h in heuristics.HEURISTICS]
     parser.add_argument(
         "--heuristic",
@@ -33,11 +32,11 @@ def __parse_args():
     puzzle = Puzzle.from_file(args.filename)
     heuristic = next(h for h in heuristics.HEURISTICS if h.__name__ == args.heuristic)
     solver = next(s for s in solvers.SOLVERS if s.__name__ == args.solver)
-    return puzzle, heuristic, solver, args.gui
+    return puzzle, heuristic, solver, args.visualizer
 
 
 def __main():
-    puzzle, heuristic, solver, gui = __parse_args()
+    puzzle, heuristic, solver, visualizer = __parse_args()
     print(puzzle)
     t0 = time.time()
     solution = solver(puzzle, heuristic)
@@ -48,8 +47,8 @@ def __main():
         solver.__name__,
         heuristic.__name__,
     )
-    if gui:
-        GUI(puzzle, solution).run()
+    if visualizer:
+        Visualizer(puzzle, solution).run()
 
 
 if __name__ == "__main__":
