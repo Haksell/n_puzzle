@@ -46,7 +46,7 @@ def __solver(puzzle, heuristic, hash_pair, optimal, max_depth, push, pop):
         if hash_current == hash_goal:
             return __reconstruct_solution(size, came_from, hash_current, hash_pair)
         current = hash_pair.undo_hash(hash_current, len(puzzle))
-        zero_idx = current.index(0)
+        zero_idx = current.index(0)  # TODO keep value somewhere
         solution_length = solution_lengths[hash_current] + 1
         for move in __available_moves(size, zero_idx, came_from[hash_current]):
             do_move(current, move, size, zero_idx)
