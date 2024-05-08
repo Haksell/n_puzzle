@@ -4,7 +4,7 @@ import time
 
 
 FONT_NAME = "poetsenone"
-FONT_FILE = f"{FONT_NAME}-regular-webfont.woff2"
+FONT_FILE = f"fonts/{FONT_NAME}-regular-webfont.woff2"
 MAX_TILE_SIZE = 125
 MAX_SCREEN_PROPORTION = 0.7
 TILE_PADDING = 0.03
