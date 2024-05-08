@@ -130,7 +130,7 @@ class Puzzle:
         self.__zero_idx = swap_idx
 
     def available_moves(self, last):
-        y, x = divmod(self.__zero_idx, self.__size)
+        y, x = divmod(self.__zero_idx, self.width)  # TODO: self.__width
         moves = []
         if y != 0 and last != Move.UP:
             moves.append(Move.DOWN)
