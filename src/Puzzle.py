@@ -1,4 +1,4 @@
-from .lib import is_solvable, make_goal, panic
+from .lib import do_move, is_solvable, make_goal, panic
 
 
 class Puzzle:
@@ -32,6 +32,9 @@ class Puzzle:
 
     def is_correct(self, i):
         return self[i] == self.__goal[i]
+
+    def do_move(self, move):
+        do_move(self.__tiles, move, self.__size, self.__tiles.index(0))
 
     @staticmethod
     def __read_file(filename):

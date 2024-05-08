@@ -1,7 +1,7 @@
 import math
 import pyglet
-from src.lib import clamp
 import time
+from .lib import clamp
 
 
 FONT_NAME = "PoetsenOne"
@@ -15,31 +15,6 @@ KEY_TIMEOUT_INITIAL = 0.4
 KEY_TIMEOUT_REPEAT = 0.05
 
 pyglet.font.add_file(FONT_FILE)
-
-
-# TODO: remove
-class DummyPuzzle:
-    def __init__(self):
-        self.__width = 4
-        self.__height = 4
-        self.__tiles = list(range(self.__width * self.__height))
-
-    @property
-    def height(self):
-        return self.__height
-
-    @property
-    def width(self):
-        return self.__width
-
-    def __iter__(self):
-        yield from self.__tiles
-
-    def __len__(self):
-        return len(self.__tiles)
-
-    def is_correct(self, _):
-        return __import__("random").choice([False, True])
 
 
 class GUI(pyglet.window.Window):
@@ -128,7 +103,7 @@ class GUI(pyglet.window.Window):
                 - self.__count_repeats(start, prev),
             )
 
-    def __update_position(self):
+    def __get_new_position(self):
         current_time = time.time()
         self.__left_key_start, self.__left_key_prev, left_repeats = self.__update_keys(
             current_time,
@@ -153,9 +128,19 @@ class GUI(pyglet.window.Window):
             )
         )
 
+    def __update_puzzle(self, new_position):
+        if new_position > self.__position:
+            for i in range(self.__position, new_position):
+                self.__puzzle.do_move(self.__solution[i])
+        else:
+            for i in reversed(range(new_position, self.__position)):
+                self.__puzzle.do_move(self.__solution[i].opposite())
+        self.__batch = self.__make_batch()
+
     def on_draw(self):
-        new_position = self.__update_position()
+        new_position = self.__get_new_position()
         if new_position != self.__position:
+            self.__update_puzzle(new_position)
             self.__position = new_position
             self.set_caption(self.__get_caption())
         pyglet.gl.glClearColor(0.1, 0.1, 0.1, 1.0)

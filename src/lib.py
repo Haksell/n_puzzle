@@ -1,6 +1,17 @@
+from enum import IntEnum
 import itertools
 import math
 import sys
+
+
+class Move(IntEnum):
+    UP = 0
+    RIGHT = 1
+    DOWN = 2
+    LEFT = 3
+
+    def opposite(self):
+        return Move(self.value ^ 2)
 
 
 def panic(message):

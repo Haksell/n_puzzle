@@ -1,18 +1,7 @@
-from enum import IntEnum
 from heapq import heappop, heappush
 from itertools import count
 import math
-from src.lib import do_move, make_goal
-
-
-class Move(IntEnum):
-    UP = 0
-    RIGHT = 1
-    DOWN = 2
-    LEFT = 3
-
-    def opposite(self):
-        return Move(self.value ^ 2)
+from .lib import Move, do_move, make_goal
 
 
 def __available_moves(size, zero_idx, last):
