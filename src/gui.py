@@ -1,9 +1,10 @@
 import pyglet
 from pyglet.graphics import Batch
 
+
 MAX_TILE_SIZE = 125
 MAX_SCREEN_PROPORTION = 0.7
-TILE_PADDING = 0.05  # TODO: add it on the border
+TILE_PADDING = 0.05
 COLOR_CORRECT = (232, 138, 69)
 COLOR_INCORRECT = (106, 198, 184)
 
@@ -11,11 +12,11 @@ COLOR_INCORRECT = (106, 198, 184)
 class GUI(pyglet.window.Window):
     def __init__(self, puzzle):
         self.__tile_size = self.__compute_tile_size(puzzle)
-        self.__padding = TILE_PADDING * self.__tile_size
         self.__font_size = self.__compute_font_size(puzzle)
+        self.__padding = round(TILE_PADDING * self.__tile_size)
         super().__init__(
-            width=self.__tile_size * puzzle.width,
-            height=self.__tile_size * puzzle.height,
+            width=self.__tile_size * puzzle.width + 2 * self.__padding,
+            height=self.__tile_size * puzzle.height + 2 * self.__padding,
             caption=f"{len(puzzle)-1}-puzzle",
         )
         self.__batch = self.__make_batch(puzzle)
@@ -46,18 +47,17 @@ class GUI(pyglet.window.Window):
             pyglet.text.Label(
                 str(number),
                 font_size=self.__font_size,
-                x=x * self.__tile_size + half_tile,
-                y=self.height - (y * self.__tile_size + half_tile),
+                # TODO: better font
+                x=x * self.__tile_size + half_tile + self.__padding,
+                y=self.height - (y * self.__tile_size + half_tile + self.__padding),
                 anchor_x="center",
                 anchor_y="center",
-                color=(255, 255, 255, 255),  # TODO: better color and font
+                color=(255, 255, 255, 255),
                 batch=batch,
             )
             pyglet.shapes.Rectangle(
-                x * self.__tile_size + self.__padding,
-                self.height
-                - (y * self.__tile_size + self.__tile_size)
-                + self.__padding,
+                x * self.__tile_size + 2 * self.__padding,
+                self.height - (y * self.__tile_size + self.__tile_size),
                 visible_tile_size,
                 visible_tile_size,
                 color=COLOR_CORRECT if puzzle.is_correct(i) else COLOR_INCORRECT,
@@ -67,6 +67,7 @@ class GUI(pyglet.window.Window):
 
     def on_draw(self):
         self.clear()
+        pyglet.gl.glClearColor(0.1, 0.1, 0.1, 1.0)
         self.__batch.draw()
 
     def run(self):
