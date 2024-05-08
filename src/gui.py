@@ -114,26 +114,28 @@ class GUI(pyglet.window.Window):
             + int(math.floor((end - start - KEY_TIMEOUT_INITIAL) / KEY_TIMEOUT_REPEAT)),
         )
 
-    def f(self, current_time, key):
+    def f(self, current_time, key, start, prev):
         if self.__keys[key]:
-            if self.__left_key_start == 0.0:
+            if start == 0.0:
                 self.__position += 1  # TODO: -1
-                self.__left_key_start = self.__left_key_prev = current_time
+                start = prev = current_time
             else:
-                prev_repeats = self.__class__.__count_repeats(
-                    self.__left_key_start, self.__left_key_prev
-                )
-                current_repeats = self.__class__.__count_repeats(
-                    self.__left_key_start, current_time
-                )
+                prev_repeats = self.__class__.__count_repeats(start, prev)
+                current_repeats = self.__class__.__count_repeats(start, current_time)
                 self.__position += current_repeats - prev_repeats
-                self.__left_key_prev = current_time
+                prev = current_time
         else:
-            self.__left_key_start = self.__left_key_prev = 0.0
+            start = prev = 0.0
+        return start, prev
 
     def on_draw(self):
         current_time = time.time()
-        self.f(current_time, pyglet.window.key.LEFT)
+        self.__left_key_start, self.__left_key_prev = self.f(
+            current_time,
+            pyglet.window.key.LEFT,
+            self.__left_key_start,
+            self.__left_key_prev,
+        )
         self.set_caption(self.__get_caption())
         pyglet.gl.glClearColor(0.1, 0.1, 0.1, 1.0)
         self.clear()
