@@ -1,6 +1,7 @@
 import pyglet
 from pyglet.graphics import Batch
 
+pyglet.font.add_file("PoetsenOne-Regular.ttf")
 
 MAX_TILE_SIZE = 125
 MAX_SCREEN_PROPORTION = 0.7
@@ -47,7 +48,7 @@ class GUI(pyglet.window.Window):
             pyglet.text.Label(
                 str(number),
                 font_size=self.__font_size,
-                # TODO: better font
+                font_name="PoetsenOne",
                 x=x * self.__tile_size + half_tile + self.__padding,
                 y=self.height - (y * self.__tile_size + half_tile + self.__padding),
                 anchor_x="center",
