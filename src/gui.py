@@ -8,7 +8,7 @@ FONT_NAME = "PoetsenOne"
 FONT_FILE = f"{FONT_NAME}-Regular.ttf"
 MAX_TILE_SIZE = 125
 MAX_SCREEN_PROPORTION = 0.7
-TILE_PADDING = 0.05
+TILE_PADDING = 0.03
 COLOR_CORRECT = (232, 138, 69)
 COLOR_INCORRECT = (106, 198, 184)
 KEY_TIMEOUT_INITIAL = 0.4
@@ -154,8 +154,10 @@ class GUI(pyglet.window.Window):
         )
 
     def on_draw(self):
-        self.__position = self.__update_position()
-        self.set_caption(self.__get_caption())
+        new_position = self.__update_position()
+        if new_position != self.__position:
+            self.__position = new_position
+            self.set_caption(self.__get_caption())
         pyglet.gl.glClearColor(0.1, 0.1, 0.1, 1.0)
         self.clear()
         self.__batch.draw()
