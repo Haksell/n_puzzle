@@ -1,11 +1,6 @@
 help:
 	@python npuzzle.py --help
 
-all:
-	-@$(MAKE) --no-print-directory clean > /dev/null
-	-@$(MAKE) --no-print-directory test
-	-@$(MAKE) --no-print-directory clean > /dev/null
-
 test:
 	pytest -vv
 
