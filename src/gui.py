@@ -11,6 +11,7 @@ COLOR_INCORRECT = (106, 198, 184)
 class GUI(pyglet.window.Window):
     def __init__(self, puzzle):
         self.__tile_size = self.__compute_tile_size(puzzle)
+        self.__padding = TILE_PADDING * self.__tile_size
         self.__font_size = self.__compute_font_size(puzzle)
         super().__init__(
             width=self.__tile_size * puzzle.width,
@@ -36,7 +37,6 @@ class GUI(pyglet.window.Window):
 
     def __make_batch(self, puzzle):
         batch = Batch()
-        background_padding = TILE_PADDING * self.__tile_size
         visible_tile_size = (1 - 2 * TILE_PADDING) * self.__tile_size
         half_tile = self.__tile_size // 2
         for i, number in enumerate(puzzle):
@@ -54,10 +54,10 @@ class GUI(pyglet.window.Window):
                 batch=batch,
             )
             pyglet.shapes.Rectangle(
-                x * self.__tile_size + background_padding,
+                x * self.__tile_size + self.__padding,
                 self.height
                 - (y * self.__tile_size + self.__tile_size)
-                + background_padding,
+                + self.__padding,
                 visible_tile_size,
                 visible_tile_size,
                 color=COLOR_CORRECT if puzzle.is_correct(i) else COLOR_INCORRECT,
