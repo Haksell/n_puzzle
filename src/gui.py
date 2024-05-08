@@ -1,5 +1,6 @@
 import pyglet
-
+from pyglet.shapes import Rectangle
+from pyglet.graphics import Batch
 
 """
 TODO: remove
@@ -35,6 +36,7 @@ class GUI(pyglet.window.Window):
             height=self.tile_size * puzzle.height,
             caption="N-puzzle",
         )
+        self.batch = Batch()
         self.font_size = self.__compute_font_size(puzzle)
         self.tiles = self.__make_tiles(puzzle)
 
@@ -65,14 +67,14 @@ class GUI(pyglet.window.Window):
                 y=self.height - (y * self.tile_size + half_tile),
                 anchor_x="center",
                 anchor_y="center",
+                batch=self.batch,
             )
             tiles.append(label)
         return tiles
 
     def on_draw(self):
         self.clear()
-        for tile in self.tiles:
-            tile.draw()
+        self.batch.draw()
 
     def run(self):
         pyglet.app.run()
