@@ -96,7 +96,7 @@ class Puzzle:
         )
 
     def hash(self):  # TODO: __hash__
-        return tuple(self)  # TODO: constently updated factorial base
+        return tuple(self)  # TODO: constantly updated factorial base
 
     def is_correct(self, i):
         return self[i] == self.__goal[i]
