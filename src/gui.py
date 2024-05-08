@@ -34,13 +34,12 @@ class DummyPuzzle:
     def __len__(self):
         return len(self.__tiles)
 
-    def is_correct(self, i):
+    def is_correct(self, _):
         return __import__("random").choice([False, True])
 
 
 class GUI(pyglet.window.Window):
     def __init__(self, puzzle):
-        # puzzle = DummyPuzzle()
         self.__tile_size = self.__compute_tile_size(puzzle)
         self.__padding = round(TILE_PADDING * self.__tile_size)
         super().__init__(
