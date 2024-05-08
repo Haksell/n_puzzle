@@ -9,6 +9,7 @@ def __lebesgue(puzzle, goal, dist_func):
     for i, v in enumerate(puzzle):
         if v == 0:
             continue
+        # TODO: cache divmod
         gy, gx = divmod(goal_pos[v], width)
         py, px = divmod(i, width)
         total_distance += dist_func(gx - px, gy - py)
