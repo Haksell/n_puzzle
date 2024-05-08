@@ -68,7 +68,7 @@ class GUI(pyglet.window.Window):
     def __make_batch(self, puzzle):
         batch = Batch()
         visible_tile_size = (1 - 2 * TILE_PADDING) * self.__tile_size
-        half_tile = self.__tile_size // 2
+        label_offset = self.__tile_size // 2 + self.__padding
         for i, number in enumerate(puzzle):
             if number == 0:
                 continue
@@ -77,8 +77,8 @@ class GUI(pyglet.window.Window):
                 str(number),
                 font_size=self.__font_size,
                 font_name=FONT_NAME,
-                x=x * self.__tile_size + half_tile + self.__padding,
-                y=self.height - (y * self.__tile_size + half_tile + self.__padding),
+                x=x * self.__tile_size + label_offset,
+                y=self.height - (y * self.__tile_size + label_offset),
                 anchor_x="center",
                 anchor_y="center",
                 color=(255, 255, 255, 255),
