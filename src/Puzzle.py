@@ -83,6 +83,34 @@ class Puzzle:
     def __len__(self):
         return len(self.__tiles)
 
+    def __iter__(self):
+        yield from self.__tiles
+
+    def __getitem__(self, idx):
+        return self.__tiles[idx]
+
+    def __str__(self):
+        padding = len(str(len(self) - 1))
+        return "\n".join(
+            " ".join(f"{self[y*self.__size+x]:{padding}}" for x in range(self.__size))
+            for y in range(self.__size)
+        )
+
+    # https://stackoverflow.com/a/24689277/10793260
+    @property
+    def hash(self):
+        k = 0
+        m = 1
+        n = len(self)
+        pos = list(range(n))
+        elems = list(range(n))
+        for i in range(n - 1):
+            k += m * pos[self[i]]
+            m *= n - i
+            pos[elems[n - i - 1]] = pos[self[i]]
+            elems[pos[self[i]]] = elems[n - i - 1]
+        return k
+
     @property
     def height(self):
         return self.__size
@@ -98,19 +126,6 @@ class Puzzle:
     @property
     def goal_pos(self):
         return self.__goal_pos
-
-    def __iter__(self):
-        yield from self.__tiles
-
-    def __getitem__(self, idx):
-        return self.__tiles[idx]
-
-    def __str__(self):
-        padding = len(str(len(self) - 1))
-        return "\n".join(
-            " ".join(f"{self[y*self.__size+x]:{padding}}" for x in range(self.__size))
-            for y in range(self.__size)
-        )
 
     def is_correct(self, i):
         return self[i] == self.__goal[i]
