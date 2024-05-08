@@ -1,6 +1,7 @@
 import argparse
 from src import heuristics, solvers
 from src.Puzzle import Puzzle
+from src.gui import GUI
 from src.hash_puzzle import compressed, uncompressed
 from src.solvers import Move
 import time
@@ -109,7 +110,8 @@ def __main():
         hash_pair.name,
     )
     if gui:
-        __import__("src.gui").gui.launch_gui(puzzle, solution)
+        # TODO: GUI(puzzle, solution).run()
+        GUI(puzzle).run()
 
 
 if __name__ == "__main__":
