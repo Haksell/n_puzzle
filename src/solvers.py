@@ -14,24 +14,24 @@ def __reconstruct_solution(came_from, puzzle):
 
 
 def __heap_solver(puzzle, heuristic, optimal):
-    hash_puzzle = tuple(puzzle)
-    came_from = {hash_puzzle: None}
-    solution_lengths = {hash_puzzle: 0}
-    frontier = [(heuristic(puzzle, puzzle.goal), hash_puzzle)]
+    tup_puzzle = tuple(puzzle)
+    came_from = {tup_puzzle: None}
+    solution_lengths = {tup_puzzle: 0}
+    frontier = [(heuristic(puzzle, puzzle.goal), tup_puzzle)]
     while frontier:
-        (_, hash_current) = heappop(frontier)
-        current = Puzzle(puzzle.height, list(hash_current))
+        (_, tup_current) = heappop(frontier)
+        current = Puzzle(puzzle.height, list(tup_current))
         if current.is_solved():
             return __reconstruct_solution(came_from, current)
-        solution_length = solution_lengths[hash_current] + 1
-        for move in current.available_moves(came_from[hash_current]):
+        solution_length = solution_lengths[tup_current] + 1
+        for move in current.available_moves(came_from[tup_current]):
             current.do_move(move)
-            hash_neighbor = tuple(current)
-            if solution_length < solution_lengths.get(hash_neighbor, sys.maxsize):
-                came_from[hash_neighbor] = move
-                solution_lengths[hash_neighbor] = solution_length
+            tup_neighbor = tuple(current)
+            if solution_length < solution_lengths.get(tup_neighbor, sys.maxsize):
+                came_from[tup_neighbor] = move
+                solution_lengths[tup_neighbor] = solution_length
                 estimate = heuristic(current, puzzle.goal) + solution_length * optimal
-                heappush(frontier, (estimate, hash_neighbor))
+                heappush(frontier, (estimate, tup_neighbor))
             current.do_move(move.opposite())
 
 
@@ -44,16 +44,16 @@ def best_first_search(puzzle, heuristic):
 
 
 def __ida_star(puzzle, heuristic, max_depth, moves, solution_lengths):
-    hash_current = tuple(puzzle)
-    solution_length = solution_lengths[hash_current] + 1
+    tup_current = tuple(puzzle)
+    solution_length = solution_lengths[tup_current] + 1
     for move in puzzle.available_moves(moves[-1] if moves else None):
         puzzle.do_move(move)
-        hash_neighbor = tuple(puzzle)
-        if solution_length < solution_lengths.get(hash_neighbor, sys.maxsize):
+        tup_neighbor = tuple(puzzle)
+        if solution_length < solution_lengths.get(tup_neighbor, sys.maxsize):
             moves.append(move)
             if puzzle.is_solved():
                 return moves
-            solution_lengths[hash_neighbor] = solution_length
+            solution_lengths[tup_neighbor] = solution_length
             estimate = heuristic(puzzle, puzzle.goal) + solution_length
             if estimate <= max_depth and __ida_star(
                 puzzle, heuristic, max_depth, moves, solution_lengths
