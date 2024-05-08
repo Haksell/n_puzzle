@@ -2,27 +2,6 @@ import math
 from ._lebesgue import manhattan
 
 
-def __corner_conflicts(puzzle, goal):
-    size = math.isqrt(len(puzzle))
-    top_left = 0
-    top_right = size - 1
-    bottom_left = (size - 1) * size
-    bottom_right = size * size - 1
-    return sum(
-        puzzle[corner] != goal[corner]
-        and (
-            puzzle[horizontal_neighbor] == goal[horizontal_neighbor]
-            or puzzle[vertical_neighbor] == goal[vertical_neighbor]
-        )
-        for corner, horizontal_neighbor, vertical_neighbor in [
-            (top_left, top_left + 1, top_left + size),
-            (top_right, top_right - 1, top_right + size),
-            (bottom_left, bottom_left + 1, bottom_left - size),
-            (bottom_right, bottom_right - 1, bottom_right - size),
-        ]
-    )
-
-
 def __get_ceil_index(arr, tail_indices, lo, hi, key):
     while hi - lo > 1:
         mi = lo + hi >> 1
@@ -78,9 +57,6 @@ def __linear_conflicts(puzzle, goal):
     return conflicts
 
 
+# TODO: bring back corner conflicts
 def manhattan_with_conflicts(puzzle, goal):
-    return (
-        manhattan(puzzle, goal)
-        + __corner_conflicts(puzzle, goal)
-        + 2 * __linear_conflicts(puzzle, goal)
-    )
+    return manhattan(puzzle, goal) + 2 * __linear_conflicts(puzzle, goal)

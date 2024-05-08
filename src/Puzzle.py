@@ -70,6 +70,7 @@ class Puzzle:
         self.__size = size
         self.__tiles = tiles
         self.__zero_idx = tiles.index(0)
+        # TODO:be lazy about calling make_goal
         self.__goal = make_goal(self.__size)
 
     def __len__(self):
