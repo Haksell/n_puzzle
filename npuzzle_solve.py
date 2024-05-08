@@ -1,9 +1,9 @@
 import argparse
 from src import heuristics, solvers
 from src.Puzzle import Puzzle
+from src.gui import GUI
 from src.hash_puzzle import compressed, uncompressed
 import time
-import tkinter as tk
 
 
 def __parse_args():
@@ -38,17 +38,11 @@ def __parse_args():
     return puzzle, hash_pair, heuristic, solver, args.gui
 
 
-def __launch_gui(puzzle, solution):
-    root = tk.Tk()
-    root.title("n_puzzle")
-    root.geometry("800x600")
-    root.mainloop()
-
-
 def __main():
     puzzle, hash_pair, heuristic, solver, gui = __parse_args()
     t0 = time.time()
     solution = solver(puzzle, heuristic, hash_pair)
+    print(list(puzzle))
     print(
         "".join(move.name[0] for move in solution),
         len(solution),
@@ -58,7 +52,7 @@ def __main():
         hash_pair.name,
     )
     if gui:
-        __launch_gui(puzzle, solution)
+        GUI(puzzle, solution).run()
 
 
 if __name__ == "__main__":

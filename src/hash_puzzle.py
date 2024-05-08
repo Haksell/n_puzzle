@@ -39,4 +39,6 @@ def __int_to_perm(n, size):
 
 
 compressed = HashPair("compressed", __perm_to_int, __int_to_perm)
-uncompressed = HashPair("uncompressed", tuple, lambda a, _: list(a))
+uncompressed = HashPair(
+    "uncompressed", tuple, lambda a, _: list(a)
+)  # TODO: just identity function

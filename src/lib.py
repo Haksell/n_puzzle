@@ -1,6 +1,17 @@
+from enum import IntEnum
 import itertools
 import math
 import sys
+
+
+class Move(IntEnum):
+    UP = 0
+    RIGHT = 1
+    DOWN = 2
+    LEFT = 3
+
+    def opposite(self):
+        return Move(self.value ^ 2)
 
 
 def panic(message):
@@ -8,6 +19,12 @@ def panic(message):
     sys.exit(1)
 
 
+def clamp(x, mini, maxi):
+    return mini if x < mini else maxi if x > maxi else x
+
+
+# TODO: accept rectangles
+# TODO: directly in Puzzle class?
 def make_goal(s):
     ts = s * s
     puzzle = [-1] * ts
@@ -70,3 +87,9 @@ def is_solvable(puzzle):
 
     size = math.isqrt(len(puzzle))
     return parity_empty(puzzle, size) == parity_compared_to_goal(puzzle, size)
+
+
+def do_move(tiles, move, size, zero_idx):
+    # TODO: execute the moves directly on the hashed value
+    swap_idx = zero_idx + [size, -1, -size, 1][move]
+    tiles[zero_idx], tiles[swap_idx] = tiles[swap_idx], tiles[zero_idx]
