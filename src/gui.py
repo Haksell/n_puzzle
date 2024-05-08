@@ -120,8 +120,8 @@ class GUI(pyglet.window.Window):
                 self.__position += 1  # TODO: -1
                 start = prev = current_time
             else:
-                prev_repeats = self.__class__.__count_repeats(start, prev)
-                current_repeats = self.__class__.__count_repeats(start, current_time)
+                prev_repeats = self.__count_repeats(start, prev)
+                current_repeats = self.__count_repeats(start, current_time)
                 self.__position += current_repeats - prev_repeats
                 prev = current_time
         else:
