@@ -12,13 +12,13 @@ COLOR_INCORRECT = (106, 198, 184)
 class GUI(pyglet.window.Window):
     def __init__(self, puzzle):
         self.__tile_size = self.__compute_tile_size(puzzle)
-        self.__font_size = self.__compute_font_size(puzzle)
         self.__padding = round(TILE_PADDING * self.__tile_size)
         super().__init__(
             width=self.__tile_size * puzzle.width + 2 * self.__padding,
             height=self.__tile_size * puzzle.height + 2 * self.__padding,
             caption=f"{len(puzzle)-1}-puzzle",
         )
+        self.__font_size = self.__compute_font_size(puzzle)
         self.__batch = self.__make_batch(puzzle)
 
     def __compute_tile_size(self, puzzle):
@@ -66,8 +66,8 @@ class GUI(pyglet.window.Window):
         return batch
 
     def on_draw(self):
-        self.clear()
         pyglet.gl.glClearColor(0.1, 0.1, 0.1, 1.0)
+        self.clear()
         self.__batch.draw()
 
     def run(self):
