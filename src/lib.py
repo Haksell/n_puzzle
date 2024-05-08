@@ -8,6 +8,10 @@ def panic(message):
     sys.exit(1)
 
 
+def clamp(x, mini, maxi):
+    return mini if x < mini else maxi if x > maxi else x
+
+
 # TODO: accept rectangles
 # TODO: directly in Puzzle class?
 def make_goal(s):

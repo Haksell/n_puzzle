@@ -1,6 +1,7 @@
 import math
-import time
 import pyglet
+from src.lib import clamp
+import time
 
 
 FONT_NAME = "PoetsenOne"
@@ -114,28 +115,46 @@ class GUI(pyglet.window.Window):
             + int(math.floor((end - start - KEY_TIMEOUT_INITIAL) / KEY_TIMEOUT_REPEAT)),
         )
 
-    def f(self, current_time, key, start, prev):
-        if self.__keys[key]:
-            if start == 0.0:
-                self.__position += 1  # TODO: -1
-                start = prev = current_time
-            else:
-                prev_repeats = self.__count_repeats(start, prev)
-                current_repeats = self.__count_repeats(start, current_time)
-                self.__position += current_repeats - prev_repeats
-                prev = current_time
+    def __update_keys(self, current_time, key, start, prev):
+        if not self.__keys[key]:
+            return 0, 0, 0
+        elif start == 0.0:
+            return current_time, current_time, 1
         else:
-            start = prev = 0.0
-        return start, prev
+            return (
+                start,
+                current_time,
+                self.__count_repeats(start, current_time)
+                - self.__count_repeats(start, prev),
+            )
 
-    def on_draw(self):
+    def __update_position(self):
         current_time = time.time()
-        self.__left_key_start, self.__left_key_prev = self.f(
+        self.__left_key_start, self.__left_key_prev, left_repeats = self.__update_keys(
             current_time,
             pyglet.window.key.LEFT,
             self.__left_key_start,
             self.__left_key_prev,
         )
+        self.__right_key_start, self.__right_key_prev, right_repeats = (
+            self.__update_keys(
+                current_time,
+                pyglet.window.key.RIGHT,
+                self.__right_key_start,
+                self.__right_key_prev,
+            )
+        )
+        return (
+            self.__position
+            if self.__keys[pyglet.window.key.LEFT]
+            == self.__keys[pyglet.window.key.RIGHT]
+            else clamp(
+                self.__position + right_repeats - left_repeats, 0, len(self.__solution)
+            )
+        )
+
+    def on_draw(self):
+        self.__position = self.__update_position()
         self.set_caption(self.__get_caption())
         pyglet.gl.glClearColor(0.1, 0.1, 0.1, 1.0)
         self.clear()
