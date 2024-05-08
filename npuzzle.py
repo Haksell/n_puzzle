@@ -12,6 +12,7 @@ def __parse_args():
         "--visualizer", action="store_true", help="Visualize the solution"
     )
     # TODO: refactor heuristic and solver code
+    # TODO: adapt default solver to puzzle size
     heuristic_names = [h.__name__ for h in heuristics.HEURISTICS]
     parser.add_argument(
         "--heuristic",

@@ -1,26 +1,4 @@
-import math
 from ._lebesgue import manhattan
-
-
-def __corner_conflicts(puzzle, goal):
-    size = math.isqrt(len(puzzle))
-    top_left = 0
-    top_right = size - 1
-    bottom_left = (size - 1) * size
-    bottom_right = size * size - 1
-    return sum(
-        puzzle[corner] != goal[corner]
-        and (
-            puzzle[horizontal_neighbor] == goal[horizontal_neighbor]
-            or puzzle[vertical_neighbor] == goal[vertical_neighbor]
-        )
-        for corner, horizontal_neighbor, vertical_neighbor in [
-            (top_left, top_left + 1, top_left + size),
-            (top_right, top_right - 1, top_right + size),
-            (bottom_left, bottom_left + 1, bottom_left - size),
-            (bottom_right, bottom_right - 1, bottom_right - size),
-        ]
-    )
 
 
 def __get_ceil_index(arr, tail_indices, lo, hi, key):
@@ -67,20 +45,18 @@ def __line_conflicts(line_puzzle, line_goal):
     return len(perm) - __longest_increasing_subsequence(perm)
 
 
+# TODO: alternative simpler linear conflicts that misses multiple conflicts
+# but is faster to compute without lis
 def __linear_conflicts(puzzle, goal):
-    size = math.isqrt(len(puzzle))
     conflicts = 0
-    for i in range(size):
-        slice_row = slice(size * i, size * (i + 1), None)
-        slice_col = slice(i, None, size)
+    for i in range(puzzle.height):
+        slice_row = slice(puzzle.height * i, puzzle.height * (i + 1), None)
+        slice_col = slice(i, None, puzzle.height)
         conflicts += __line_conflicts(puzzle[slice_row], goal[slice_row])
         conflicts += __line_conflicts(puzzle[slice_col], goal[slice_col])
     return conflicts
 
 
+# TODO: bring back corner conflicts
 def manhattan_with_conflicts(puzzle, goal):
-    return (
-        manhattan(puzzle, goal)
-        + __corner_conflicts(puzzle, goal)
-        + 2 * __linear_conflicts(puzzle, goal)
-    )
+    return manhattan(puzzle, goal) + 2 * __linear_conflicts(puzzle, goal)
