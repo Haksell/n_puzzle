@@ -22,6 +22,7 @@
 ## todo
 
 -   `Puzzle` class (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator, zero_idx & goal properties)
+-   remove `size`, `width` and `height` arguments from everywhere
 -   accept randomly generated puzzles
 -   graphical visualization
 -   remaining solvers

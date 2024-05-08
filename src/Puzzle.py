@@ -35,14 +35,14 @@ def is_solvable(tiles):
 
 class Puzzle:
     # TODO: accept rectangles
-    # TODO: remove retarded make_goal argument
-    def __init__(self, size, tiles, *, make_goal=True):
+    # TODO: remove retarded mkg argument
+    def __init__(self, size, tiles, *, mkg=True):
         assert sorted(tiles) == list(
             range(size * size)
         ), f"Invalid puzzle of size {size}: {tiles}"
         self.__size = size
         self.__tiles = tiles
-        if make_goal:
+        if mkg:
             self.__goal = Puzzle.make_goal(self.__size)
 
     def __len__(self):
@@ -121,7 +121,7 @@ class Puzzle:
                 dx, dy = -dy, dx
             x += dx
             y += dy
-        return cls(s, tiles, make_goal=False)
+        return cls(s, tiles, mkg=False)
 
     @classmethod
     def from_file(cls, filename):
