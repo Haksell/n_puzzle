@@ -15,7 +15,9 @@ def __heap_solver(puzzle, heuristic, *, use_g, use_h):
     tup_puzzle = tuple(puzzle)
     came_from = {tup_puzzle: None}
     g_costs = {tup_puzzle: 0}
-    frontier = [(heuristic(puzzle, puzzle.goal), tup_puzzle)]
+    if (h := heuristic(puzzle, puzzle.goal)) == 0:
+        return []
+    frontier = [(h, tup_puzzle)]
     while frontier:
         (_, tup_current) = heappop(frontier)
         current = Puzzle(puzzle.height, list(tup_current))
@@ -26,8 +28,7 @@ def __heap_solver(puzzle, heuristic, *, use_g, use_h):
             if g_cost < g_costs.get(tup_neighbor, sys.maxsize):
                 came_from[tup_neighbor] = move
                 g_costs[tup_neighbor] = g_cost
-                h = heuristic(current, puzzle.goal)
-                if h == 0:
+                if (h := heuristic(current, puzzle.goal)) == 0:
                     return __reconstruct_solution(came_from, current)
                 heappush(frontier, (use_g * g_cost + use_h * h, tup_neighbor))
             current.do_move(move.opposite())
