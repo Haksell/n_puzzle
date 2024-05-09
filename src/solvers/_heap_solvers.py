@@ -11,31 +11,35 @@ def __reconstruct_solution(came_from, puzzle):
     return solution[::-1]
 
 
-def __heap_solver(puzzle, heuristic, optimal):
+def __heap_solver(puzzle, heuristic, *, use_g, use_h):
     tup_puzzle = tuple(puzzle)
     came_from = {tup_puzzle: None}
-    solution_lengths = {tup_puzzle: 0}
+    g_costs = {tup_puzzle: 0}
     frontier = [(heuristic(puzzle, puzzle.goal), tup_puzzle)]
     while frontier:
         (_, tup_current) = heappop(frontier)
         current = Puzzle(puzzle.height, list(tup_current))
-        solution_length = solution_lengths[tup_current] + 1
+        g_cost = g_costs[tup_current] + 1
         for move in current.available_moves(came_from[tup_current]):
             current.do_move(move)
             tup_neighbor = tuple(current)
-            if solution_length < solution_lengths.get(tup_neighbor, sys.maxsize):
+            if g_cost < g_costs.get(tup_neighbor, sys.maxsize):
                 came_from[tup_neighbor] = move
-                solution_lengths[tup_neighbor] = solution_length
+                g_costs[tup_neighbor] = g_cost
                 h = heuristic(current, puzzle.goal)
                 if h == 0:
                     return __reconstruct_solution(came_from, current)
-                heappush(frontier, (h + solution_length * optimal, tup_neighbor))
+                heappush(frontier, (use_g * g_cost + use_h * h, tup_neighbor))
             current.do_move(move.opposite())
 
 
 def a_star(puzzle, heuristic):
-    return __heap_solver(puzzle, heuristic, True)
+    return __heap_solver(puzzle, heuristic, use_g=True, use_h=True)
 
 
-def best_first_search(puzzle, heuristic):
-    return __heap_solver(puzzle, heuristic, False)
+def greedy(puzzle, heuristic):
+    return __heap_solver(puzzle, heuristic, use_g=False, use_h=True)
+
+
+def uniform_cost(puzzle, heuristic):
+    return __heap_solver(puzzle, heuristic, use_g=True, use_h=False)

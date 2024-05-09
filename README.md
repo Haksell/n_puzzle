@@ -2,12 +2,12 @@
 
 ## mandatory
 
--   [ ] You must provide a Makefile with the usual rules.
--   [ ] Implement the A\* search algorithm (or one of its variants, you’re free to choose) to solve an N-puzzle
+-   [x] You must provide a Makefile with the usual rules.
+-   [x] Implement the A\* search algorithm (or one of its variants, you’re free to choose) to solve an N-puzzle
 -   [ ] You have to manage various puzzle sizes (3, 4, 5, 17, etc ...). The higher your program can go without dying a horrible, horrible death, the better.
 -   [ ] You have to manage both randomly determined states (of your own generation of course), and input files that specify a starting board, the format of which is described in the appendix.
--   [ ] The cost associated with each transition is always 1.
--   [ ] The user must be able to choose between at LEAST 3 (relevant) heuristic functions. The Manhattan-distance heuristic is mandatory, the other two are up to you.
+-   [x] The cost associated with each transition is always 1.
+-   [x] The user must be able to choose between at LEAST 3 (relevant) heuristic functions. The Manhattan-distance heuristic is mandatory, the other two are up to you.
 -   [ ] Show total number of states ever selected in the "opened" set (complexity in time)
 -   [ ] Show maximum number of states ever represented in memory at the same time during the search (complexity in size)
 -   [ ] Show number of moves required to transition from the initial state to the final state, according to the search
@@ -16,27 +16,24 @@
 
 ## bonus
 
--   [ ] For the bonus part you can configure the appropriate g(x) and h(x) functions to run both the uniform-cost and greedy searches. Execute with the same output (Of course, the solution may be different. Read up on why, that’s the point.)
+-   [x] Configure g(x) and h(x) to run both the uniform-cost and greedy searches
+-   [x] Visualizer
+-   [ ] Non-square puzzles: remove `size`, `width` and `height` arguments from everywhere
 -   [ ] Normal and Snail mode
 
 ## todo
 
--   `Puzzle` class (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator, zero_idx & goal properties)
--   remove `size`, `width` and `height` arguments from everywhere
--   accept randomly generated puzzles
--   graphical visualization
--   remaining solvers
--   remaining heuristics
+-   `Puzzle` class: (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator)
+-   accept randomly generated puzzles (+ remove \_gen file)
 -   just cycle when 2x2 to solve
 -   way more testing
--   compare code with Tristan
 
 ## solvers
 
 -   [x] A\*
--   [x] Best-First Search
+-   [x] Greedy Search
+-   [x] Uniform Cost Search
 -   [x] IDA\*
--   [ ] Uniform Cost Search
 -   [ ] LPA\*
 -   [ ] SMA\*
 -   [ ] ID-Dual\* or Bi-directional A\*
@@ -51,7 +48,6 @@
 -   [x] chebyshev
 -   [x] manhattan with conflicts
 -   [x] hamming
--   [x] constant zero (equivalent to BFS)
 -   [x] inversion distance
 -   [ ] walking distance
 -   [ ] pattern databases

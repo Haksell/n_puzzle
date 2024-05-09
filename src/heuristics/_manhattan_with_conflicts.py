@@ -58,5 +58,6 @@ def __linear_conflicts(puzzle, goal):
 
 
 # TODO: bring back corner conflicts
+# TODO: cache conflicts in Puzzle class
 def manhattan_with_conflicts(puzzle, goal):
     return manhattan(puzzle, goal) + 2 * __linear_conflicts(puzzle, goal)
