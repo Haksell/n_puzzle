@@ -1,4 +1,5 @@
-# On top of being admissible, solvers require that heuristic(0) <=> puzzle is solved
+# On top of being admissible, solvers require that:
+# (heuristic(puzzle) == 0) == puzzle.is_solved()
 
 from ._manhattan_with_conflicts import manhattan_with_conflicts
 from ._inversion_distance import inversion_distance
