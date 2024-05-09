@@ -46,7 +46,7 @@ def __line_conflicts(line_puzzle, line_goal):
 
 
 # TODO: alternative simpler linear conflicts that misses multiple conflicts
-# but is faster to compute without lis
+# but is faster to compute without __longest_increasing_subsequence
 def __linear_conflicts(puzzle):
     conflicts = 0
     for i in range(puzzle.height):

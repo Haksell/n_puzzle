@@ -62,7 +62,6 @@ def _is_solvable(tiles, height, width):
 # TODO: running manhattan
 # TODO: rows iterator, cols iterator
 class Puzzle:
-    # TODO: accept rectangles
     def __init__(self, tiles, height, width):
         assert sorted(tiles) == list(
             range(height * width)

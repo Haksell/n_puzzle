@@ -18,7 +18,7 @@
 
 -   [x] Configure g(x) and h(x) to run both the uniform-cost and greedy searches
 -   [x] Visualization
--   [ ] Non-square puzzles
+-   [ ] Non-square puzzles (from_file todo)
 -   [ ] Normal and Snail mode
 
 ## solvers
