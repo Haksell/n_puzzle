@@ -1,17 +1,7 @@
 import itertools
 import random
 from src.Move import Move
-from src.utils import panic
-
-
-def _read_file(filename):
-    MAX_FILE_SIZE = 1 << 15
-    try:
-        content = open(filename).read(MAX_FILE_SIZE)
-        assert len(content) != MAX_FILE_SIZE, f"file too big (max={MAX_FILE_SIZE})"
-    except Exception as e:
-        panic(f"Failed to read puzzle '{filename}': {e}")
-    return content
+from src.utils import panic, parse_size, read_file
 
 
 def _make_goal(height, width):
@@ -140,9 +130,8 @@ class Puzzle:
 
     @staticmethod
     def from_file(filename):
-        # TODO: accept rectangles
-        content = _read_file(filename)
-        size = None
+        content = read_file(filename)
+        height = width = size = None
         seen = set()
         tiles = []
         for line in content.splitlines():
@@ -150,43 +139,33 @@ class Puzzle:
             if not line:
                 continue
             if size is None:
-                try:
-                    size = int(line)
-                    assert size >= 2
-                except (AssertionError, ValueError):
-                    panic(f"Invalid size: {line}")
-            else:
-                try:
-                    row = line.split()
+                height, width = parse_size(line.strip())
+                size = height * width
+                continue
+            try:
+                row = line.split()
+                assert (
+                    len(row) == width
+                ), f"Invalid width (got {len(row)}, expected {width})"
+                for x in row:
+                    assert all(c.isdigit() for c in x), f"Invalid natural number: {x}"
+                    x = int(x)
                     assert (
-                        len(row) == size
-                    ), f"Invalid width (got {len(row)}, expected {size})"
-                    for x in row:
-                        assert all(
-                            c.isdigit() for c in x
-                        ), f"Invalid natural number: {x}"
-                        x = int(x)
-                        assert (
-                            x < size * size
-                        ), f"Number too big for given puzzle size: (got {x}, max {size*size-1})"
-                        assert x not in seen, f"Duplicate number: {x}"
-                        seen.add(x)
-                        tiles.append(x)
-                except AssertionError as e:
-                    panic(e)
+                        x < size
+                    ), f"Number too big for given puzzle size: (got {x}, max {size-1})"
+                    assert x not in seen, f"Duplicate number: {x}"
+                    seen.add(x)
+                    tiles.append(x)
+            except AssertionError as e:
+                panic(e)
         if size is None:
             panic("Empty file")
-        height = len(tiles) // size
-        if height != size:
-            panic(f"Invalid height (got {height}, expected {size})")
-        if not _is_solvable(tiles, size, size):
+        if not _is_solvable(tiles, height, width):
             panic("Unsolvable puzzle")
-        return Puzzle(tiles, size, size)
+        return Puzzle(tiles, height, width)
 
     @staticmethod
     def random(height, width):
-        if width < 2 or height < 2:
-            panic(f"Invalid size: {height}x{width}")
         tiles = list(range(height * width))
         random.shuffle(tiles)
         if not _is_solvable(tiles, height, width):

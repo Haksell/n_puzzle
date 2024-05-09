@@ -3,7 +3,7 @@ from copy import deepcopy
 import re
 from src import heuristics, solvers
 from src.Puzzle import Puzzle
-from src.utils import panic
+from src.utils import panic, parse_size
 from src.Visualizer import Visualizer
 import time
 
@@ -27,10 +27,7 @@ def __make_puzzle(args):
             return Puzzle.from_file(args.filename)
     else:
         if args.random:
-            if fullmatch := re.fullmatch(r"(\d+)x(\d+)", args.random):
-                return Puzzle.random(int(fullmatch.group(1)), int(fullmatch.group(2)))
-            else:
-                panic(f"Invalid size: {args.random}")
+            return Puzzle.random(*parse_size(args.random))
         else:
             panic("Can't specify both a filename and a random size")
 
