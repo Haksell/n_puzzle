@@ -21,13 +21,6 @@
 -   [ ] Non-square puzzles: remove `size`, `width` and `height` arguments from everywhere
 -   [ ] Normal and Snail mode
 
-## todo
-
--   `Puzzle` class: (avoid recomputing size and size\*size everywhere, not necessarily square, `rows` iterator, `cols` iterator)
--   accept randomly generated puzzles (+ remove \_gen file)
--   just cycle when 2x2 to solve
--   way more testing
-
 ## solvers
 
 -   [x] A\*

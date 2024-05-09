@@ -1,7 +1,7 @@
 import itertools
 import math
-import sys
 from src.Move import Move
+import sys
 
 
 def panic(message):
@@ -61,9 +61,8 @@ def is_solvable(tiles):
     return parity_empty(tiles, size) == parity_compared_to_goal(tiles, size)
 
 
-# TODO: keep running manhattan
-
-
+# TODO: running manhattan
+# TODO: rows iterator, cols iterator
 class Puzzle:
     # TODO: accept rectangles
     def __init__(self, size, tiles):
@@ -73,7 +72,7 @@ class Puzzle:
         self.__size = size
         self.__tiles = tiles
         self.__zero_idx = tiles.index(0)
-        # TODO:be lazy about calling make_goal
+        # TODO: be lazy about calling make_goal
         self.__goal = make_goal(self.__size)
         # TODO: only if manhattan or similar
         self.__goal_pos = [0] * (size * size)
