@@ -5,30 +5,25 @@ from src.Visualizer import Visualizer
 import time
 
 
+def __add_list_arg(parser, flag, funcs):
+    names = [h.__name__ for h in funcs]
+    parser.add_argument(
+        f"--{flag}",
+        type=str,
+        choices=names,
+        default=names[0],
+        help=f"Type of {flag} to use. Defaults to {names[0]}.",
+    )
+
+
 def __parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", type=str, help="Filename of the puzzle")
     parser.add_argument(
         "--visualizer", action="store_true", help="Visualize the solution"
     )
-    # TODO: refactor heuristic and solver code
-    # TODO: adapt default solver to puzzle size
-    heuristic_names = [h.__name__ for h in heuristics.HEURISTICS]
-    parser.add_argument(
-        "--heuristic",
-        type=str,
-        choices=heuristic_names,
-        default=heuristic_names[0],
-        help=f"Type of heuristic to use. Defaults to {heuristic_names[0]}.",
-    )
-    solver_names = [h.__name__ for h in solvers.SOLVERS]
-    parser.add_argument(
-        "--solver",
-        type=str,
-        choices=solver_names,
-        default=solver_names[0],
-        help=f"Type of solver to use. Defaults to {solver_names[0]}.",
-    )
+    __add_list_arg(parser, "heuristic", heuristics.HEURISTICS)
+    __add_list_arg(parser, "solver", solvers.SOLVERS)
     args = parser.parse_args()
     puzzle = Puzzle.from_file(args.filename)
     heuristic = next(h for h in heuristics.HEURISTICS if h.__name__ == args.heuristic)
