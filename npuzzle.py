@@ -1,8 +1,9 @@
 import argparse
 from copy import deepcopy
 import re
-from src import heuristics, solvers
+from src.heuristics import HEURISTICS
 from src.Puzzle import Puzzle
+from src.solvers import SOLVERS
 from src.utils import panic, parse_size
 from src.Visualizer import Visualizer
 import time
@@ -44,12 +45,12 @@ def __parse_args():
     parser.add_argument(
         "--verbose", action="store_true", help="Print the puzzle states"
     )
-    __add_list_arg(parser, "heuristic", heuristics.HEURISTICS)
-    __add_list_arg(parser, "solver", solvers.SOLVERS)
+    __add_list_arg(parser, "heuristic", HEURISTICS)
+    __add_list_arg(parser, "solver", SOLVERS)
     args = parser.parse_args()
     puzzle = __make_puzzle(args)
-    heuristic = next(h for h in heuristics.HEURISTICS if h.__name__ == args.heuristic)
-    solver = next(s for s in solvers.SOLVERS if s.__name__ == args.solver)
+    heuristic = next(h for h in HEURISTICS if h.__name__ == args.heuristic)
+    solver = next(s for s in SOLVERS if s.__name__ == args.solver)
     return puzzle, heuristic, solver, args.visualize, args.verbose
 
 

@@ -4,17 +4,17 @@ from src.utils import clamp
 import time
 
 
-FONT_NAME = "poetsenone"
-FONT_FILE = f"fonts/{FONT_NAME}-regular-webfont.woff2"
-MAX_TILE_SIZE = 125
-MAX_SCREEN_PROPORTION = 0.7
-TILE_PADDING = 0.03
-COLOR_CORRECT = (232, 138, 69)
-COLOR_INCORRECT = (106, 198, 184)
-KEY_TIMEOUT_INITIAL = 0.4
-KEY_TIMEOUT_REPEAT = 0.05
+_FONT_NAME = "poetsenone"
+_FONT_FILE = f"fonts/{_FONT_NAME}-regular-webfont.woff2"
+_MAX_TILE_SIZE = 125
+_MAX_SCREEN_PROPORTION = 0.7
+_TILE_PADDING = 0.03
+_COLOR_CORRECT = (232, 138, 69)
+_COLOR_INCORRECT = (106, 198, 184)
+_KEY_TIMEOUT_INITIAL = 0.4
+_KEY_TIMEOUT_REPEAT = 0.05
 
-pyglet.font.add_file(FONT_FILE)
+pyglet.font.add_file(_FONT_FILE)
 
 
 class Visualizer(pyglet.window.Window):
@@ -22,7 +22,7 @@ class Visualizer(pyglet.window.Window):
         self.__puzzle = puzzle
         self.__solution = solution
         self.__tile_size = self.__compute_tile_size()
-        self.__padding = round(TILE_PADDING * self.__tile_size)
+        self.__padding = round(_TILE_PADDING * self.__tile_size)
         self.__position = 0
         super().__init__(
             width=self.__tile_size * puzzle.width + 2 * self.__padding,
@@ -41,7 +41,7 @@ class Visualizer(pyglet.window.Window):
         screen = pyglet.canvas.get_display().get_default_screen()
         h = screen.height / self.__puzzle.height
         w = screen.width / self.__puzzle.width
-        return min(MAX_TILE_SIZE, int(min(h, w) * MAX_SCREEN_PROPORTION))
+        return min(_MAX_TILE_SIZE, int(min(h, w) * _MAX_SCREEN_PROPORTION))
 
     def __get_caption(self):
         return (
@@ -55,7 +55,7 @@ class Visualizer(pyglet.window.Window):
 
     def __make_batch(self):
         batch = pyglet.graphics.Batch()
-        visible_tile_size = (1 - 2 * TILE_PADDING) * self.__tile_size
+        visible_tile_size = (1 - 2 * _TILE_PADDING) * self.__tile_size
         label_offset = self.__tile_size // 2 + self.__padding
         for i, number in enumerate(self.__puzzle):
             if number == 0:
@@ -64,7 +64,7 @@ class Visualizer(pyglet.window.Window):
             pyglet.text.Label(
                 str(number),
                 font_size=self.__font_size,
-                font_name=FONT_NAME,
+                font_name=_FONT_NAME,
                 x=x * self.__tile_size + label_offset,
                 y=self.height - (y * self.__tile_size + label_offset),
                 anchor_x="center",
@@ -77,7 +77,9 @@ class Visualizer(pyglet.window.Window):
                 self.height - (y * self.__tile_size + self.__tile_size),
                 visible_tile_size,
                 visible_tile_size,
-                color=COLOR_CORRECT if self.__puzzle.is_correct(i) else COLOR_INCORRECT,
+                color=_COLOR_CORRECT
+                if self.__puzzle.is_correct(i)
+                else _COLOR_INCORRECT,
                 batch=batch,
             )
         return batch
@@ -87,7 +89,9 @@ class Visualizer(pyglet.window.Window):
         return max(
             0,
             1
-            + int(math.floor((end - start - KEY_TIMEOUT_INITIAL) / KEY_TIMEOUT_REPEAT)),
+            + int(
+                math.floor((end - start - _KEY_TIMEOUT_INITIAL) / _KEY_TIMEOUT_REPEAT)
+            ),
         )
 
     def __update_keys(self, current_time, key, start, prev):
