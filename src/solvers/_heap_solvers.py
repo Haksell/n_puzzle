@@ -12,26 +12,26 @@ def __reconstruct_solution(came_from, puzzle):
 
 
 def __heap_solver(puzzle, heuristic, *, use_g, use_h):
-    tup_puzzle = tuple(puzzle)
-    came_from = {tup_puzzle: None}
-    g_costs = {tup_puzzle: 0}
-    if (h := heuristic(puzzle, puzzle.goal)) == 0:
+    if (h_cost := heuristic(puzzle, puzzle.goal)) == 0:
         return []
-    frontier = [(h, tup_puzzle)]
+    tup = tuple(puzzle)
+    came_from = {tup: None}
+    g_costs = {tup: 0}
+    frontier = [(h_cost, tup)]
     while frontier:
-        (_, tup_current) = heappop(frontier)
-        current = Puzzle(list(tup_current), puzzle.height, puzzle.width)
-        g_cost = g_costs[tup_current] + 1
-        for move in current.available_moves(came_from[tup_current]):
-            current.do_move(move)
-            tup_neighbor = tuple(current)
-            if g_cost < g_costs.get(tup_neighbor, sys.maxsize):
-                came_from[tup_neighbor] = move
-                g_costs[tup_neighbor] = g_cost
-                if (h := heuristic(current, puzzle.goal)) == 0:
-                    return __reconstruct_solution(came_from, current)
-                heappush(frontier, (use_g * g_cost + use_h * h, tup_neighbor))
-            current.do_move(move.opposite())
+        (_, tup) = heappop(frontier)
+        puzzle = Puzzle(list(tup), puzzle.height, puzzle.width)
+        g_cost = g_costs[tup] + 1
+        for move in puzzle.available_moves(came_from[tup]):
+            puzzle.do_move(move)
+            tup = tuple(puzzle)
+            if g_cost < g_costs.get(tup, sys.maxsize):
+                came_from[tup] = move
+                g_costs[tup] = g_cost
+                if (h_cost := heuristic(puzzle, puzzle.goal)) == 0:
+                    return __reconstruct_solution(came_from, puzzle)
+                heappush(frontier, (use_g * g_cost + use_h * h_cost, tup))
+            puzzle.do_move(move.opposite())
 
 
 def a_star(puzzle, heuristic):
