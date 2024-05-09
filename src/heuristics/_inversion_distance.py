@@ -38,10 +38,10 @@ def __transpose(tiles, height, width):
     return [tiles[y + x * height] for y in range(height) for x in range(width)]
 
 
-def inversion_distance(puzzle, goal):
-    horizontal_inversions = __count_inversions(puzzle, goal)
+def inversion_distance(puzzle):
+    horizontal_inversions = __count_inversions(puzzle, puzzle.goal)
     transpose_inversions = __count_inversions(
         __transpose(puzzle, puzzle.height, puzzle.width),
-        __transpose(goal, puzzle.height, puzzle.width),
+        __transpose(puzzle.goal, puzzle.height, puzzle.width),
     )
     return sum(divmod(horizontal_inversions, 3)) + sum(divmod(transpose_inversions, 3))

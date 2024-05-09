@@ -1,8 +1,7 @@
 import math
 
 
-def __lebesgue(puzzle, goal, dist_func):
-    assert len(puzzle) == len(goal)
+def __lebesgue(puzzle, dist_func):
     total_distance = 0
     goal_pos = puzzle.goal_pos
     width = puzzle.width
@@ -16,13 +15,13 @@ def __lebesgue(puzzle, goal, dist_func):
     return total_distance
 
 
-def manhattan(puzzle, goal):
-    return __lebesgue(puzzle, goal, lambda dx, dy: abs(dx) + abs(dy))
+def manhattan(puzzle):
+    return __lebesgue(puzzle, lambda dx, dy: abs(dx) + abs(dy))
 
 
-def euclidean(puzzle, goal):
-    return __lebesgue(puzzle, goal, math.hypot)
+def euclidean(puzzle):
+    return __lebesgue(puzzle, math.hypot)
 
 
-def chebyshev(puzzle, goal):
-    return __lebesgue(puzzle, goal, lambda dx, dy: max(abs(dx), abs(dy)))
+def chebyshev(puzzle):
+    return __lebesgue(puzzle, lambda dx, dy: max(abs(dx), abs(dy)))

@@ -9,15 +9,15 @@ from ._lebesgue import chebyshev, euclidean, manhattan
 # TODO: solver decorator that returns [] on solved puzzle
 
 
-def hamming(puzzle, goal):
-    return sum(0 != pi != gi for pi, gi in zip(puzzle, goal))
+def hamming(puzzle):
+    return sum(0 != pi != gi for pi, gi in zip(puzzle, puzzle.goal))
 
 
 HEURISTICS = [
     manhattan_with_conflicts,
-    inversion_distance,
-    chebyshev,
-    euclidean,
     manhattan,
+    euclidean,
+    chebyshev,
+    inversion_distance,
     hamming,
 ]

@@ -47,17 +47,17 @@ def __line_conflicts(line_puzzle, line_goal):
 
 # TODO: alternative simpler linear conflicts that misses multiple conflicts
 # but is faster to compute without lis
-def __linear_conflicts(puzzle, goal):
+def __linear_conflicts(puzzle):
     conflicts = 0
     for i in range(puzzle.height):
         slice_row = slice(puzzle.height * i, puzzle.height * (i + 1), None)
         slice_col = slice(i, None, puzzle.height)
-        conflicts += __line_conflicts(puzzle[slice_row], goal[slice_row])
-        conflicts += __line_conflicts(puzzle[slice_col], goal[slice_col])
+        conflicts += __line_conflicts(puzzle[slice_row], puzzle.goal[slice_row])
+        conflicts += __line_conflicts(puzzle[slice_col], puzzle.goal[slice_col])
     return conflicts
 
 
 # TODO: bring back corner conflicts
 # TODO: cache conflicts in Puzzle class
-def manhattan_with_conflicts(puzzle, goal):
-    return manhattan(puzzle, goal) + 2 * __linear_conflicts(puzzle, goal)
+def manhattan_with_conflicts(puzzle):
+    return manhattan(puzzle) + 2 * __linear_conflicts(puzzle)

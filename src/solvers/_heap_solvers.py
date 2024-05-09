@@ -12,7 +12,7 @@ def __reconstruct_solution(came_from, puzzle):
 
 
 def __heap_solver(puzzle, heuristic, *, use_g, use_h):
-    if (h_cost := heuristic(puzzle, puzzle.goal)) == 0:
+    if (h_cost := heuristic(puzzle)) == 0:
         return []
     tup = tuple(puzzle)
     came_from = {tup: None}
@@ -28,7 +28,7 @@ def __heap_solver(puzzle, heuristic, *, use_g, use_h):
             if g_cost < g_costs.get(tup, sys.maxsize):
                 came_from[tup] = move
                 g_costs[tup] = g_cost
-                if (h_cost := heuristic(puzzle, puzzle.goal)) == 0:
+                if (h_cost := heuristic(puzzle)) == 0:
                     return __reconstruct_solution(came_from, puzzle)
                 heappush(frontier, (use_g * g_cost + use_h * h_cost, tup))
             puzzle.do_move(move.opposite())
