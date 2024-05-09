@@ -17,7 +17,7 @@
 ## bonus
 
 -   [x] Configure g(x) and h(x) to run both the uniform-cost and greedy searches
--   [x] Visualizer
+-   [x] Visualization
 -   [ ] Non-square puzzles
 -   [ ] Normal and Snail mode
 
