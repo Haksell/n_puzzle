@@ -39,15 +39,11 @@ def __parse_args():
 def __main():
     puzzle, heuristic, solver, visualizer = __parse_args()
     print(puzzle)
+    print(f"Using {solver.__name__} with {heuristic.__name__}...")
     t0 = time.time()
     solution = solver(puzzle, heuristic)
-    print(
-        "".join(move.name[0] for move in solution),
-        len(solution),
-        f"{time.time() - t0:.3f}s",
-        solver.__name__,
-        heuristic.__name__,
-    )
+    print(f"Found {len(solution)}-move solution in {time.time() - t0:.3f}s:")
+    print("".join(move.name[0] for move in solution))
     if visualizer:
         Visualizer(puzzle, solution).run()
 
