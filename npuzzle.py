@@ -39,7 +39,7 @@ def __parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--filename", type=str, help="Filename of the puzzle to solve")
     parser.add_argument(
-        "--random", type=str, help="Generate a random puzzle of size [h]x[w]"
+        "--random", type=str, help="Generate a random puzzle of size [height]x[width]"
     )
     parser.add_argument(
         "--visualize", action="store_true", help="Visualize the solution"
