@@ -18,7 +18,7 @@
 
 -   [x] Configure g(x) and h(x) to run both the uniform-cost and greedy searches
 -   [x] Visualizer
--   [ ] Non-square puzzles: remove `size`, `width` and `height` arguments from everywhere
+-   [ ] Non-square puzzles: remove `size`, `width` and `height` arguments from everywhere, solvable and unsolvable files
 -   [ ] Normal and Snail mode
 
 ## solvers

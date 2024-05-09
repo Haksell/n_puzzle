@@ -1,5 +1,4 @@
 import itertools
-import math
 from src.Move import Move
 import sys
 
@@ -10,22 +9,21 @@ def panic(message):
 
 
 # TODO: in Puzzle class
-# TODO: accept rectangles
-def make_goal(s):
-    ts = s * s
-    tiles = [-1] * ts
+def make_goal(width, height):
+    length = width * height
+    tiles = [-1] * length
     x = y = 0
     dx = 1
     dy = 0
-    for cur in itertools.chain(range(1, ts), [0]):
-        tiles[x + y * s] = cur
+    for cur in itertools.chain(range(1, length), [0]):
+        tiles[x + y * width] = cur
         cur += 1
         if (
-            x + dx >= s
+            x + dx >= width
             or x + dx < 0
-            or y + dy >= s
+            or y + dy >= height
             or y + dy < 0
-            or tiles[x + dx + (y + dy) * s] != -1
+            or tiles[x + dx + (y + dy) * width] != -1
         ):
             dx, dy = -dy, dx
         x += dx
@@ -33,32 +31,29 @@ def make_goal(s):
     return tiles
 
 
+def __parity_permutation(tiles):
+    seen = set()
+    transpositions = 0
+    for i in range(len(tiles)):
+        if i in seen:
+            continue
+        seen.add(i)
+        j = tiles[i]
+        while j != i:
+            seen.add(j)
+            j = tiles[j]
+            transpositions ^= 1
+    return transpositions
+
+
 # TODO: in Puzzle class
 # TODO: test with rectangles of various sizes
-def is_solvable(tiles):
-    def parity_empty(tiles, size):
-        py, px = divmod(tiles.index(0), size)
-        return (size ^ py ^ px ^ 1) & 1
-
-    def parity_permutation(tiles):
-        seen = set()
-        transpositions = 0
-        for i in range(len(tiles)):
-            if i in seen:
-                continue
-            seen.add(i)
-            j = tiles[i]
-            while j != i:
-                seen.add(j)
-                j = tiles[j]
-                transpositions ^= 1
-        return transpositions
-
-    def parity_compared_to_goal(tiles, size):
-        return parity_permutation(tiles) ^ parity_permutation(make_goal(size))
-
-    size = math.isqrt(len(tiles))
-    return parity_empty(tiles, size) == parity_compared_to_goal(tiles, size)
+def is_solvable(tiles, width, height):
+    py, px = divmod(tiles.index(0), width)
+    parity_empty = (len(tiles) ^ py ^ px ^ 1) & 1
+    parity_tiles = __parity_permutation(tiles)
+    parity_goal = __parity_permutation(make_goal(width, height))
+    return parity_empty == (parity_tiles ^ parity_goal)
 
 
 # TODO: running manhattan
@@ -73,7 +68,7 @@ class Puzzle:
         self.__tiles = tiles
         self.__zero_idx = tiles.index(0)
         # TODO: be lazy about calling make_goal
-        self.__goal = make_goal(self.__size)
+        self.__goal = make_goal(self.__size, self.__size)
         # TODO: only if manhattan or similar
         self.__goal_pos = [0] * (size * size)
         for i, n in enumerate(self.__goal):
@@ -190,7 +185,7 @@ class Puzzle:
         height = len(tiles) // size
         if height != size:
             panic(f"Invalid height (got {height}, expected {size})")
-        if not is_solvable(tiles):
+        if not is_solvable(tiles, size, size):
             panic("Unsolvable puzzle")
         return cls(size, tiles)
 
