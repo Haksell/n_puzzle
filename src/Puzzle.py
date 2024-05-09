@@ -142,8 +142,8 @@ class Puzzle:
                 height, width = parse_size(line.strip())
                 size = height * width
                 continue
+            row = line.split()
             try:
-                row = line.split()
                 assert (
                     len(row) == width
                 ), f"Invalid width (got {len(row)}, expected {width})"
@@ -174,3 +174,8 @@ class Puzzle:
             else:
                 tiles[0], tiles[1] = tiles[1], tiles[0]
         return Puzzle(tiles, height, width)
+
+    # TODO: check it is solvable and add CLI argument
+    # @staticmethod
+    # def opposite(height, width):
+    #     return Puzzle(_make_goal(height, width)[::-1], height, width)
