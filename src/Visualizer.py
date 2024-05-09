@@ -49,7 +49,7 @@ class Visualizer(pyglet.window.Window):
         )
 
     def __compute_font_size(self):
-        max_digits = len(str(self.__puzzle.width * self.__puzzle.height - 1))
+        max_digits = len(str(len(self.__puzzle) - 1))
         factor = max(0.2, 0.48 - max_digits * 0.04)
         return round(self.__tile_size * factor)
 

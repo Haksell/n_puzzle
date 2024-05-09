@@ -4,8 +4,17 @@ from src.Move import Move
 from src.utils import panic
 
 
-# TODO: in Puzzle class
-def make_goal(height, width):
+def _read_file(filename):
+    MAX_FILE_SIZE = 1 << 15
+    try:
+        content = open(filename).read(MAX_FILE_SIZE)
+        assert len(content) != MAX_FILE_SIZE, f"file too big (max={MAX_FILE_SIZE})"
+    except Exception as e:
+        panic(f"Failed to read puzzle '{filename}': {e}")
+    return content
+
+
+def _make_goal(height, width):
     length = width * height
     tiles = [-1] * length
     x = y = 0
@@ -42,13 +51,11 @@ def __parity_permutation(tiles):
     return transpositions
 
 
-# TODO: in Puzzle class
-# TODO: test with rectangles of various sizes
-def is_solvable(tiles, height, width):
+def _is_solvable(tiles, height, width):
     py, px = divmod(tiles.index(0), width)
     parity_empty = (len(tiles) ^ py ^ px ^ 1) & 1
     parity_tiles = __parity_permutation(tiles)
-    parity_goal = __parity_permutation(make_goal(height, width))
+    parity_goal = __parity_permutation(_make_goal(height, width))
     return parity_empty == (parity_tiles ^ parity_goal)
 
 
@@ -56,17 +63,18 @@ def is_solvable(tiles, height, width):
 # TODO: rows iterator, cols iterator
 class Puzzle:
     # TODO: accept rectangles
-    def __init__(self, size, tiles):
+    def __init__(self, tiles, height, width):
         assert sorted(tiles) == list(
-            range(size * size)
-        ), f"Invalid puzzle of size {size}: {tiles}"
-        self.__size = size
+            range(height * width)
+        ), f"Invalid puzzle of size {height}x{width}: {tiles}"
+        self.__height = height
+        self.__width = width
         self.__tiles = tiles
         self.__zero_idx = tiles.index(0)
-        # TODO: be lazy about calling make_goal
-        self.__goal = make_goal(self.__size, self.__size)
+        # TODO: be lazy about calling _make_goal
+        self.__goal = _make_goal(height, width)
         # TODO: only if manhattan or similar
-        self.__goal_pos = [0] * (size * size)
+        self.__goal_pos = [0] * len(tiles)
         for i, n in enumerate(self.__goal):
             self.__goal_pos[n] = i
 
@@ -82,9 +90,9 @@ class Puzzle:
     def __str__(self):
         return "\n".join(
             " ".join(
-                f"{self[y*self.__size+x]:{self.padding}}" for x in range(self.__size)
+                f"{self[y*self.__width+x]:{self.padding}}" for x in range(self.__width)
             )
-            for y in range(self.__size)
+            for y in range(self.__height)
         )
 
     @property
@@ -93,11 +101,11 @@ class Puzzle:
 
     @property
     def height(self):
-        return self.__size
+        return self.__height
 
     @property
     def width(self):
-        return self.__size
+        return self.__width
 
     @property
     def goal(self):
@@ -111,7 +119,7 @@ class Puzzle:
         return self[i] == self.__goal[i]
 
     def do_move(self, move):
-        swap_idx = self.__zero_idx + [self.__size, -1, -self.__size, 1][move]
+        swap_idx = self.__zero_idx + [self.__width, -1, -self.__width, 1][move]
         self.__tiles[self.__zero_idx], self.__tiles[swap_idx] = (
             self.__tiles[swap_idx],
             self.__tiles[self.__zero_idx],
@@ -119,31 +127,22 @@ class Puzzle:
         self.__zero_idx = swap_idx
 
     def available_moves(self, last):
-        y, x = divmod(self.__zero_idx, self.__size)
+        y, x = divmod(self.__zero_idx, self.__width)
         moves = []
         if y != 0 and last != Move.UP:
             moves.append(Move.DOWN)
-        if x != self.__size - 1 and last != Move.RIGHT:
+        if x != self.__width - 1 and last != Move.RIGHT:
             moves.append(Move.LEFT)
-        if y != self.__size - 1 and last != Move.DOWN:
+        if y != self.__height - 1 and last != Move.DOWN:
             moves.append(Move.UP)
         if x != 0 and last != Move.LEFT:
             moves.append(Move.RIGHT)
         return moves
 
     @staticmethod
-    def __read_file(filename):
-        MAX_FILE_SIZE = 1 << 15
-        try:
-            content = open(filename).read(MAX_FILE_SIZE)
-            assert len(content) != MAX_FILE_SIZE, f"file too big (max={MAX_FILE_SIZE})"
-        except Exception as e:
-            panic(f"Failed to read puzzle '{filename}': {e}")
-        return content
-
-    @classmethod
-    def from_file(cls, filename):
-        content = cls.__read_file(filename)
+    def from_file(filename):
+        # TODO: accept rectangles
+        content = _read_file(filename)
         size = None
         seen = set()
         tiles = []
@@ -181,19 +180,19 @@ class Puzzle:
         height = len(tiles) // size
         if height != size:
             panic(f"Invalid height (got {height}, expected {size})")
-        if not is_solvable(tiles, size, size):
+        if not _is_solvable(tiles, size, size):
             panic("Unsolvable puzzle")
-        return cls(size, tiles)
+        return Puzzle(tiles, size, size)
 
-    @classmethod
-    def random(cls, height, width):
+    @staticmethod
+    def random(height, width):
         if width < 2 or height < 2:
             panic(f"Invalid size: {height}x{width}")
         tiles = list(range(height * width))
         random.shuffle(tiles)
-        if not is_solvable(tiles, height, width):
+        if not _is_solvable(tiles, height, width):
             if tiles[0] == 0 or tiles[1] == 0:
                 tiles[-1], tiles[-2] = tiles[-2], tiles[-1]
             else:
                 tiles[0], tiles[1] = tiles[1], tiles[0]
-        return Puzzle(height, tiles)
+        return Puzzle(tiles, height, width)

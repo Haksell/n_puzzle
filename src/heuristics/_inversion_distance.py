@@ -34,10 +34,14 @@ def __count_inversions(arr1, arr2):
     return __merge_sort(arr1_mapped, temp_arr, 0, len(arr1_mapped) - 1)
 
 
+def __transpose(tiles, height, width):
+    return [tiles[y + x * height] for y in range(height) for x in range(width)]
+
+
 def inversion_distance(puzzle, goal):
-    size = puzzle.height
-    vertical_puzzle = [puzzle[i + j * size] for i in range(size) for j in range(size)]
-    vertical_goal = [goal[i + j * size] for i in range(size) for j in range(size)]
     horizontal_inversions = __count_inversions(puzzle, goal)
-    vertical_inversions = __count_inversions(vertical_puzzle, vertical_goal)
-    return sum(divmod(horizontal_inversions, 3)) + sum(divmod(vertical_inversions, 3))
+    transpose_inversions = __count_inversions(
+        __transpose(puzzle, puzzle.height, puzzle.width),
+        __transpose(goal, puzzle.height, puzzle.width),
+    )
+    return sum(divmod(horizontal_inversions, 3)) + sum(divmod(transpose_inversions, 3))

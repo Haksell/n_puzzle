@@ -17,7 +17,7 @@ def __ida_star(puzzle, heuristic, max_depth, moves):
 
 
 def ida_star(puzzle, heuristic):
-    if list(puzzle) == list(puzzle.goal):
+    if heuristic(puzzle, puzzle.goal) == 0:
         return []
     for max_depth in count(1):
         solution = __ida_star(deepcopy(puzzle), heuristic, max_depth, [])
