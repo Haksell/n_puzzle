@@ -1,4 +1,5 @@
 import argparse
+from copy import deepcopy
 import re
 from src import heuristics, solvers
 from src.Puzzle import Puzzle
@@ -23,13 +24,16 @@ def __parse_args():
     parser.add_argument(
         "--visualize", action="store_true", help="Visualize the solution"
     )
+    parser.add_argument(
+        "--verbose", action="store_true", help="Print the puzzle states"
+    )
     __add_list_arg(parser, "heuristic", heuristics.HEURISTICS)
     __add_list_arg(parser, "solver", solvers.SOLVERS)
     args = parser.parse_args()
     puzzle = Puzzle.from_file(args.filename)
     heuristic = next(h for h in heuristics.HEURISTICS if h.__name__ == args.heuristic)
     solver = next(s for s in solvers.SOLVERS if s.__name__ == args.solver)
-    return puzzle, heuristic, solver, args.visualize
+    return puzzle, heuristic, solver, args.visualize, args.verbose
 
 
 def __solver_name(solver):
@@ -38,14 +42,32 @@ def __solver_name(solver):
     return fullmatch.group(1).upper() + "*" if fullmatch else official
 
 
-def __main():
-    puzzle, heuristic, solver, visualize = __parse_args()
+def __print_states(puzzle, solution):
+    line_width = (puzzle.padding + 1) * puzzle.width - 1
+    print()
+    print("=== PUZZLE STATES ===")
+    print()
     print(puzzle)
-    print(f"Using {__solver_name(solver)} with {heuristic.__name__}...")
+    for move in solution:
+        puzzle.do_move(move)
+        print()
+        print(move.char() * line_width)
+        print()
+        print(puzzle)
+
+
+def __main():
+    puzzle, heuristic, solver, visualize, verbose = __parse_args()
+    print(
+        f"Using {__solver_name(solver)} with {heuristic.__name__} to solve this puzzle:"
+    )
+    print(puzzle)
     t0 = time.time()
-    solution = solver(puzzle, heuristic)
+    solution = solver(deepcopy(puzzle), heuristic)
     print(f"Found {len(solution)}-move solution in {time.time() - t0:.3f}s:")
     print("".join(move.name[0] for move in solution))
+    if verbose:
+        __print_states(puzzle, solution)
     if visualize:
         Visualizer(puzzle, solution).run()
 

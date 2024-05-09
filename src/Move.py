@@ -9,3 +9,14 @@ class Move(IntEnum):
 
     def opposite(self):
         return Move(self.value ^ 2)
+
+    def char(self):
+        return _MOVE_CHARS[self]
+
+
+_MOVE_CHARS = {
+    Move.UP: "^",
+    Move.RIGHT: ">",
+    Move.DOWN: "v",
+    Move.LEFT: "<",
+}

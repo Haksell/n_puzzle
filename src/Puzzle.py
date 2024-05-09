@@ -89,11 +89,16 @@ class Puzzle:
         return self.__tiles[idx]
 
     def __str__(self):
-        padding = len(str(len(self) - 1))
         return "\n".join(
-            " ".join(f"{self[y*self.__size+x]:{padding}}" for x in range(self.__size))
+            " ".join(
+                f"{self[y*self.__size+x]:{self.padding}}" for x in range(self.__size)
+            )
             for y in range(self.__size)
         )
+
+    @property
+    def padding(self):
+        return len(str(len(self) - 1))
 
     @property
     def height(self):

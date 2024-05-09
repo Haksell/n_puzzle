@@ -11,8 +11,8 @@
 -   [ ] Show total number of states ever selected in the "opened" set (complexity in time)
 -   [ ] Show maximum number of states ever represented in memory at the same time during the search (complexity in size)
 -   [ ] Show number of moves required to transition from the initial state to the final state, according to the search
--   [ ] Show the ordered sequence of states that make up the solution, according to the search
--   [ ] The puzzle may be unsolvable, in which case you have to inform the user and exit
+-   [x] Show the ordered sequence of states that make up the solution, according to the search
+-   [x] The puzzle may be unsolvable, in which case you have to inform the user and exit
 
 ## bonus
 
