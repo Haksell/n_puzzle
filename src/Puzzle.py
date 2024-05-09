@@ -115,9 +115,6 @@ class Puzzle:
     def is_correct(self, i):
         return self[i] == self.__goal[i]
 
-    def is_solved(self):
-        return all(map(int.__eq__, self, self.__goal))
-
     def do_move(self, move):
         swap_idx = self.__zero_idx + [self.__size, -1, -self.__size, 1][move]
         self.__tiles[self.__zero_idx], self.__tiles[swap_idx] = (

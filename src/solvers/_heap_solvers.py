@@ -19,8 +19,6 @@ def __heap_solver(puzzle, heuristic, optimal):
     while frontier:
         (_, tup_current) = heappop(frontier)
         current = Puzzle(puzzle.height, list(tup_current))
-        if current.is_solved():
-            return __reconstruct_solution(came_from, current)
         solution_length = solution_lengths[tup_current] + 1
         for move in current.available_moves(came_from[tup_current]):
             current.do_move(move)
@@ -28,8 +26,10 @@ def __heap_solver(puzzle, heuristic, optimal):
             if solution_length < solution_lengths.get(tup_neighbor, sys.maxsize):
                 came_from[tup_neighbor] = move
                 solution_lengths[tup_neighbor] = solution_length
-                estimate = heuristic(current, puzzle.goal) + solution_length * optimal
-                heappush(frontier, (estimate, tup_neighbor))
+                h = heuristic(current, puzzle.goal)
+                if h == 0:
+                    return __reconstruct_solution(came_from, current)
+                heappush(frontier, (h + solution_length * optimal, tup_neighbor))
             current.do_move(move.opposite())
 
 

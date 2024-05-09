@@ -3,13 +3,14 @@ from itertools import count
 
 
 def __ida_star(puzzle, heuristic, max_depth, moves):
-    if puzzle.is_solved():
-        return moves
     for move in puzzle.available_moves(moves[-1] if moves else None):
         puzzle.do_move(move)
         moves.append(move)
-        estimate = heuristic(puzzle, puzzle.goal) + len(moves)
-        if estimate <= max_depth and __ida_star(puzzle, heuristic, max_depth, moves):
+        h = heuristic(puzzle, puzzle.goal)
+        if h == 0 or (
+            h + len(moves) <= max_depth
+            and __ida_star(puzzle, heuristic, max_depth, moves)
+        ):
             return moves
         moves.pop()
         puzzle.do_move(move.opposite())
