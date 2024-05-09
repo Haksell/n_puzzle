@@ -3,6 +3,7 @@ from copy import deepcopy
 import re
 from src import heuristics, solvers
 from src.Puzzle import Puzzle
+from src.utils import panic
 from src.Visualizer import Visualizer
 import time
 
@@ -18,9 +19,28 @@ def __add_list_arg(parser, flag, funcs):
     )
 
 
+def __make_puzzle(args):
+    if args.filename:
+        if args.random:
+            panic("Can't specify both a filename and a random size")
+        else:
+            return Puzzle.from_file(args.filename)
+    else:
+        if args.random:
+            if fullmatch := re.fullmatch(r"(\d+)x(\d+)", args.random):
+                return Puzzle.random(int(fullmatch.group(1)), int(fullmatch.group(2)))
+            else:
+                panic(f"Invalid size: {args.random}")
+        else:
+            panic("Can't specify both a filename and a random size")
+
+
 def __parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("filename", type=str, help="Filename of the puzzle")
+    parser.add_argument("--filename", type=str, help="Filename of the puzzle to solve")
+    parser.add_argument(
+        "--random", type=str, help="Generate a random puzzle of size [h]x[w]"
+    )
     parser.add_argument(
         "--visualize", action="store_true", help="Visualize the solution"
     )
@@ -30,7 +50,7 @@ def __parse_args():
     __add_list_arg(parser, "heuristic", heuristics.HEURISTICS)
     __add_list_arg(parser, "solver", solvers.SOLVERS)
     args = parser.parse_args()
-    puzzle = Puzzle.from_file(args.filename)
+    puzzle = __make_puzzle(args)
     heuristic = next(h for h in heuristics.HEURISTICS if h.__name__ == args.heuristic)
     solver = next(s for s in solvers.SOLVERS if s.__name__ == args.solver)
     return puzzle, heuristic, solver, args.visualize, args.verbose

@@ -1,5 +1,6 @@
 import math
 import pyglet
+from src.utils import clamp
 import time
 
 
@@ -14,10 +15,6 @@ KEY_TIMEOUT_INITIAL = 0.4
 KEY_TIMEOUT_REPEAT = 0.05
 
 pyglet.font.add_file(FONT_FILE)
-
-
-def clamp(x, mini, maxi):
-    return mini if x < mini else maxi if x > maxi else x
 
 
 class Visualizer(pyglet.window.Window):

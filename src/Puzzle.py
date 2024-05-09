@@ -1,15 +1,11 @@
 import itertools
+import random
 from src.Move import Move
-import sys
-
-
-def panic(message):
-    print(message, file=sys.stderr)
-    sys.exit(1)
+from src.utils import panic
 
 
 # TODO: in Puzzle class
-def make_goal(width, height):
+def make_goal(height, width):
     length = width * height
     tiles = [-1] * length
     x = y = 0
@@ -48,11 +44,11 @@ def __parity_permutation(tiles):
 
 # TODO: in Puzzle class
 # TODO: test with rectangles of various sizes
-def is_solvable(tiles, width, height):
+def is_solvable(tiles, height, width):
     py, px = divmod(tiles.index(0), width)
     parity_empty = (len(tiles) ^ py ^ px ^ 1) & 1
     parity_tiles = __parity_permutation(tiles)
-    parity_goal = __parity_permutation(make_goal(width, height))
+    parity_goal = __parity_permutation(make_goal(height, width))
     return parity_empty == (parity_tiles ^ parity_goal)
 
 
@@ -190,5 +186,14 @@ class Puzzle:
         return cls(size, tiles)
 
     @classmethod
-    def random(cls, width, height):
-        pass  # TODO
+    def random(cls, height, width):
+        if width < 2 or height < 2:
+            panic(f"Invalid size: {height}x{width}")
+        tiles = list(range(height * width))
+        random.shuffle(tiles)
+        if not is_solvable(tiles, height, width):
+            if tiles[0] == 0 or tiles[1] == 0:
+                tiles[-1], tiles[-2] = tiles[-2], tiles[-1]
+            else:
+                tiles[0], tiles[1] = tiles[1], tiles[0]
+        return Puzzle(height, tiles)
