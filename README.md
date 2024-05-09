@@ -18,7 +18,7 @@
 
 -   [x] Configure g(x) and h(x) to run both the uniform-cost and greedy searches
 -   [x] Visualizer
--   [ ] Rectangles from_file, solvable and unsolvable files
+-   [ ] Rectangles
 -   [ ] Normal and Snail mode
 
 ## solvers
