@@ -124,7 +124,11 @@ class Visualizer(pyglet.window.Window):
             )
         )
         return (
-            self.__position
+            0
+            if self.__keys[pyglet.window.key.PAGEUP]
+            else len(self.__solution)
+            if self.__keys[pyglet.window.key.PAGEDOWN]
+            else self.__position
             if self.__keys[pyglet.window.key.LEFT]
             == self.__keys[pyglet.window.key.RIGHT]
             else clamp(
