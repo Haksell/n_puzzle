@@ -107,6 +107,10 @@ class Puzzle:
     def is_correct(self, i):
         return self[i] == self.__goal[i]
 
+    # TODO: remove
+    def index(self, i):
+        return self.__tiles.index(i)
+
     def do_move(self, move):
         swap_idx = self.__zero_idx + [self.__width, -1, -self.__width, 1][move]
         self.__tiles[self.__zero_idx], self.__tiles[swap_idx] = (

@@ -2,6 +2,7 @@ import argparse
 from copy import deepcopy
 import re
 from src import HEURISTICS, Puzzle, SOLVERS, Visualizer
+from src.solvers import incremental
 from src.utils import panic, parse_size
 import time
 
@@ -20,14 +21,14 @@ def __add_list_arg(parser, flag, funcs):
 def __make_puzzle(args):
     if args.filename:
         if args.random:
-            panic("Can't specify both a filename and a random size")
+            panic("Can't specify both a filename and a random size.")
         else:
             return Puzzle.from_file(args.filename)
     else:
         if args.random:
             return Puzzle.random(*parse_size(args.random))
         else:
-            panic("Can't specify both a filename and a random size")
+            panic("You should specify a filename or a random size.")
 
 
 def __parse_args():
@@ -74,13 +75,24 @@ def __print_states(puzzle, solution):
 def __main():
     puzzle, heuristic, solver, visualize, verbose = __parse_args()
     print(
-        f"Using {__solver_name(solver)} with {heuristic.__name__} to solve this puzzle:"
+        "Solving the following puzzle tile by tile:"
+        if solver == incremental
+        else f"Using {__solver_name(solver)} with {heuristic.__name__} to solve this puzzle:"
     )
     print(puzzle)
+
+    # TODO: remove
+    print()
+    print(Puzzle(puzzle.goal, puzzle.height, puzzle.width))
+    print()
+
     t0 = time.time()
     solution = solver(deepcopy(puzzle), heuristic)
-    print(f"Found {len(solution)}-move solution in {time.time() - t0:.3f}s:")
-    print("".join(move.name[0] for move in solution))
+    if solution:
+        print(f"Found {len(solution)}-move solution in {time.time() - t0:.3f}s:")
+        print("".join(move.name[0] for move in solution))
+    else:
+        print("Puzzle was already solved.")
     if verbose:
         __print_states(puzzle, solution)
     if visualize:
