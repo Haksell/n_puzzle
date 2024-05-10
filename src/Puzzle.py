@@ -174,8 +174,3 @@ class Puzzle:
             else:
                 tiles[0], tiles[1] = tiles[1], tiles[0]
         return Puzzle(tiles, height, width)
-
-    # TODO: check it is solvable and add CLI argument
-    # @staticmethod
-    # def opposite(height, width):
-    #     return Puzzle(_make_goal(height, width)[::-1], height, width)
