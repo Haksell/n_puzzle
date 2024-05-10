@@ -131,35 +131,36 @@ class Puzzle:
     @staticmethod
     def from_file(filename):
         content = read_file(filename)
-        height = width = size = None
+        size = None
         seen = set()
         tiles = []
         for line in content.splitlines():
-            line = line.split("#")[0].strip()
-            if not line:
+            if not (line := line.split("#")[0].strip()):
                 continue
             if size is None:
                 height, width = parse_size(line.strip())
                 size = height * width
                 continue
             row = line.split()
-            try:
-                assert (
-                    len(row) == width
-                ), f"Invalid width (got {len(row)}, expected {width})"
-                for x in row:
-                    assert all(c.isdigit() for c in x), f"Invalid natural number: {x}"
-                    x = int(x)
-                    assert (
-                        x < size
-                    ), f"Number too big for given puzzle size: (got {x}, max {size-1})"
-                    assert x not in seen, f"Duplicate number: {x}"
-                    seen.add(x)
-                    tiles.append(x)
-            except AssertionError as e:
-                panic(e)
+            if len(row) != width:
+                panic(f"Invalid width (got {len(row)}, expected {width})")
+            for x in row:
+                if any(not c.isdigit() for c in x):
+                    panic(f"Invalid natural number: {x}")
+                x = int(x)
+                if x >= size:
+                    panic(
+                        f"Number too big for given puzzle size: (got {x}, max {size-1})"
+                    )
+                if x in seen:
+                    panic(f"Duplicate number: {x}")
+                seen.add(x)
+                tiles.append(x)
         if size is None:
             panic("Empty file")
+        actual_height = len(tiles) // width
+        if actual_height != height:
+            panic(f"Invalid height (got {actual_height}, expected {height})")
         if not _is_solvable(tiles, height, width):
             panic("Unsolvable puzzle")
         return Puzzle(tiles, height, width)

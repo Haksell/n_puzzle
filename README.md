@@ -19,6 +19,7 @@
 -   [x] Configure g(x) and h(x) to run both the uniform-cost and greedy searches
 -   [x] Visualization
 -   [x] Non-square puzzles
+-   [ ] 1-by-1 solver (doesn't accept heuristic argument)
 -   [ ] Line solver (`--strategy=full|snail|all_lines|best_line`, don't allow with pattern databases)
 
 ## solvers
