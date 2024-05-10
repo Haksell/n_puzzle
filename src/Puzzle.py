@@ -1,6 +1,6 @@
 import itertools
 import random
-from src.Move import Move
+from src import Move
 from src.utils import panic, parse_size, read_file
 
 

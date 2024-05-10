@@ -1,11 +1,8 @@
 import argparse
 from copy import deepcopy
 import re
-from src.heuristics import HEURISTICS
-from src.Puzzle import Puzzle
-from src.solvers import SOLVERS
+from src import HEURISTICS, Puzzle, SOLVERS, Visualizer
 from src.utils import panic, parse_size
-from src.Visualizer import Visualizer
 import time
 
 

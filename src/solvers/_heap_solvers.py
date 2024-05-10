@@ -1,5 +1,5 @@
 from heapq import heappop, heappush
-from src.Puzzle import Puzzle
+from src import Puzzle
 import sys
 
 

@@ -19,6 +19,7 @@
 -   [x] Configure g(x) and h(x) to run both the uniform-cost and greedy searches
 -   [x] Visualization
 -   [x] Non-square puzzles
+-   [ ] Line solver (`--strategy=full|all_lines|best_line`, don't allow with pattern databases)
 
 ## solvers
 
@@ -30,7 +31,6 @@
 -   [ ] SMA\*
 -   [ ] ID-Dual\* or Bi-directional A\*
 -   [ ] JPS+
--   [ ] Row/Col solver (don't allow with pattern databases)
 -   ... https://chat.openai.com/c/10a31ea2-f76b-49db-86f3-f3adaeb3e31e
 
 ## heuristics
