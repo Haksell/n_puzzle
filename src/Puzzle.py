@@ -52,20 +52,45 @@ def _is_solvable(tiles, height, width):
 # TODO: running manhattan
 # TODO: rows iterator, cols iterator
 class Puzzle:
-    def __init__(self, tiles, height, width):
-        assert sorted(tiles) == list(
-            range(height * width)
-        ), f"Invalid puzzle of size {height}x{width}: {tiles}"
+    def __init__(self, tiles, height, width, *, goal=None):
+        # TODO: bring back assert in some circumstances?
+        # assert sorted(tiles) == list(
+        #     range(height * width)
+        # ), f"Invalid puzzle of size {height}x{width}: {tiles}"
         self.__height = height
         self.__width = width
         self.__tiles = tiles
         self.__zero_idx = tiles.index(0)
-        # TODO: be lazy about calling _make_goal
-        self.__goal = _make_goal(height, width)
-        # TODO: only if manhattan or similar
-        self.__goal_pos = [0] * len(tiles)
-        for i, n in enumerate(self.__goal):
-            self.__goal_pos[n] = i
+        self.update_goal(goal or _make_goal(height, width))
+
+    # dangerous
+    def update_goal(self, goal):
+        self.__goal = goal
+        self.__goal_pos = {n: i for i, n in enumerate(self.__goal)}
+
+    def remove_top(self):
+        self.__tiles = self.__tiles[self.width :]
+        self.__height -= 1
+        self.__zero_idx = self.__tiles.index(0)
+
+    def remove_right(self):
+        self.__tiles = [
+            x
+            for i, x in enumerate(self.__tiles)
+            if i % self.__width != self.__width - 1
+        ]
+        self.__width -= 1
+        self.__zero_idx = self.__tiles.index(0)
+
+    def remove_bottom(self):
+        self.__tiles = self.__tiles[: -self.width]
+        self.__height -= 1
+        self.__zero_idx = self.__tiles.index(0)
+
+    def remove_left(self):
+        self.__tiles = [x for i, x in enumerate(self.__tiles) if i % self.__width != 0]
+        self.__width -= 1
+        self.__zero_idx = self.__tiles.index(0)
 
     def __len__(self):
         return len(self.__tiles)
@@ -77,11 +102,16 @@ class Puzzle:
         return self.__tiles[idx]
 
     def __str__(self):
-        return "\n".join(
-            " ".join(
-                f"{self[y*self.__width+x]:{self.padding}}" for x in range(self.__width)
+        return (
+            "==========================================\n"
+            + "\n".join(
+                " ".join(
+                    f"{self[y*self.__width+x]:{self.padding}}"
+                    for x in range(self.__width)
+                )
+                for y in range(self.__height)
             )
-            for y in range(self.__height)
+            + "\n=========================================="
         )
 
     @property

@@ -20,7 +20,7 @@ def __heap_solver(puzzle, heuristic, *, use_g, use_h):
     frontier = [(h_cost, tup)]
     while frontier:
         (_, tup) = heappop(frontier)
-        puzzle = Puzzle(list(tup), puzzle.height, puzzle.width)
+        puzzle = Puzzle(list(tup), puzzle.height, puzzle.width, goal=puzzle.goal)
         g_cost = g_costs[tup] + 1
         for move in puzzle.available_moves(came_from[tup]):
             puzzle.do_move(move)

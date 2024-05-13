@@ -20,14 +20,14 @@ def __add_list_arg(parser, flag, funcs):
 def __make_puzzle(args):
     if args.filename:
         if args.random:
-            panic("Can't specify both a filename and a random size")
+            panic("Can't specify both a filename and a random size.")
         else:
             return Puzzle.from_file(args.filename)
     else:
         if args.random:
             return Puzzle.random(*parse_size(args.random))
         else:
-            panic("Can't specify both a filename and a random size")
+            panic("You should specify a filename or a random size.")
 
 
 def __parse_args():
@@ -42,13 +42,17 @@ def __parse_args():
     parser.add_argument(
         "--verbose", action="store_true", help="Print the puzzle states"
     )
+    parser.add_argument(
+        "--line-by-line", action="store_true", help="Solve the puzzle line by line"
+    )
     __add_list_arg(parser, "heuristic", HEURISTICS)
     __add_list_arg(parser, "solver", SOLVERS)
     args = parser.parse_args()
+    print(args)
     puzzle = __make_puzzle(args)
     heuristic = next(h for h in HEURISTICS if h.__name__ == args.heuristic)
     solver = next(s for s in SOLVERS if s.__name__ == args.solver)
-    return puzzle, heuristic, solver, args.visualize, args.verbose
+    return puzzle, heuristic, solver, args.line_by_line, args.visualize, args.verbose
 
 
 def __solver_name(solver):
@@ -71,19 +75,72 @@ def __print_states(puzzle, solution):
         print(puzzle)
 
 
+# TODO: just cycle when 2x2 remaining
+def solve_line_by_line(puzzle, solver, heuristic):
+    solution = []
+    full_goal = deepcopy(puzzle.goal)
+    zeroy, zerox = divmod(full_goal.index(0), puzzle.width)
+    while len(puzzle) > 1:
+        print(puzzle.height, puzzle.width)
+        maxx, maxy = puzzle.width - 1, puzzle.height - 1
+        dt = zeroy - 0
+        dr = maxx - zerox
+        db = maxy - zeroy
+        dl = zerox - 0
+        best = max(dt, dr, db, dl)
+        if best == dt:
+            line = full_goal[: puzzle.width]
+            zeroy -= 1
+        elif best == dr:
+            line = full_goal[puzzle.width - 1 :: puzzle.width]
+        elif best == db:
+            line = full_goal[-puzzle.width :]
+        else:
+            line = full_goal[:: puzzle.width]
+            zerox -= 1
+        goal = [x if x in line else 0 for x in full_goal]
+        full_goal = [x for x in full_goal if x not in line]
+        puzzle.update_goal(goal)
+        line_solution = solver(deepcopy(puzzle), heuristic)
+        for move in line_solution:
+            puzzle.do_move(move)
+        if best == dt:
+            puzzle.remove_top()
+        elif best == dr:
+            puzzle.remove_right()
+        elif best == db:
+            puzzle.remove_bottom()
+        else:
+            puzzle.remove_left()
+        # print(puzzle)
+        solution.extend(line_solution)
+    return solution
+
+
 def __main():
-    puzzle, heuristic, solver, visualize, verbose = __parse_args()
+    puzzle, heuristic, solver, line_by_line, visualize, verbose = __parse_args()
     print(
-        f"Using {__solver_name(solver)} with {heuristic.__name__} to solve this puzzle:"
+        f"Using {__solver_name(solver)} with {heuristic.__name__} to solve this puzzle{' line by line' if line_by_line else ''}:"
     )
     print(puzzle)
+
+    # TODO: remove
+    print()
+    print(Puzzle(puzzle.goal, puzzle.height, puzzle.width))
+    print()
+
     t0 = time.time()
-    solution = solver(deepcopy(puzzle), heuristic)
+    solution = (
+        solve_line_by_line(deepcopy(puzzle), solver, heuristic)
+        if line_by_line
+        else solver(deepcopy(puzzle), heuristic)
+    )
     print(f"Found {len(solution)}-move solution in {time.time() - t0:.3f}s:")
     print("".join(move.name[0] for move in solution))
     if verbose:
         __print_states(puzzle, solution)
     if visualize:
+        # Visualizer(Puzzle(puzzle.goal, puzzle.height, puzzle.width), solution).run()
         Visualizer(puzzle, solution).run()
 
 
