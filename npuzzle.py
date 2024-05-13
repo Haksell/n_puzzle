@@ -48,7 +48,6 @@ def __parse_args():
     __add_list_arg(parser, "heuristic", HEURISTICS)
     __add_list_arg(parser, "solver", SOLVERS)
     args = parser.parse_args()
-    print(args)
     puzzle = __make_puzzle(args)
     heuristic = next(h for h in HEURISTICS if h.__name__ == args.heuristic)
     solver = next(s for s in SOLVERS if s.__name__ == args.solver)
@@ -81,6 +80,8 @@ def __solve_line_by_line(puzzle, solver, heuristic):
     zeroy, zerox = divmod(full_goal.index(0), puzzle.width)
     pw = puzzle.width
     mask = {0}
+    time_complexity = 0
+    size_complexity = 0
     while puzzle.minx < puzzle.maxx or puzzle.miny < puzzle.maxy:
         dt = zeroy - puzzle.miny
         dr = puzzle.maxx - zerox
@@ -109,11 +110,15 @@ def __solve_line_by_line(puzzle, solver, heuristic):
             puzzle.minx += 1
         mask.update(line)
         puzzle.update_goal([x if x in mask else -1 for x in full_goal])
-        line_solution = solver(deepcopy(puzzle), heuristic)
+        line_solution, sub_time_complexity, sub_size_complexity = solver(
+            deepcopy(puzzle), heuristic
+        )
+        time_complexity += sub_time_complexity
+        size_complexity = max(size_complexity, sub_size_complexity)
         for move in line_solution:
             puzzle.do_move(move)
         solution.extend(line_solution)
-    return solution
+    return solution, time_complexity, size_complexity
 
 
 def __main():
@@ -123,10 +128,14 @@ def __main():
     )
     print(puzzle)
     t0 = time.time()
-    solution = (
+    solution, time_complexity, size_complexity = (
         __solve_line_by_line(deepcopy(puzzle), solver, heuristic)
         if line_by_line
         else solver(deepcopy(puzzle), heuristic)
+    )
+    print(f"Time complexity: {time_complexity:,} states selected")
+    print(
+        f"Size complexity: at most {size_complexity:,} state{'s' if size_complexity>=2 else ''} stored in memory at the same time"
     )
     print(f"Found {len(solution)}-move solution in {time.time() - t0:.3f}s:")
     print("".join(move.name[0] for move in solution))

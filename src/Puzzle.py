@@ -56,6 +56,7 @@ class Puzzle:
         self.__width = width
         self.__tiles = tiles
         self.__zero_idx = tiles.index(0)
+        self.__moves = [self.__width, -1, -self.__width, 1]
         self.update_goal(goal or _make_goal(height, width))
         self.minx = self.miny = 0
         self.maxx = width - 1
@@ -102,7 +103,7 @@ class Puzzle:
         return self[i] == self.__goal[i]
 
     def do_move(self, move):
-        swap_idx = self.__zero_idx + [self.__width, -1, -self.__width, 1][move]
+        swap_idx = self.__zero_idx + self.__moves[move]
         self.__tiles[self.__zero_idx], self.__tiles[swap_idx] = (
             self.__tiles[swap_idx],
             self.__tiles[self.__zero_idx],
