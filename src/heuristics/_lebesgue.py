@@ -7,7 +7,7 @@ def __lebesgue(puzzle, dist_func):
     # print(puzzle.width, goal_pos)
     width = puzzle.width
     for i, v in enumerate(puzzle):
-        if v == 0:
+        if v <= 0:
             continue
         gpv = goal_pos.get(v)
         if gpv is None:

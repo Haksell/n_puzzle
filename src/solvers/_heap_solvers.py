@@ -11,10 +11,14 @@ def __reconstruct_solution(came_from, puzzle):
     return solution[::-1]
 
 
+def mask(puzzle):
+    return tuple(x if x in puzzle.goal else -1 for x in puzzle)
+
+
 def __heap_solver(puzzle, heuristic, *, use_g, use_h):
     if (h_cost := heuristic(puzzle)) == 0:
         return []
-    tup = tuple(puzzle)
+    tup = mask(puzzle)
     came_from = {tup: None}
     g_costs = {tup: 0}
     frontier = [(h_cost, tup)]
@@ -24,7 +28,7 @@ def __heap_solver(puzzle, heuristic, *, use_g, use_h):
         g_cost = g_costs[tup] + 1
         for move in puzzle.available_moves(came_from[tup]):
             puzzle.do_move(move)
-            tup = tuple(puzzle)
+            tup = mask(puzzle)
             if g_cost < g_costs.get(tup, sys.maxsize):
                 came_from[tup] = move
                 g_costs[tup] = g_cost

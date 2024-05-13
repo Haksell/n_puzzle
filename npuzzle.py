@@ -75,44 +75,43 @@ def __print_states(puzzle, solution):
         print(puzzle)
 
 
-# TODO: just cycle when 2x2 remaining
+# TODO: ida_star is inconsistent with line_by_line
 def solve_line_by_line(puzzle, solver, heuristic):
     solution = []
     full_goal = deepcopy(puzzle.goal)
     zeroy, zerox = divmod(full_goal.index(0), puzzle.width)
-    while len(puzzle) > 1:
-        print(puzzle.height, puzzle.width)
-        maxx, maxy = puzzle.width - 1, puzzle.height - 1
-        dt = zeroy - 0
+    pw = puzzle.width
+    minx = miny = 0
+    maxx, maxy = pw - 1, puzzle.height - 1
+    mask = {0}
+    while minx < maxx or miny < maxy:
+        dt = zeroy - miny
         dr = maxx - zerox
         db = maxy - zeroy
-        dl = zerox - 0
+        dl = zerox - minx
         best = max(dt, dr, db, dl)
         if best == dt:
-            line = full_goal[: puzzle.width]
-            zeroy -= 1
+            line = full_goal[miny * pw : (miny + 1) * pw][minx : maxx + 1]
+            print(f"Solving row {miny}...")
+            miny += 1
         elif best == dr:
-            line = full_goal[puzzle.width - 1 :: puzzle.width]
+            line = full_goal[maxx::pw][miny : maxy + 1]
+            print(f"Solving col {maxx}...")
+            maxx -= 1
         elif best == db:
-            line = full_goal[-puzzle.width :]
+            line = full_goal[maxy * pw : (maxy + 1) * pw][minx : maxx + 1]
+            print(f"Solving row {maxy}...")
+            maxy -= 1
         else:
-            line = full_goal[:: puzzle.width]
-            zerox -= 1
-        goal = [x if x in line else 0 for x in full_goal]
-        full_goal = [x for x in full_goal if x not in line]
+            line = full_goal[minx::pw][miny : maxy + 1]
+            print(f"Solving col {minx}...")
+            minx += 1
+        mask.update(line)
+        goal = [x if x in mask else -1 for x in full_goal]
         puzzle.update_goal(goal)
         line_solution = solver(deepcopy(puzzle), heuristic)
         for move in line_solution:
             puzzle.do_move(move)
-        if best == dt:
-            puzzle.remove_top()
-        elif best == dr:
-            puzzle.remove_right()
-        elif best == db:
-            puzzle.remove_bottom()
-        else:
-            puzzle.remove_left()
-        # print(puzzle)
         solution.extend(line_solution)
     return solution
 
@@ -123,12 +122,6 @@ def __main():
         f"Using {__solver_name(solver)} with {heuristic.__name__} to solve this puzzle{' line by line' if line_by_line else ''}:"
     )
     print(puzzle)
-
-    # TODO: remove
-    print()
-    print(Puzzle(puzzle.goal, puzzle.height, puzzle.width))
-    print()
-
     t0 = time.time()
     solution = (
         solve_line_by_line(deepcopy(puzzle), solver, heuristic)
@@ -140,7 +133,6 @@ def __main():
     if verbose:
         __print_states(puzzle, solution)
     if visualize:
-        # Visualizer(Puzzle(puzzle.goal, puzzle.height, puzzle.width), solution).run()
         Visualizer(puzzle, solution).run()
 
 
