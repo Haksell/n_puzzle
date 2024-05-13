@@ -136,12 +136,15 @@ def __main():
         if line_by_line
         else solver(deepcopy(puzzle), heuristic)
     )
-    print(f"Time complexity: {time_complexity:,} states selected")
-    print(
-        f"Size complexity: at most {size_complexity:,} state{'s' if size_complexity>=2 else ''} stored in memory at the same time"
-    )
-    print(f"Found {len(solution)}-move solution in {time.time() - t0:.3f}s:")
-    print("".join(move.name[0] for move in solution))
+    if solution:
+        print(f"Time complexity: {time_complexity:,} states selected")
+        print(
+            f"Size complexity: at most {size_complexity:,} state{'s' if size_complexity>=2 else ''} stored in memory at the same time"
+        )
+        print(f"Found {len(solution)}-move solution in {time.time() - t0:.3f}s:")
+        print("".join(move.name[0] for move in solution))
+    else:
+        print("Puzzle was already solved.")
     if verbose:
         __print_states(puzzle, solution)
     if visualize:

@@ -127,7 +127,8 @@ class Puzzle:
         self.__goal = goal
         self.__goal_pos = [-1] * len(self.__goal)
         for i, n in enumerate(self.__goal):
-            self.__goal_pos[n] = i
+            if n != -1:
+                self.__goal_pos[n] = i
 
     @staticmethod
     def from_file(filename):
