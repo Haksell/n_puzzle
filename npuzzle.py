@@ -75,37 +75,38 @@ def __print_states(puzzle, solution):
         print(puzzle)
 
 
-# TODO: check with all heuristics
 def __solve_line_by_line(puzzle, solver, heuristic):
     solution = []
     full_goal = deepcopy(puzzle.goal)
     zeroy, zerox = divmod(full_goal.index(0), puzzle.width)
     pw = puzzle.width
-    minx = miny = 0
-    maxx, maxy = pw - 1, puzzle.height - 1
     mask = {0}
-    while minx < maxx or miny < maxy:
-        dt = zeroy - miny
-        dr = maxx - zerox
-        db = maxy - zeroy
-        dl = zerox - minx
+    while puzzle.minx < puzzle.maxx or puzzle.miny < puzzle.maxy:
+        dt = zeroy - puzzle.miny
+        dr = puzzle.maxx - zerox
+        db = puzzle.maxy - zeroy
+        dl = zerox - puzzle.minx
         best = max(dt, dr, db, dl)
         if best == dt:
-            line = full_goal[miny * pw : (miny + 1) * pw][minx : maxx + 1]
-            print(f"Solving row {miny}...")
-            miny += 1
+            line = full_goal[puzzle.miny * pw : (puzzle.miny + 1) * pw][
+                puzzle.minx : puzzle.maxx + 1
+            ]
+            print(f"Solving row {puzzle.miny}...")
+            puzzle.miny += 1
         elif best == dr:
-            line = full_goal[maxx::pw][miny : maxy + 1]
-            print(f"Solving col {maxx}...")
-            maxx -= 1
+            line = full_goal[puzzle.maxx :: pw][puzzle.miny : puzzle.maxy + 1]
+            print(f"Solving col {puzzle.maxx}...")
+            puzzle.maxx -= 1
         elif best == db:
-            line = full_goal[maxy * pw : (maxy + 1) * pw][minx : maxx + 1]
-            print(f"Solving row {maxy}...")
-            maxy -= 1
+            line = full_goal[puzzle.maxy * pw : (puzzle.maxy + 1) * pw][
+                puzzle.minx : puzzle.maxx + 1
+            ]
+            print(f"Solving row {puzzle.maxy}...")
+            puzzle.maxy -= 1
         else:
-            line = full_goal[minx::pw][miny : maxy + 1]
-            print(f"Solving col {minx}...")
-            minx += 1
+            line = full_goal[puzzle.minx :: pw][puzzle.miny : puzzle.maxy + 1]
+            print(f"Solving col {puzzle.minx}...")
+            puzzle.minx += 1
         mask.update(line)
         puzzle.update_goal([x if x in mask else -1 for x in full_goal])
         line_solution = solver(deepcopy(puzzle), heuristic)
