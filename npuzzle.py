@@ -2,6 +2,7 @@ import argparse
 from copy import deepcopy
 import re
 from src import HEURISTICS, Puzzle, SOLVERS, Visualizer
+from src.solvers import ida_star
 from src.utils import panic, parse_size
 import time
 
@@ -51,6 +52,8 @@ def __parse_args():
     puzzle = __make_puzzle(args)
     heuristic = next(h for h in HEURISTICS if h.__name__ == args.heuristic)
     solver = next(s for s in SOLVERS if s.__name__ == args.solver)
+    if args.line_by_line and solver == ida_star:
+        panic("Line-by-line solving is incompatible with IDA*")  # TODO: fix
     return puzzle, heuristic, solver, args.line_by_line, args.visualize, args.verbose
 
 
