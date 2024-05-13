@@ -1,7 +1,7 @@
 import math
 
 
-def __lebesgue(puzzle, dist_func):
+def lebesgue(puzzle, dist_func):
     total_distance = 0
     goal_pos = puzzle.goal_pos
     width = puzzle.width
@@ -9,6 +9,9 @@ def __lebesgue(puzzle, dist_func):
         if v <= 0:
             continue
         # TODO: cache divmod
+        gpv = goal_pos[v]
+        if gpv == -1:
+            continue
         gy, gx = divmod(goal_pos[v], width)
         py, px = divmod(i, width)
         total_distance += dist_func(gx - px, gy - py)
@@ -16,12 +19,12 @@ def __lebesgue(puzzle, dist_func):
 
 
 def manhattan(puzzle):
-    return __lebesgue(puzzle, lambda dx, dy: abs(dx) + abs(dy))
+    return puzzle.manhattan_distance
 
 
 def euclidean(puzzle):
-    return __lebesgue(puzzle, math.hypot)
+    return lebesgue(puzzle, math.hypot)
 
 
 def chebyshev(puzzle):
-    return __lebesgue(puzzle, lambda dx, dy: max(abs(dx), abs(dy)))
+    return lebesgue(puzzle, lambda dx, dy: max(abs(dx), abs(dy)))

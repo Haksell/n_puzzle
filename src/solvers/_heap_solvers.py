@@ -21,10 +21,16 @@ def __heap_solver(puzzle, heuristic, *, use_g, use_h):
     tup = mask(puzzle)
     came_from = {tup: None}
     g_costs = {tup: 0}
-    frontier = [(h_cost, tup)]
+    frontier = [(h_cost, tup, puzzle.manhattan_distance)]
     while frontier:
-        (_, tup) = heappop(frontier)
-        puzzle = Puzzle(list(tup), puzzle.height, puzzle.width, goal=puzzle.goal)
+        (_, tup, manhattan_distance) = heappop(frontier)
+        puzzle = Puzzle(
+            list(tup),
+            puzzle.height,
+            puzzle.width,
+            goal=puzzle.goal,
+            manhattan_distance=manhattan_distance,
+        )
         g_cost = g_costs[tup] + 1
         for move in puzzle.available_moves(came_from[tup]):
             puzzle.do_move(move)
@@ -34,7 +40,10 @@ def __heap_solver(puzzle, heuristic, *, use_g, use_h):
                 g_costs[tup] = g_cost
                 if (h_cost := heuristic(puzzle)) == 0:
                     return __reconstruct_solution(came_from, puzzle)
-                heappush(frontier, (use_g * g_cost + use_h * h_cost, tup))
+                heappush(
+                    frontier,
+                    (use_g * g_cost + use_h * h_cost, tup, puzzle.manhattan_distance),
+                )
             puzzle.do_move(move.opposite())
 
 

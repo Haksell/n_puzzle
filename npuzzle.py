@@ -48,7 +48,6 @@ def __parse_args():
     __add_list_arg(parser, "heuristic", HEURISTICS)
     __add_list_arg(parser, "solver", SOLVERS)
     args = parser.parse_args()
-    print(args)
     puzzle = __make_puzzle(args)
     heuristic = next(h for h in HEURISTICS if h.__name__ == args.heuristic)
     solver = next(s for s in SOLVERS if s.__name__ == args.solver)
@@ -109,6 +108,7 @@ def __solve_line_by_line(puzzle, solver, heuristic):
             puzzle.minx += 1
         mask.update(line)
         puzzle.update_goal([x if x in mask else -1 for x in full_goal])
+        puzzle.calculate_manhattan()
         line_solution = solver(deepcopy(puzzle), heuristic)
         for move in line_solution:
             puzzle.do_move(move)

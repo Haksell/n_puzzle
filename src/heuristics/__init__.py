@@ -3,7 +3,7 @@
 
 from ._manhattan_with_conflicts import manhattan_with_conflicts
 from ._inversion_distance import inversion_distance
-from ._lebesgue import chebyshev, euclidean, manhattan
+from ._lebesgue import lebesgue, chebyshev, euclidean, manhattan  # noqa
 
 # TODO: heuristic that prefers solved edges to solved centers
 # TODO: solver decorator that returns [] on solved puzzle

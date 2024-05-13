@@ -1,6 +1,7 @@
 import itertools
 import random
 from src import Move
+from src.heuristics import lebesgue
 from src.utils import panic, parse_size, read_file
 
 
@@ -51,12 +52,18 @@ def _is_solvable(tiles, height, width):
 
 # TODO: running manhattan
 class Puzzle:
-    def __init__(self, tiles, height, width, *, goal=None):
+    def __init__(self, tiles, height, width, *, manhattan_distance=-1, goal=None):
         self.__height = height
         self.__width = width
         self.__tiles = tiles
         self.__zero_idx = tiles.index(0)
+        self.__moves = [self.__width, -1, -self.__width, 1]
         self.update_goal(goal or _make_goal(height, width))
+        self.__manhattan_distance = (
+            manhattan_distance
+            if manhattan_distance != -1
+            else lebesgue(self, lambda dx, dy: abs(dx) + abs(dy))
+        )
         self.minx = self.miny = 0
         self.maxx = width - 1
         self.maxy = height - 1
@@ -98,11 +105,25 @@ class Puzzle:
     def goal_pos(self):
         return self.__goal_pos
 
+    @property
+    def manhattan_distance(self):
+        return self.__manhattan_distance
+
+    def calculate_manhattan(self):
+        self.__manhattan_distance = lebesgue(self, lambda dx, dy: abs(dx) + abs(dy))
+
     def is_correct(self, i):
         return self[i] == self.__goal[i]
 
     def do_move(self, move):
-        swap_idx = self.__zero_idx + [self.__width, -1, -self.__width, 1][move]
+        swap_idx = self.__zero_idx + self.__moves[move]
+        if self.__tiles[swap_idx] > 0:
+            gy, gx = divmod(self.goal_pos[self.__tiles[swap_idx]], self.width)
+            py, px = divmod(swap_idx, self.width)
+            zy, zx = divmod(self.__zero_idx, self.width)
+            self.__manhattan_distance += (
+                abs(gy - zy) + abs(gx - zx) - abs(gy - py) - abs(gx - px)
+            )
         self.__tiles[self.__zero_idx], self.__tiles[swap_idx] = (
             self.__tiles[swap_idx],
             self.__tiles[self.__zero_idx],
@@ -126,7 +147,8 @@ class Puzzle:
         self.__goal = goal
         self.__goal_pos = [-1] * len(self.__goal)
         for i, n in enumerate(self.__goal):
-            self.__goal_pos[n] = i
+            if n != -1:
+                self.__goal_pos[n] = i
 
     @staticmethod
     def from_file(filename):
