@@ -38,6 +38,7 @@ def __longest_increasing_subsequence(a):
 def __line_conflicts(line_puzzle, line_goal):
     common = set(line_puzzle) & set(line_goal)
     common.discard(0)
+    common.discard(-1)
     line_puzzle = [n for n in line_puzzle if n in common]
     line_goal = [n for n in line_goal if n in common]
     goal_pos = {n: i for i, n in enumerate(line_goal)}
