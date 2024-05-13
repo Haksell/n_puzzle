@@ -50,15 +50,20 @@ def _is_solvable(tiles, height, width):
     return parity_empty == (parity_tiles ^ parity_goal)
 
 
-# TODO: running manhattan
 class Puzzle:
-    def __init__(self, tiles, height, width, *, manhattan_distance=-1, goal=None):
+    def __init__(
+        self, tiles, height, width, *, manhattan_distance=-1, goal=None, goal_pos=None
+    ):
         self.__height = height
         self.__width = width
         self.__tiles = tiles
         self.__zero_idx = tiles.index(0)
         self.__moves = [self.__width, -1, -self.__width, 1]
-        self.update_goal(goal or _make_goal(height, width))
+        if goal is None:
+            self.update_goal(_make_goal(height, width))
+        else:
+            self.__goal = goal
+            self.__goal_pos = goal_pos
         self.__manhattan_distance = (
             manhattan_distance
             if manhattan_distance != -1

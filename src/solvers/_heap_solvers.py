@@ -29,6 +29,7 @@ def __heap_solver(puzzle, heuristic, *, use_g, use_h):
             puzzle.height,
             puzzle.width,
             goal=puzzle.goal,
+            goal_pos=puzzle.goal_pos,
             manhattan_distance=manhattan_distance,
         )
         g_cost = g_costs[tup] + 1
