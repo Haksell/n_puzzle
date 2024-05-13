@@ -10,7 +10,7 @@ from ._lebesgue import chebyshev, euclidean, manhattan
 
 
 def hamming(puzzle):
-    return sum(0 != pi != gi for pi, gi in zip(puzzle, puzzle.goal))
+    return sum(0 < pi != gi for pi, gi in zip(puzzle, puzzle.goal))
 
 
 HEURISTICS = [

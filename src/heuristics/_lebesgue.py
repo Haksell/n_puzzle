@@ -6,7 +6,7 @@ def __lebesgue(puzzle, dist_func):
     goal_pos = puzzle.goal_pos
     width = puzzle.width
     for i, v in enumerate(puzzle):
-        if v == 0:
+        if v <= 0:
             continue
         # TODO: cache divmod
         gy, gx = divmod(goal_pos[v], width)

@@ -50,22 +50,17 @@ def _is_solvable(tiles, height, width):
 
 
 # TODO: running manhattan
-# TODO: rows iterator, cols iterator
 class Puzzle:
-    def __init__(self, tiles, height, width):
-        assert sorted(tiles) == list(
-            range(height * width)
-        ), f"Invalid puzzle of size {height}x{width}: {tiles}"
+    def __init__(self, tiles, height, width, *, goal=None):
         self.__height = height
         self.__width = width
         self.__tiles = tiles
         self.__zero_idx = tiles.index(0)
-        # TODO: be lazy about calling _make_goal
-        self.__goal = _make_goal(height, width)
-        # TODO: only if manhattan or similar
-        self.__goal_pos = [0] * len(tiles)
-        for i, n in enumerate(self.__goal):
-            self.__goal_pos[n] = i
+        self.__moves = [self.__width, -1, -self.__width, 1]
+        self.update_goal(goal or _make_goal(height, width))
+        self.minx = self.miny = 0
+        self.maxx = width - 1
+        self.maxy = height - 1
 
     def __len__(self):
         return len(self.__tiles)
@@ -108,7 +103,7 @@ class Puzzle:
         return self[i] == self.__goal[i]
 
     def do_move(self, move):
-        swap_idx = self.__zero_idx + [self.__width, -1, -self.__width, 1][move]
+        swap_idx = self.__zero_idx + self.__moves[move]
         self.__tiles[self.__zero_idx], self.__tiles[swap_idx] = (
             self.__tiles[swap_idx],
             self.__tiles[self.__zero_idx],
@@ -118,15 +113,21 @@ class Puzzle:
     def available_moves(self, last):
         y, x = divmod(self.__zero_idx, self.__width)
         moves = []
-        if y != 0 and last != Move.UP:
+        if y != self.miny and last != Move.UP:
             moves.append(Move.DOWN)
-        if x != self.__width - 1 and last != Move.RIGHT:
+        if x != self.maxx and last != Move.RIGHT:
             moves.append(Move.LEFT)
-        if y != self.__height - 1 and last != Move.DOWN:
+        if y != self.maxy and last != Move.DOWN:
             moves.append(Move.UP)
-        if x != 0 and last != Move.LEFT:
+        if x != self.minx and last != Move.LEFT:
             moves.append(Move.RIGHT)
         return moves
+
+    def update_goal(self, goal):
+        self.__goal = goal
+        self.__goal_pos = [-1] * len(self.__goal)
+        for i, n in enumerate(self.__goal):
+            self.__goal_pos[n] = i
 
     @staticmethod
     def from_file(filename):

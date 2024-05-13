@@ -27,11 +27,13 @@ def __merge_sort(arr, temp_arr, lo, hi):
     return inv_count
 
 
-def __count_inversions(arr1, arr2):
-    index_map = {value: idx for idx, value in enumerate(arr2)}
-    arr1_mapped = [index_map[value] for value in arr1]
-    temp_arr = [0] * len(arr1)
-    return __merge_sort(arr1_mapped, temp_arr, 0, len(arr1_mapped) - 1)
+def __count_inversions(tiles, goal):
+    index_map = {value: idx for idx, value in enumerate(goal)}
+    tiles_mapped = [
+        index_map[value] for value in tiles if value > 0 and value in index_map
+    ]
+    temp_arr = [0] * len(tiles_mapped)
+    return __merge_sort(tiles_mapped, temp_arr, 0, len(tiles_mapped) - 1)
 
 
 def __transpose(tiles, height, width):
