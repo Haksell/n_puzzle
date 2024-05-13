@@ -50,23 +50,13 @@ def _is_solvable(tiles, height, width):
 
 
 # TODO: running manhattan
-# TODO: rows iterator, cols iterator
 class Puzzle:
     def __init__(self, tiles, height, width, *, goal=None):
-        # assert sorted(tiles) == list(
-        #     range(height * width)
-        # ), f"Invalid puzzle of size {height}x{width}: {tiles}"
         self.__height = height
         self.__width = width
         self.__tiles = tiles
-        # print(tiles)
         self.__zero_idx = tiles.index(0)
         self.update_goal(goal or _make_goal(height, width))
-
-    # dangerous
-    def update_goal(self, goal):
-        self.__goal = goal
-        self.__goal_pos = {n: i for i, n in enumerate(self.__goal)}
 
     def __len__(self):
         return len(self.__tiles)
@@ -128,6 +118,12 @@ class Puzzle:
         if x != 0 and last != Move.LEFT:
             moves.append(Move.RIGHT)
         return moves
+
+    def update_goal(self, goal):
+        self.__goal = goal
+        self.__goal_pos = [-1] * len(self.__goal)
+        for i, n in enumerate(self.__goal):
+            self.__goal_pos[n] = i
 
     @staticmethod
     def from_file(filename):

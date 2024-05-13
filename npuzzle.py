@@ -75,8 +75,8 @@ def __print_states(puzzle, solution):
         print(puzzle)
 
 
-# TODO: ida_star is inconsistent with line_by_line
-def solve_line_by_line(puzzle, solver, heuristic):
+# TODO: check with all heuristics
+def __solve_line_by_line(puzzle, solver, heuristic):
     solution = []
     full_goal = deepcopy(puzzle.goal)
     zeroy, zerox = divmod(full_goal.index(0), puzzle.width)
@@ -107,8 +107,7 @@ def solve_line_by_line(puzzle, solver, heuristic):
             print(f"Solving col {minx}...")
             minx += 1
         mask.update(line)
-        goal = [x if x in mask else -1 for x in full_goal]
-        puzzle.update_goal(goal)
+        puzzle.update_goal([x if x in mask else -1 for x in full_goal])
         line_solution = solver(deepcopy(puzzle), heuristic)
         for move in line_solution:
             puzzle.do_move(move)
@@ -124,7 +123,7 @@ def __main():
     print(puzzle)
     t0 = time.time()
     solution = (
-        solve_line_by_line(deepcopy(puzzle), solver, heuristic)
+        __solve_line_by_line(deepcopy(puzzle), solver, heuristic)
         if line_by_line
         else solver(deepcopy(puzzle), heuristic)
     )
