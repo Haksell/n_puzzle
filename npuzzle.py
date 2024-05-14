@@ -146,9 +146,9 @@ def __main():
     else:
         print("Puzzle was already solved.")
     if verbose:
-        __print_states(puzzle, solution)
+        __print_states(deepcopy(puzzle), solution)
     if visualize:
-        Visualizer(puzzle, solution).run()
+        Visualizer(deepcopy(puzzle), solution).run()
 
 
 if __name__ == "__main__":
