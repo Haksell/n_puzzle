@@ -46,4 +46,5 @@ def inversion_distance(puzzle):
         __transpose(puzzle, puzzle.height, puzzle.width),
         __transpose(puzzle.goal, puzzle.height, puzzle.width),
     )
+    # TODO: verify when puzzles are not 4x4
     return sum(divmod(horizontal_inversions, 3)) + sum(divmod(transpose_inversions, 3))
